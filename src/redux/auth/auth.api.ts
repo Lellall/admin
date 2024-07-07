@@ -1,7 +1,8 @@
-import apiSlice from "../../redux/api/apiSlice";
-import { LoginRequest, LoginResponse } from "../../redux/auth";
+/* eslint-disable no-console */
+import apiSlice from "../api/apiSlice";
 // import { api } from "../../services/baseApi";
-import { setAuthState, logout } from "./authSlice";
+import { setAuthState, logout } from "../../features/auth/authSlice";
+import { LoginRequest, LoginResponse } from "./typings";
 
 const authApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({

@@ -4,7 +4,7 @@ import InputWithIcon from "../../components/Inputs/input";
 import { MessageText, Unlock, User } from "iconsax-react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { useLoginMutation } from "./auth.api";
+import { useLoginMutation } from "../../redux/auth";
 
 const ForgotPassword: React.FC = () => {
   const dispatch = useDispatch();

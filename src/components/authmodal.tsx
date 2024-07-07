@@ -1,5 +1,23 @@
-// AuthModal.js
-import styled from 'styled-components';
+import React, { CSSProperties } from "react";
+import styled from "styled-components";
+
+interface AuthModalProps {
+  onClose: () => void;
+  children: React.ReactNode;
+  style?: CSSProperties;
+}
+const AuthModal = ({ onClose, children, style }: AuthModalProps) => {
+  return (
+    <ModalContainer>
+      <ModalContent style={style}>
+        <CloseButton onClick={onClose}>&times;</CloseButton>
+        {children}
+      </ModalContent>
+    </ModalContainer>
+  );
+};
+
+export default AuthModal;
 
 const ModalContainer = styled.div`
   position: fixed;
@@ -38,16 +56,3 @@ const CloseButton = styled.button`
     color: #555;
   }
 `;
-
-const AuthModal = ({ onClose, children, style }) => {
-  return (
-    <ModalContainer>
-      <ModalContent style={style}>
-        <CloseButton onClick={onClose}>&times;</CloseButton>
-        {children}
-      </ModalContent>
-    </ModalContainer>
-  );
-};
-
-export default AuthModal;

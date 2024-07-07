@@ -1,5 +1,5 @@
 // interface RefreshResponse {}
-interface RefreshRequest {
+export interface RefreshRequest {
   refreshToken: string;
   role: string;
 }

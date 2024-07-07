@@ -1,11 +1,13 @@
+/* eslint-disable no-console */
 import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { CopyAllOutlined } from "@mui/icons-material";
 // import { useIncompleteStore } from './incompleteOrderStore';
 import { Button, ListItem } from "@mui/material";
 import { ArrowCircleDown } from "iconsax-react";
-import { formatCurrency } from "../../utils/helpers";
+import { formatCurrency, formatDateTime } from "../../utils/helpers";
 import AuthModal from "../../components/authmodal";
+import { useIncompleteOrdersQuery } from "../../redux/orders";
 
 export const copyToClipboard = (text) => {
   navigator.clipboard.writeText(text);
@@ -24,25 +26,12 @@ const getStatusColor = (status) => {
   }
 };
 
-const formatDateTime = (dateTimeString) => {
-  const date = new Date(dateTimeString);
-
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, "0");
-  const day = String(date.getDate()).padStart(2, "0");
-  const hour = String(date.getHours()).padStart(2, "0");
-  const minute = String(date.getMinutes()).padStart(2, "0");
-  const second = String(date.getSeconds()).padStart(2, "0");
-  const millisecond = String(date.getMilliseconds()).padStart(3, "0");
-
-  const formattedDateTime = `${year}-${month}-${day} ${hour}:${minute}:${second}.${millisecond}`;
-
-  return formattedDateTime;
-};
-
 const OrderForRider = () => {
-  const incompleteOrders = [];
-  const error = "";
+  const {
+    data: incompleteOrders,
+
+    error,
+  } = useIncompleteOrdersQuery({ page: 1, size: 10, sort: "DESC" });
 
   const intervalIdRef = useRef<number>(0);
   const [expandedRow, setExpandedRow] = useState(null);
@@ -102,7 +91,7 @@ const OrderForRider = () => {
             </TableHeadRow>
           </TableHead>
           <TableBody>
-            {[]?.data?.map((item, ind) => (
+            {incompleteOrders?.data?.map((item, ind) => (
               <React.Fragment key={item.id}>
                 <TableRow onClick={() => toggleExpand({ id: item.id, ind })}>
                   <TableDataCell>{item.reference}</TableDataCell>

@@ -50,7 +50,7 @@ const App: React.FC = () => {
               </Suspense>
             }
           />
-          <Route path="/check" element={<AdminLayout />}>
+          <Route path="/" element={<AdminLayout />}>
             <Route
               index
               element={

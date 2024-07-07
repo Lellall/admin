@@ -3,9 +3,9 @@ import { Controller, useForm } from "react-hook-form";
 import InputWithIcon from "../../components/Inputs/input";
 import { MessageText, Unlock } from "iconsax-react";
 import { useNavigate } from "react-router-dom";
-import { useLoginMutation } from "./auth.api";
 import { setCredentials } from "../../redux/auth/auth2Slice";
 import { useDispatch } from "react-redux";
+import { useLoginMutation } from "../../redux/auth";
 
 interface LoginData {
   email: string;

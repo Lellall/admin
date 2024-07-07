@@ -57,7 +57,6 @@ const InputWithIcon = ({
   icon: Icon,
   label,
   // eslint-disable-next-line no-unused-vars
-  name,
   type,
   hasError,
   errorMessage,
