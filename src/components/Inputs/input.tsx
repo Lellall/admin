@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 // @ts-nocheck
 import { useState } from "react";
 import styled from "styled-components";
@@ -10,10 +9,11 @@ const InputContainer = styled.div`
   width: 100%;
 `;
 
-const StyledInput = styled.input`
+export const StyledInput = styled.input`
   padding: 10px 20px;
   padding-right: ${(props) => (props.hasToggle ? "40px" : "20px")};
-  width: 300px;
+  /* max-width: 300px; */
+  width: 100%;
   box-sizing: border-box;
   border: 1px solid ${(props) => (props.hasError ? "red" : "#D3D3D3")};
   border-radius: 3px;
@@ -87,9 +87,23 @@ const InputWithIcon = ({
       {hasToggle && (
         <EyeIcon hasError onClick={togglePasswordVisibility}>
           {showPassword ? (
-            <div style={{ marginTop:`${hasError ? "0px" : "20px"} `, color:"#ccc" }}>{<EyeSlash size="16" />}</div>
+            <div
+              style={{
+                marginTop: `${hasError ? "0px" : "20px"} `,
+                color: "#ccc",
+              }}
+            >
+              {<EyeSlash size="16" />}
+            </div>
           ) : (
-            <div style={{ marginTop:`${hasError ? "0px" : "20px"} `, color:"#ccc" }}>{<Eye size="16" />}</div>
+            <div
+              style={{
+                marginTop: `${hasError ? "0px" : "20px"} `,
+                color: "#ccc",
+              }}
+            >
+              {<Eye size="16" />}
+            </div>
           )}
         </EyeIcon>
       )}
