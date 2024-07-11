@@ -1,8 +1,9 @@
 /* eslint-disable no-console */
-import apiSlice from "../api/apiSlice";
+import apiSlice from "../api/api.slice";
 // import { api } from "../../services/baseApi";
-import { setAuthState, logout } from "../../features/auth/authSlice";
+import { setAuthState, logout } from "../../features/auth/auth.slice";
 import { LoginRequest, LoginResponse } from "./typings";
+import { toast } from "react-toastify";
 
 const authApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
@@ -66,14 +67,24 @@ const authApi = apiSlice.injectEndpoints({
         }
       },
     }),
-    requestPasswordReset: builder.mutation({
-      query: (email) => ({
+    requestPasswordReset: builder.mutation<EmailResponse, EmailRequest>({
+      query: (params: EmailRequest) => ({
         url: `/auth/password-reset/request`,
         method: "POST",
-        params: { email, role: "CONSUMER" },
-        headers: { accept: "*/*" },
-        body: "",
+        params: { email: params.email, role: "ADMIN" },
       }),
+      async onQueryStarted(_args, { queryFulfilled: qf }) {
+        qf.then((res) =>
+          toast.success(`${res.data.content}`, {
+            position: "top-right",
+          })
+        ).catch((err) => {
+          console.error(err);
+          toast.error(`${err?.status?.message}`, {
+            position: "top-right",
+          });
+        });
+      },
     }),
     resetPassword: builder.mutation({
       query: ({ email, token, newPassword, confirmPassword, role }) => ({
@@ -83,34 +94,6 @@ const authApi = apiSlice.injectEndpoints({
         headers: { "Content-Type": "application/json" },
         body: { newPassword, confirmPassword },
       }),
-    }),
-    refreshToken: builder.mutation({
-      query: () => ({
-        url: "/auth/refresh-token/",
-        method: "POST",
-        body: {
-          refresh: JSON.parse(localStorage.getItem("refresh_token") || "null"),
-        },
-      }),
-      transformResponse: (response: { access_token: string }) => {
-        localStorage.setItem("access_token", response.access_token);
-        return response;
-      },
-      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
-        try {
-          const { data } = await queryFulfilled;
-          dispatch(
-            setAuthState({
-              isAuthenticated: true,
-              accessToken: data.access_token,
-              refreshToken: localStorage.getItem("refresh_token"),
-            })
-          );
-        } catch (err) {
-          console.error(err);
-          dispatch(logout());
-        }
-      },
     }),
     logout: builder.mutation({
       // @ts-ignore
@@ -129,5 +112,18 @@ const authApi = apiSlice.injectEndpoints({
   }),
 });
 
-export const { useLoginMutation, useLogoutMutation, useRegisterMutation } =
-  authApi;
+export const {
+  useLoginMutation,
+  useLogoutMutation,
+  useRegisterMutation,
+  useResetPasswordMutation,
+  useRequestPasswordResetMutation,
+} = authApi;
+
+interface EmailRequest {
+  email: string;
+}
+
+interface EmailResponse {
+  content: string;
+}

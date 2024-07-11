@@ -1,37 +1,33 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable no-console */
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
 import InputWithIcon from "../../components/Inputs/input";
-import { MessageText, Unlock, User } from "iconsax-react";
-import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { useLoginMutation } from "../../redux/auth";
+import { MessageText } from "iconsax-react";
+// import { useDispatch } from "react-redux";
+// import { useNavigate } from "react-router-dom";
+import { useRequestPasswordResetMutation } from "../../redux/auth";
 
 const ForgotPassword: React.FC = () => {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+  // const dispatch = useDispatch();
+  // const navigate = useNavigate();
 
-  const [login, { isLoading }] = useLoginMutation();
+  const [reset, { isLoading }] = useRequestPasswordResetMutation();
   const {
     handleSubmit,
     control,
     formState: { errors },
   } = useForm();
 
-  const handleLogin = async ({ email, password }: any) => {
-    try {
-      await login({ email, password, role: "CONSUMER" }).unwrap();
-      // dispatch(setAuth(true));
-    } catch (err) {
-      console.error("Failed to login:", err);
-    }
+  const handleResetPassword = async (email: any) => {
+    await reset(email).unwrap();
   };
-  const onSubmit = (data: any) => {
-    console.log(data);
 
-    handleLogin(data);
-  };
   return (
-    <form className=" box-border w-full " onSubmit={handleSubmit(onSubmit)}>
+    <form
+      className=" box-border w-full "
+      onSubmit={handleSubmit(handleResetPassword)}
+    >
       <div className="flex text-center mb-5 flex-col m:flex-row mx-4">
         <span
           style={{

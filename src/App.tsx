@@ -2,16 +2,20 @@ import React, { lazy, Suspense } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import "./App.css";
 import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 //components
 import AdminLayout from "./components/layout/admin.layout";
 import AuthLayout from "./components/layout/auth.layout";
-import PrivateRoute from "./components/routes-helpers/privateRoute";
-import ScreenLoader from "./components/ui/ScreenLoader";
+import PrivateRoute from "./components/routes-helpers/private-route";
+import ScreenLoader from "./components/screen-loader";
+import Transaction from "./features/transaction/transaction-history.components";
+import Products from "./features/products/products.components";
+import { ManageVendors } from "./features/vendors/vendors.component";
 
 //pages-routes
-const OrderForRider = lazy(() => import("./features/order/orderForRider"));
-const Login = lazy(() => import("./features/auth/login"));
+const OrderForRider = lazy(() => import("./features/order/orders.component"));
+const Login = lazy(() => import("./features/auth/login.component"));
 const ForgotPassword = lazy(() => import("./features/auth/forgot-password"));
 const Register = lazy(() => import("./features/auth/register"));
 
@@ -57,6 +61,46 @@ const App: React.FC = () => {
                 <Suspense fallback={<ScreenLoader />}>
                   <PrivateRoute>
                     <OrderForRider />
+                  </PrivateRoute>
+                </Suspense>
+              }
+            />
+            <Route
+              path="/transaction-history"
+              element={
+                <Suspense fallback={<ScreenLoader />}>
+                  <PrivateRoute>
+                    <Transaction />
+                  </PrivateRoute>
+                </Suspense>
+              }
+            />
+            <Route
+              path="/products"
+              element={
+                <Suspense fallback={<ScreenLoader />}>
+                  <PrivateRoute>
+                    <Products />
+                  </PrivateRoute>
+                </Suspense>
+              }
+            />
+            <Route
+              path="/my-orders"
+              element={
+                <Suspense fallback={<ScreenLoader />}>
+                  <PrivateRoute>
+                    <ManageVendors />
+                  </PrivateRoute>
+                </Suspense>
+              }
+            />
+            <Route
+              path="/products"
+              element={
+                <Suspense fallback={<ScreenLoader />}>
+                  <PrivateRoute>
+                    <Products />
                   </PrivateRoute>
                 </Suspense>
               }

@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { LoginResponse } from ".";
 import { RootState } from "../store";
+import { LoginResponse } from "./typings";
 
 export interface AuthState {
   user: LoginResponse;

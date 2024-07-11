@@ -16,16 +16,21 @@ import { useResponsiveValue } from "../../lib/use-responsive-value.js";
 import { ViewportWidth } from "../../utils/enums.js";
 import { appPaths } from "./app-paths.js";
 import { Modal } from "../ui/index.js";
+import { logout } from "../../features/auth/auth.slice.js";
+import { useDispatch } from "react-redux";
 
 const AdminLayout = () => {
   //   const { logoutAdmin } = useAuth();
-
+  const dispatch = useDispatch();
+  const handleLogOut = () => {
+    dispatch(logout());
+  };
   const navItems = [
     {
       id: 1,
       icon: <MonitorRecorder size="20" />,
       text: "Manage Orders & Riders",
-      url: "/check",
+      url: "/",
     },
     {
       id: 2,
@@ -85,8 +90,7 @@ const AdminLayout = () => {
             ))}
           </div>
           <div className="deactivate">
-            {/* <button onClick={() => logoutAdmin()}>Logout</button> */}
-            <button onClick={() => {}}>Logout</button>
+            <button onClick={handleLogOut}>Logout </button>
           </div>
         </NavContainer>
         <ContentContainer>
