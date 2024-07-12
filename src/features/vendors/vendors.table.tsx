@@ -41,8 +41,11 @@ const StatusTd = styled(Td)<StyledStatusProps>`
     }
   }};
 `;
+interface VendrosTableProps {
+  data: ConsumerOrderHistory[];
+}
 
-export const VendrosTable = (data: ConsumerOrderHistory[]) => {
+export const VendrosTable: React.FC<VendrosTableProps> = ({ data }) => {
   return (
     <TableContainer>
       <Table>

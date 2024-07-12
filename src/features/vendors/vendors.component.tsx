@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { SetStateAction, useState } from "react";
 import {
   HeadingContainer,
   HeadingText,
@@ -12,17 +12,22 @@ import { useGetConsumerHistoryQuery } from "../../redux/orders";
 import EmptyState from "../../components/empty-state";
 import MiniLoader from "../../components/mini-loader";
 
+type Option = "PENDING" | "ACCEPTED" | "ON_GOING" | "COMPLETED" | "CANCELED";
+
 export const ManageVendors = () => {
   const [currentTab, setCurrentTab] = useState(1);
   const [page, setPage] = useState<number>(0);
-  const [status, setStatus] = useState("PENDING");
+  const [status, setStatus] = useState<Option>("PENDING");
   const { data, isFetching } = useGetConsumerHistoryQuery({
     page: page,
     size: 10,
     status,
   });
 
-  const handleTabChange = (tabIndex, orderStatus) => {
+  const handleTabChange = (
+    tabIndex: SetStateAction<number>,
+    orderStatus: Option
+  ) => {
     setCurrentTab(tabIndex);
     setStatus(orderStatus);
     setPage(1);
@@ -75,7 +80,7 @@ export const ManageVendors = () => {
       <>
         {data?.data?.length ? (
           <>
-            <VendrosTable orders={data?.data} />
+            <VendrosTable data={data?.data} />
             <Pagination
               onChange={onChangePage}
               current={page}
