@@ -18,6 +18,7 @@ import { appPaths } from "./app-paths.js";
 import { Modal } from "../ui/index.js";
 import { logout } from "../../features/auth/auth.slice.js";
 import { useDispatch } from "react-redux";
+import { NetworkIndicator } from "../ui/network-indicator/network-indicator-component.js";
 
 const AdminLayout = () => {
   //   const { logoutAdmin } = useAuth();
@@ -41,29 +42,35 @@ const AdminLayout = () => {
     {
       id: 3,
       icon: <BookSaved size="20" />,
-      text: "Manage Vendors",
+      text: "Order History",
       url: appPaths.myOrders,
     },
     {
       id: 4,
       icon: <Additem size="20" />,
+      text: "Manage Vendors",
+      url: appPaths.vendors,
+    },
+    {
+      id: 5,
+      icon: <Additem size="20" />,
       text: "Manage Products",
       url: appPaths.products,
     },
     {
-      id: 5,
+      id: 6,
       icon: <Heart size="20" />,
       text: "Favorites",
       url: appPaths.favorites,
     },
     {
-      id: 6,
+      id: 7,
       icon: <TicketDiscount size="20" />,
       text: "Discount",
       url: appPaths.discount,
     },
     {
-      id: 7,
+      id: 8,
       icon: <Clock size="20" />,
       text: "Recently viewed",
       url: appPaths.recentlyViewed,
@@ -78,6 +85,7 @@ const AdminLayout = () => {
 
   return (
     <>
+      <NetworkIndicator />
       <MainContainer>
         <NavContainer>
           <div className="nav-items">

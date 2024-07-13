@@ -1,99 +1,73 @@
-import { SetStateAction, useState } from "react";
-import {
-  HeadingContainer,
-  HeadingText,
-  TabContainer,
-  StyledButton,
-  MainContainer,
-} from "./vendors.style";
-import Pagination from "rc-pagination";
-import { VendrosTable } from "./vendors.table";
-import { useGetConsumerHistoryQuery } from "../../redux/orders";
-import EmptyState from "../../components/empty-state";
+/* eslint-disable no-console */
+import { useGetShopsQuery } from "../../redux/shops";
+import VendorsTable from "./vendors-table";
+import Pagination from "rc-pagination/lib/Pagination";
+import { useState } from "react";
+import { SearchInp } from "../../components/ui/base/navbar/navbar.styles";
+import ScreenLoader from "../../components/screen-loader";
 import MiniLoader from "../../components/mini-loader";
+import { useDebounce } from "react-use";
 
-type Option = "PENDING" | "ACCEPTED" | "ON_GOING" | "COMPLETED" | "CANCELED";
+const Vendor = () => {
+  const [page, setPage] = useState(1);
+  const [vendorName, setVendorName] = useState<string>("");
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
+  useDebounce(
+    () => {
+      setDebouncedSearchTerm(vendorName);
+    },
+    500,
+    [vendorName]
+  );
 
-export const ManageVendors = () => {
-  const [currentTab, setCurrentTab] = useState(1);
-  const [page, setPage] = useState<number>(0);
-  const [status, setStatus] = useState<Option>("PENDING");
-  const { data, isFetching } = useGetConsumerHistoryQuery({
-    page: page,
+  const { data, isLoading, isFetching } = useGetShopsQuery({
+    page,
     size: 10,
-    status,
+    categoryId: "",
+    filter: debouncedSearchTerm,
   });
 
-  const handleTabChange = (
-    tabIndex: SetStateAction<number>,
-    orderStatus: Option
-  ) => {
-    setCurrentTab(tabIndex);
-    setStatus(orderStatus);
-    setPage(1);
-  };
+  console.log("data", data);
 
-  const onChangePage = (pageNumber: number) => {
+  const handlePageClick = (pageNumber: number) => {
     setPage(pageNumber);
+    // refetch(pageNumber);
   };
 
+  const handleSearchChange = (event: {
+    target: { value: React.SetStateAction<string> };
+  }) => {
+    setVendorName(event.target.value);
+  };
   return (
-    <MainContainer>
-      <HeadingContainer>
-        <div className="flex items-center justify-between  w-full">
-          <HeadingText>Order History</HeadingText>
-          {isFetching ? <MiniLoader /> : ""}
-        </div>
-      </HeadingContainer>
-      <TabContainer>
-        <StyledButton
-          onClick={() => handleTabChange(1, "PENDING")}
-          active={currentTab === 1}
-        >
-          PENDING
-        </StyledButton>
-        <StyledButton
-          onClick={() => handleTabChange(2, "ACCEPTED")}
-          active={currentTab === 2}
-        >
-          ACCEPTED
-        </StyledButton>
-        <StyledButton
-          onClick={() => handleTabChange(3, "ON_GOING")}
-          active={currentTab === 3}
-        >
-          ON_GOING
-        </StyledButton>
-        <StyledButton
-          onClick={() => handleTabChange(4, "COMPLETED")}
-          active={currentTab === 4}
-        >
-          COMPLETED
-        </StyledButton>
-        <StyledButton
-          onClick={() => handleTabChange(5, "CANCELED")}
-          active={currentTab === 5}
-        >
-          CANCELED
-        </StyledButton>
-      </TabContainer>
-      <>
-        {data?.data?.length ? (
-          <>
-            <VendrosTable data={data?.data} />
+    <>
+      <div className="flex justify-between w-full items-center  ">
+        <SearchInp
+          type="text"
+          placeholder="Who are you looking for?"
+          value={vendorName}
+          onChange={handleSearchChange}
+        />
+        {isFetching && <MiniLoader />}
+      </div>
+
+      {isLoading ? (
+        <ScreenLoader style={{ height: "50vh" }} />
+      ) : (
+        <>
+          <div style={{ width: "100%" }}>
+            <VendorsTable vendors={data.data} />
+          </div>
+          <div style={{ float: "right", margin: "10px" }}>
             <Pagination
-              onChange={onChangePage}
+              onChange={handlePageClick}
               current={page}
               total={data?.resultTotal}
-              style={{ marginTop: 10, marginBottom: 10 }}
             />
-          </>
-        ) : (
-          <>
-            <EmptyState />
-          </>
-        )}
-      </>
-    </MainContainer>
+          </div>
+        </>
+      )}
+    </>
   );
 };
+export default Vendor;

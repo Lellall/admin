@@ -19,7 +19,7 @@ const products = apiSlice.injectEndpoints({
     updateProduct: builder.mutation<Product, UpdateProductRequest>({
       query: ({ id, ...rest }) => ({
         url: `/products/${id}`,
-        method: "patch",
+        method: "PATCH",
         body: {
           isAvailable: rest.isAvailable,
           price: rest.price,
@@ -27,13 +27,12 @@ const products = apiSlice.injectEndpoints({
         },
       }),
       async onQueryStarted(_args, { queryFulfilled: qf }) {
-        qf.then((res) => {
-          toast.success(`${res}`, {
+        qf.then(() => {
+          toast.success(`Product Updated Successfully `, {
             position: "top-right",
           });
         }).catch((err) => {
-          console.log(err);
-          toast.error(`${err.error.error}`, {
+          toast.error(`${err.error.error} || Failed to update the products`, {
             position: "top-right",
           });
         });

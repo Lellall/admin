@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { CopyAllOutlined } from "@mui/icons-material";
 
 export const TableWrapper = styled.div`
   width: 100%;
@@ -29,8 +30,7 @@ export const TableHeadCell = styled.th`
   font-weight: 300;
   padding: 20px;
   text-align: left;
-  width: 20%;
-  /* background: red; */
+  width: 100%;
 `;
 
 export const TableBody = styled.tbody`
@@ -41,8 +41,6 @@ export const TableRow = styled.tr`
   font-size: 11px;
   padding: 20px;
   width: 100%;
-  cursor: pointer;
-
   &:nth-child(even) {
     background-color: #f2f2f2;
   }
@@ -55,15 +53,27 @@ export const TableDataCell = styled.td`
   white-space: pre-wrap;
 `;
 
-export const ShopStatus = styled(TableDataCell)<{ status: "OPEN" | "CLOSE" }>`
-  color: ${({ status }) => {
-    switch (status) {
-      case "OPEN":
-        return "GREEN";
-      case "CLOSE":
-        return "RED";
-      default:
-        return "black";
-    }
-  }};
+export const ExpandableRow = styled.tr`
+  background-color: #eafef1;
+  color: #00a661;
+`;
+
+export const ExpandableDataCell = styled.td`
+  padding: 12px;
+  border: 1px solid #ccc;
+`;
+
+export const InteractiveIcon = styled(CopyAllOutlined)`
+  color: #333;
+  cursor: pointer;
+  transition: color 0.3s ease;
+  &:hover {
+    color: red;
+  }
+`;
+export const Content = styled.div`
+  display: flex;
+  flex: 1;
+  justify-content: space-between;
+  min-height: 200px;
 `;

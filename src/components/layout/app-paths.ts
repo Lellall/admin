@@ -12,6 +12,7 @@ export const appPaths = {
   // USER
   profile: "/account",
   myOrders: "my-orders",
+  vendors: "vendors",
   notification: "notification",
   products: "products",
   favorites: "favorites",
