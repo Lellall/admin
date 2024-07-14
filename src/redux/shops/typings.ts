@@ -3,7 +3,7 @@ interface Category {
   name: string;
   imageUrl: string;
   description: string;
-  type: "SHOP"; // Enum value based on the provided example
+  type: 'SHOP'; // Enum value based on the provided example
 }
 
 interface Time {
@@ -36,7 +36,7 @@ export interface Shop {
   logoUrl: string;
   name: string;
   address: string;
-  status: "OPEN"; // Enum value based on the provided example
+  status: 'OPEN'; // Enum value based on the provided example
   inventory: number;
   active: boolean;
   createdAt: string; // ISO 8601 date format

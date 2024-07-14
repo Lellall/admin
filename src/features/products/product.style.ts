@@ -1,5 +1,5 @@
-import styled from "styled-components";
-import { CopyAllOutlined } from "@mui/icons-material";
+import styled from 'styled-components';
+import { CopyAllOutlined } from '@mui/icons-material';
 
 export const TableWrapper = styled.div`
   width: 100%;

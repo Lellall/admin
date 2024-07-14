@@ -1,29 +1,26 @@
-import React, { lazy, Suspense } from "react";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import "./App.css";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import React, { lazy, Suspense } from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import './App.css';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 //components
-import AdminLayout from "./components/layout/admin.layout";
-import AuthLayout from "./components/layout/auth.layout";
-import PrivateRoute from "./components/routes-helpers/private-route";
-import ScreenLoader from "./components/screen-loader";
-import { appPaths } from "./components/layout/app-paths";
+import AdminLayout from './components/layout/admin.layout';
+import AuthLayout from './components/layout/auth.layout';
+import PrivateRoute from './components/routes-helpers/private-route';
+import ScreenLoader from './components/screen-loader';
+import { appPaths } from './components/layout/app-paths';
 
 //pages-routes
-const OrderForRider = lazy(() => import("./features/order/orders.component"));
-const Products = lazy(() => import("./features/products/products.components"));
-const Transaction = lazy(
-  () => import("./features/transaction/transaction-history.components")
-);
-const OrderHistory = lazy(
-  () => import("./features/order/order-history.component")
-);
-const Vendor = lazy(() => import("./features/vendors/vendors.component"));
-const Login = lazy(() => import("./features/auth/login.component"));
-const ForgotPassword = lazy(() => import("./features/auth/forgot-password"));
-const Register = lazy(() => import("./features/auth/register"));
+const OrderForRider = lazy(() => import('./features/order/orders.component'));
+const Products = lazy(() => import('./features/products/products.components'));
+const Transaction = lazy(() => import('./features/transaction/transaction-history.components'));
+const OrderHistory = lazy(() => import('./features/order/order-history.component'));
+const Vendors = lazy(() => import('./features/vendors/vendors.component'));
+const Vendor = lazy(() => import('./features/vendors/vendor.components'));
+const Login = lazy(() => import('./features/auth/login.component'));
+const ForgotPassword = lazy(() => import('./features/auth/forgot-password'));
+const Register = lazy(() => import('./features/auth/register'));
 
 const App: React.FC = () => {
   return (
@@ -104,6 +101,16 @@ const App: React.FC = () => {
 
             <Route
               path={appPaths.vendors}
+              element={
+                <Suspense fallback={<ScreenLoader />}>
+                  <PrivateRoute>
+                    <Vendors />
+                  </PrivateRoute>
+                </Suspense>
+              }
+            />
+            <Route
+              path={appPaths.getVendors()}
               element={
                 <Suspense fallback={<ScreenLoader />}>
                   <PrivateRoute>

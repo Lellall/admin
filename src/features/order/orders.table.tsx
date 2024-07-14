@@ -1,6 +1,6 @@
-import React from "react";
-import styled from "styled-components";
-import { ConsumerOrderHistory } from "../../redux/orders/typings";
+import React from 'react';
+import styled from 'styled-components';
+import { ConsumerOrderHistory } from '../../redux/orders/typings';
 
 const TableContainer = styled.div`
   width: 100%;
@@ -24,20 +24,20 @@ const Td = styled.td`
 `;
 
 interface StyledStatusProps {
-  status?: "PENDING" | "ACCEPTED" | "ON_GOING" | "COMPLETED" | "CANCELED";
+  status?: 'PENDING' | 'ACCEPTED' | 'ON_GOING' | 'COMPLETED' | 'CANCELED';
 }
 
 const StatusTd = styled(Td)<StyledStatusProps>`
   color: ${({ status }) => {
     switch (status) {
-      case "PENDING":
-        return "orange";
-      case "ON_GOING":
-        return "blue";
-      case "COMPLETED":
-        return "green";
+      case 'PENDING':
+        return 'orange';
+      case 'ON_GOING':
+        return 'blue';
+      case 'COMPLETED':
+        return 'green';
       default:
-        return "black";
+        return 'black';
     }
   }};
 `;
@@ -66,10 +66,7 @@ export const OrdersTable: React.FC<OrdersTableProps> = ({ data }) => {
               <StatusTd status={order.status}>{order.status}</StatusTd>
               <Td>&#x20A6;{order.paymentItems[0].price}</Td>
               <Td>{order.distance} km</Td>
-              <StatusTd style={{ cursor: "pointer" }}>
-                {" "}
-                {order.paymentItems.length}
-              </StatusTd>
+              <StatusTd style={{ cursor: 'pointer' }}> {order.paymentItems.length}</StatusTd>
             </tr>
           ))}
         </tbody>

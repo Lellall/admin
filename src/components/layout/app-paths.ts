@@ -13,6 +13,7 @@ export const appPaths = {
   profile: "/account",
   myOrders: "my-orders",
   vendors: "vendors",
+  getVendors: (id = ":id") => `/vendors/${id}`,
   notification: "notification",
   products: "products",
   favorites: "favorites",

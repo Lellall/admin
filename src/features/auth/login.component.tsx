@@ -1,11 +1,11 @@
-import React, { useEffect } from "react";
-import { Controller, useForm } from "react-hook-form";
-import InputWithIcon from "../../components/Inputs/input";
-import { MessageText, Unlock } from "iconsax-react";
-import { useNavigate } from "react-router-dom";
-import { setCredentials } from "../../redux/auth/auth.slice";
-import { useDispatch } from "react-redux";
-import { useLoginMutation } from "../../redux/auth";
+import React, { useEffect } from 'react';
+import { Controller, useForm } from 'react-hook-form';
+import InputWithIcon from '../../components/Inputs/input';
+import { MessageText, Unlock } from 'iconsax-react';
+import { useNavigate } from 'react-router-dom';
+import { setCredentials } from '../../redux/auth/auth.slice';
+import { useDispatch } from 'react-redux';
+import { useLoginMutation } from '../../redux/auth';
 
 interface LoginData {
   email: string;
@@ -24,7 +24,7 @@ const Login: React.FC = () => {
   } = useForm();
 
   const handleLogin = async ({ email, password }: LoginData) => {
-    login({ email, password, role: "ADMIN" });
+    login({ email, password, role: 'ADMIN' });
   };
 
   useEffect(() => {
@@ -38,7 +38,7 @@ const Login: React.FC = () => {
           user: data.user,
         })
       );
-      navigate("/");
+      navigate('/');
     }
     // eslint-disable-next-line
   }, [isSuccess]);
@@ -49,37 +49,32 @@ const Login: React.FC = () => {
       <div className="text-center mb-5">
         <span
           style={{
-            color: "rgb(51, 51, 51)",
-            fontSize: "24px",
+            color: 'rgb(51, 51, 51)',
+            fontSize: '24px',
             fontWeight: 300,
-          }}
-        >
+          }}>
           Login
         </span>
         <br />
         <span
           className="mt-5"
           style={{
-            color: "#AAAAAA",
-            fontSize: "16px",
+            color: '#AAAAAA',
+            fontSize: '16px',
             fontWeight: 300,
-          }}
-        >
+          }}>
           Log in with your credentials
         </span>
       </div>
-      <form
-        className="w-full max-w-screen-sm m-auto"
-        onSubmit={handleSubmit(handleLogin)}
-      >
+      <form className="w-full max-w-screen-sm m-auto" onSubmit={handleSubmit(handleLogin)}>
         <Controller
           name="email"
           control={control}
           rules={{
-            required: "Email is required",
+            required: 'Email is required',
             pattern: {
               value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
-              message: "Invalid email address",
+              message: 'Invalid email address',
             },
           }}
           render={({ field }) => (
@@ -98,15 +93,14 @@ const Login: React.FC = () => {
           name="password"
           control={control}
           rules={{
-            required: "Password is required",
+            required: 'Password is required',
             minLength: {
               value: 8,
-              message: "Password must be at least 8 characters long",
+              message: 'Password must be at least 8 characters long',
             },
             // @ts-ignore
             pattern: {
-              message:
-                "Password must contain at least one special character (!@#$%^&*)",
+              message: 'Password must contain at least one special character (!@#$%^&*)',
             },
           }}
           render={({ field }) => (
@@ -123,32 +117,29 @@ const Login: React.FC = () => {
         />
         <div className="flex">
           <div
-            onClick={() => navigate("/forgot-password")}
+            onClick={() => navigate('/forgot-password')}
             className="ml-auto my-2 text-blue-500"
-            style={{ fontSize: "12px", cursor: "pointer" }}
-          >
+            style={{ fontSize: '12px', cursor: 'pointer' }}>
             Forgot Password?
           </div>
         </div>
         <button
           disabled={isLoading}
-          className="bg-green-800 hover:bg-[#0e5737] text-white w-full mt-4 py-2 px-4 rounded-full"
-        >
+          className="bg-green-800 hover:bg-[#0e5737] text-white w-full mt-4 py-2 px-4 rounded-full">
           LOGIN
         </button>
       </form>
       <hr className="my-6 border-t border-gray-300" />
-      <div onClick={() => navigate("/register")} className="text-center mb-5">
+      <div onClick={() => navigate('/register')} className="text-center mb-5">
         <span
           className="mt-5"
           style={{
-            color: "#AAAAAA",
-            fontSize: "16px",
-            textAlign: "center",
+            color: '#AAAAAA',
+            fontSize: '16px',
+            textAlign: 'center',
             fontWeight: 300,
-            cursor: "pointer",
-          }}
-        >
+            cursor: 'pointer',
+          }}>
           Don't have an account ?, sign up!.
         </span>
       </div>

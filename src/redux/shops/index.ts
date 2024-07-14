@@ -1,1 +1,1 @@
-export { useGetSingleShopQuery, useGetShopsQuery } from "./shops.api";
+export { useGetSingleShopQuery, useGetShopsQuery } from './shops.api';

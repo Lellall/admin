@@ -1,12 +1,7 @@
 /* eslint-disable no-console */
-import { toast } from "react-toastify";
-import apiSlice from "../api/api.slice";
-import {
-  Product,
-  ProductRequest,
-  ProductResponse,
-  UpdateProductRequest,
-} from "./typings";
+import { toast } from 'react-toastify';
+import apiSlice from '../api/api.slice';
+import { Product, ProductRequest, ProductResponse, UpdateProductRequest } from './typings';
 
 const products = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
@@ -15,25 +10,27 @@ const products = apiSlice.injectEndpoints({
         url: `/products`,
         params: { page: params.page, size: params.size, filter: params.filter },
       }),
+      providesTags: ['PRODUCTS'],
     }),
     updateProduct: builder.mutation<Product, UpdateProductRequest>({
       query: ({ id, ...rest }) => ({
         url: `/products/${id}`,
-        method: "PATCH",
+        method: 'PATCH',
         body: {
           isAvailable: rest.isAvailable,
           price: rest.price,
           description: rest.description,
         },
       }),
+      invalidatesTags: ['PRODUCTS'],
       async onQueryStarted(_args, { queryFulfilled: qf }) {
         qf.then(() => {
           toast.success(`Product Updated Successfully `, {
-            position: "top-right",
+            position: 'top-right',
           });
         }).catch((err) => {
-          toast.error(`${err.error.error} || Failed to update the products`, {
-            position: "top-right",
+          toast.error(`${err.error.data.message}`, {
+            position: 'top-right',
           });
         });
       },

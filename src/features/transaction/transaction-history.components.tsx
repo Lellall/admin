@@ -1,40 +1,35 @@
-import { useState } from "react";
+import { useState } from 'react';
 
-import {
-  HeadingContainer,
-  HeadingText,
-  EmptyState,
-  MainContainer,
-} from "./transaction.style";
-import Pagination from "rc-pagination";
-import styled from "styled-components";
-import Select from "react-select";
-import { useGetTransactionQuery } from "../../redux/transaction";
-import TransactionTable from "./tansaction-table";
-import ScreenLoader from "../../components/screen-loader";
+import { HeadingContainer, HeadingText, EmptyState, MainContainer } from './transaction.style';
+import Pagination from 'rc-pagination';
+import styled from 'styled-components';
+import Select from 'react-select';
+import { useGetTransactionQuery } from '../../redux/transaction';
+import TransactionTable from './tansaction-table';
+import ScreenLoader from '../../components/screen-loader';
 
 type Option = {
-  value: "PENDING" | "FAILED" | "COMPLETED";
+  value: 'PENDING' | 'FAILED' | 'COMPLETED';
   label: string;
 };
 
 const options: Option[] = [
-  { value: "PENDING", label: "Pending" },
-  { value: "FAILED", label: "Failed" },
-  { value: "COMPLETED", label: "Completed" },
+  { value: 'PENDING', label: 'Pending' },
+  { value: 'FAILED', label: 'Failed' },
+  { value: 'COMPLETED', label: 'Completed' },
 ];
 const Transaction = () => {
   const [page, setPage] = useState(1);
   const [selectedOption, setSelectedOption] = useState<Option>({
-    value: "COMPLETED",
-    label: "Completed",
+    value: 'COMPLETED',
+    label: 'Completed',
   });
 
   const { data, isLoading, isFetching } = useGetTransactionQuery({
     page: page,
     size: 10,
     status: selectedOption.value,
-    userId: "",
+    userId: '',
   });
   // const { data: transactionHistory, resultTotal } = data;
 
@@ -47,7 +42,7 @@ const Transaction = () => {
   };
 
   if (isLoading) {
-    return <ScreenLoader style={{ height: "60vh" }} />;
+    return <ScreenLoader style={{ height: '60vh' }} />;
   }
 
   return (

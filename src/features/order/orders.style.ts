@@ -1,6 +1,6 @@
-import styled from "styled-components";
-import { Typography, Box, Button } from "@mui/material";
-import { CopyAllOutlined } from "@mui/icons-material";
+import styled from 'styled-components';
+import { Typography, Box, Button } from '@mui/material';
+import { CopyAllOutlined } from '@mui/icons-material';
 // import { ViewportWidth } from "../../../utils/enums";
 
 export const MainContainer = styled(Box)`
@@ -23,7 +23,7 @@ export const HeadingContainer = styled(Box)`
 
 export const HeadingText = styled(Typography)`
   color: #2f313f !important;
-  font-feature-settings: "clig" off, "liga" off !important;
+  font-feature-settings: 'clig' off, 'liga' off !important;
   font-family: Raleway !important;
   font-size: 20px !important;
   font-style: normal !important;
@@ -51,9 +51,9 @@ export const StyledButton = styled(Button)<StyledButtonProps>`
   justify-content: center !important;
   align-items: center !important;
   gap: 5px !important;
-  background: ${(props) => (props.active ? "#EAFEF1" : "")} !important;
-  color: ${(props) => (props.active ? "#00A661" : "#ccc")} !important;
-  font-feature-settings: "clig" off, "liga" off !important;
+  background: ${(props) => (props.active ? '#EAFEF1' : '')} !important;
+  color: ${(props) => (props.active ? '#00A661' : '#ccc')} !important;
+  font-feature-settings: 'clig' off, 'liga' off !important;
   font-family: Open Sans !important;
   font-size: 16px !important;
   font-style: normal !important;

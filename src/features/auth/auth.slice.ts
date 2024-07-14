@@ -1,7 +1,8 @@
 // src/features/auth/authSlice.ts
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-export interface AuthState {  // Ensure AuthState is exported
+export interface AuthState {
+  // Ensure AuthState is exported
   isAuthenticated: boolean;
   accessToken: string | null;
   refreshToken: string | null;

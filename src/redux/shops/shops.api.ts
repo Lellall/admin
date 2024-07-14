@@ -1,5 +1,5 @@
-import apiSlice from "../api/api.slice";
-import { ShopRequest, ShopsRequest, ShopsResponse } from "./typings";
+import apiSlice from '../api/api.slice';
+import { Shop, ShopRequest, ShopsRequest, ShopsResponse } from './typings';
 
 const shops = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
@@ -8,7 +8,7 @@ const shops = apiSlice.injectEndpoints({
         url: `/shops`,
       }),
     }),
-    getSingleShop: builder.query<ShopsResponse, ShopRequest>({
+    getSingleShop: builder.query<Shop, ShopRequest>({
       query: (params: ShopRequest) => ({
         url: `/shops/${params.id}`,
       }),

@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
-import { toast } from "react-toastify";
-import apiSlice from "../api/api.slice";
+import { toast } from 'react-toastify';
+import apiSlice from '../api/api.slice';
 
 import {
   CompleteOrderRequest,
@@ -8,7 +8,7 @@ import {
   ConsumerHistoryResponse,
   OrderRequest,
   OrderResponse,
-} from "./typings";
+} from './typings';
 
 const orders = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
@@ -17,43 +17,36 @@ const orders = apiSlice.injectEndpoints({
         url: `/transactions/incomplete-order`,
         // params: { pageNo: params.page, pageSize: params.size },
       }),
-      providesTags: ["ORDERS"],
+      providesTags: ['ORDERS'],
     }),
     completeOrder: builder.mutation<any, CompleteOrderRequest>({
       query: (params) => ({
         url: `/orders/complete/${params.id}`,
-        method: "PUT",
+        method: 'PUT',
       }),
       async onQueryStarted(_args, { queryFulfilled: qf }) {
         qf.then((res) => {
-          console.log("RES", res);
+          console.log('RES', res);
           toast.success(`${res}`, {
-            position: "top-right",
+            position: 'top-right',
           });
         }).catch((err) => {
-          console.log("ERR", err.error.data);
+          console.log('ERR', err.error.data);
           toast.error(`${err.error.data}`, {
-            position: "top-right",
+            position: 'top-right',
           });
         });
       },
-      invalidatesTags: ["ORDERS"],
+      invalidatesTags: ['ORDERS'],
     }),
-    getConsumerHistory: builder.query<
-      ConsumerHistoryResponse,
-      ConsumerHistoryRequest
-    >({
+    getConsumerHistory: builder.query<ConsumerHistoryResponse, ConsumerHistoryRequest>({
       query: (params: ConsumerHistoryRequest) => ({
         url: `/orders/consumer/history`,
         params: { page: params.page, size: params.size, status: params.status },
       }),
-      providesTags: ["ORDERS"],
+      providesTags: ['ORDERS'],
     }),
   }),
 });
 
-export const {
-  useIncompleteOrdersQuery,
-  useCompleteOrderMutation,
-  useGetConsumerHistoryQuery,
-} = orders;
+export const { useIncompleteOrdersQuery, useCompleteOrderMutation, useGetConsumerHistoryQuery } = orders;

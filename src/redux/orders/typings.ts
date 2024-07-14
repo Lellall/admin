@@ -1,13 +1,13 @@
 export interface OrderRequest {
   page: number;
   size: number;
-  sort?: "DESC" | "ASC";
+  sort?: 'DESC' | 'ASC';
 }
 
 export interface ConsumerHistoryRequest {
   page: number;
   size: number;
-  status: "PENDING" | "ACCEPTED" | "ON_GOING" | "COMPLETED" | "CANCELED";
+  status: 'PENDING' | 'ACCEPTED' | 'ON_GOING' | 'COMPLETED' | 'CANCELED';
 }
 
 export interface OrderResponse {
@@ -63,7 +63,7 @@ export interface ConsumerOrderHistory {
   orderId: string;
   orderCode: string;
   paymentItems: PaymentItem[];
-  status: "PENDING" | "ACCEPTED" | "ON_GOING" | "COMPLETED" | "CANCELED"; // Adjust status values as needed
+  status: 'PENDING' | 'ACCEPTED' | 'ON_GOING' | 'COMPLETED' | 'CANCELED'; // Adjust status values as needed
   address: Address;
   deliveryPoint: DeliveryPoint;
   distance: number;

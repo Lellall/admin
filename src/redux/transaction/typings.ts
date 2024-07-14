@@ -2,7 +2,7 @@ export interface TransactionRequest {
   page: number;
   size: number;
   userId: string;
-  status: "PENDING" | "FAILED" | "COMPLETED";
+  status: 'PENDING' | 'FAILED' | 'COMPLETED';
   startingAt?: Date;
 }
 
@@ -15,7 +15,7 @@ export interface TransactionResponse {
 export interface Order {
   reference: string;
   id: string;
-  status: "PENDING" | "FAILED" | "COMPLETED";
+  status: 'PENDING' | 'FAILED' | 'COMPLETED';
   createdAt: string;
   updatedAt: string;
   items: [];

@@ -1,28 +1,20 @@
-import React, { useState } from "react";
-import Pagination from "rc-pagination";
-import EditForm from "./product-edit-form";
-import { TableBody } from "@mui/material";
-import { Menu } from "iconsax-react";
-import { SearchInp } from "../../components/ui/base/navbar/navbar.styles";
-import Modal from "../../components/modal";
-import { useDebounce } from "react-use";
-import MiniLoader from "../../components/mini-loader";
-import ScreenLoader from "../../components/screen-loader";
-import { useGetProductsQuery } from "../../redux/products";
-import {
-  Table,
-  TableHead,
-  TableWrapper,
-  TableDataCell,
-  TableHeadCell,
-  TableRow,
-  TableHeadRow,
-} from "./product.style";
+import React, { useState } from 'react';
+import Pagination from 'rc-pagination';
+import EditForm from './product-edit-form';
+import { TableBody } from '@mui/material';
+import { Menu } from 'iconsax-react';
+import { SearchInp } from '../../components/ui/base/navbar/navbar.styles';
+import Modal from '../../components/modal';
+import { useDebounce } from 'react-use';
+import MiniLoader from '../../components/mini-loader';
+import ScreenLoader from '../../components/screen-loader';
+import { useGetProductsQuery } from '../../redux/products';
+import { Table, TableHead, TableWrapper, TableDataCell, TableHeadCell, TableRow, TableHeadRow } from './product.style';
 const Products = () => {
   const [current, setCurrent] = useState(1);
   const [isOpen, setIsOpen] = useState(false);
-  const [produtName, setProductName] = useState<string>("");
-  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
+  const [produtName, setProductName] = useState<string>('');
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
   useDebounce(
     () => {
       setDebouncedSearchTerm(produtName);
@@ -38,7 +30,7 @@ const Products = () => {
   } = useGetProductsQuery({
     page: current - 1,
     size: 10,
-    categoryId: "",
+    categoryId: '',
     filter: debouncedSearchTerm,
   });
 
@@ -54,9 +46,7 @@ const Products = () => {
     // openView();
   };
 
-  const handleSearchChange = (event: {
-    target: { value: React.SetStateAction<string> };
-  }) => {
+  const handleSearchChange = (event: { target: { value: React.SetStateAction<string> } }) => {
     setProductName(event.target.value);
   };
   return (
@@ -72,10 +62,10 @@ const Products = () => {
       </div>
 
       {isLoading ? (
-        <ScreenLoader style={{ height: "50vh" }} />
+        <ScreenLoader style={{ height: '50vh' }} />
       ) : (
         <>
-          <div style={{ width: "100%" }}>
+          <div style={{ width: '100%' }}>
             <TableWrapper>
               <Table>
                 <TableHead>
@@ -94,19 +84,16 @@ const Products = () => {
                       <TableDataCell>{product.name}</TableDataCell>
                       <TableDataCell>{product.price}</TableDataCell>
                       <TableDataCell>{product.quantity}</TableDataCell>
-                      <TableDataCell>
-                        {product.available ? "Yes" : "No"}
-                      </TableDataCell>
+                      <TableDataCell>{product.available ? 'Yes' : 'No'}</TableDataCell>
                       <TableDataCell>{product.category?.name}</TableDataCell>
                       <TableDataCell>
                         <button
                           style={{
-                            textAlign: "center",
-                            border: "none",
-                            cursor: "pointer",
+                            textAlign: 'center',
+                            border: 'none',
+                            cursor: 'pointer',
                           }}
-                          onClick={() => openMenu(product)}
-                        >
+                          onClick={() => openMenu(product)}>
                           <Menu size="16" color="#FF8A65" />
                         </button>
                       </TableDataCell>
@@ -116,24 +103,15 @@ const Products = () => {
               </Table>
             </TableWrapper>
           </div>
-          <div style={{ float: "right", margin: "10px" }}>
-            <Pagination
-              onChange={handlePageClick}
-              current={current}
-              total={products?.resultTotal}
-            />
+          <div style={{ float: 'right', margin: '10px' }}>
+            <Pagination onChange={handlePageClick} current={current} total={products?.resultTotal} />
           </div>
         </>
       )}
-      <Modal
-        width="100%"
-        style={{ maxWidth: "700px" }}
-        show={isOpen}
-        onClose={() => setIsOpen(false)}
-      >
+      <Modal width="100%" style={{ maxWidth: '700px' }} show={isOpen} onClose={() => setIsOpen(false)}>
         Edit Product
         <hr />
-        <EditForm product={selected} />
+        <EditForm product={selected} setIsOpen={setIsOpen} />
       </Modal>
     </>
   );

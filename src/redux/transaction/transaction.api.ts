@@ -1,5 +1,5 @@
-import apiSlice from "../api/api.slice";
-import { TransactionRequest, TransactionResponse } from "./typings";
+import apiSlice from '../api/api.slice';
+import { TransactionRequest, TransactionResponse } from './typings';
 
 const transaction = apiSlice.injectEndpoints({
   endpoints: (builder) => ({

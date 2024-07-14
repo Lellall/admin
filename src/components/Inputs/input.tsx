@@ -1,7 +1,7 @@
 // @ts-nocheck
-import { useState } from "react";
-import styled from "styled-components";
-import { Eye, EyeSlash } from "iconsax-react";
+import { useState } from 'react';
+import styled from 'styled-components';
+import { Eye, EyeSlash } from 'iconsax-react';
 
 const InputContainer = styled.div`
   position: relative;
@@ -11,11 +11,11 @@ const InputContainer = styled.div`
 
 export const StyledInput = styled.input`
   padding: 10px 20px;
-  padding-right: ${(props) => (props.hasToggle ? "40px" : "20px")};
+  padding-right: ${(props) => (props.hasToggle ? '40px' : '20px')};
   /* max-width: 300px; */
   width: 100%;
   box-sizing: border-box;
-  border: 1px solid ${(props) => (props.hasError ? "red" : "#D3D3D3")};
+  border: 1px solid ${(props) => (props.hasError ? 'red' : '#D3D3D3')};
   border-radius: 3px;
   height: 45px;
   font-size: 14px;
@@ -30,7 +30,7 @@ export const StyledInput = styled.input`
 
 const EyeIcon = styled.button`
   position: absolute;
-  top: ${(props) => (props.hasError ? "55%" : "80%")};
+  top: ${(props) => (props.hasError ? '55%' : '80%')};
   right: 4px;
   transform: translateY(-50%);
   background: none;
@@ -47,7 +47,7 @@ const StyledLabel = styled.label`
 
 const IconContainer = styled.div`
   position: absolute;
-  top: ${(props) => (props.hasError ? "55%" : "70%")};
+  top: ${(props) => (props.hasError ? '55%' : '70%')};
   right: 10px;
   transform: translateY(-50%);
   color: #ccc;
@@ -69,48 +69,35 @@ const InputWithIcon = ({
     setShowPassword(!showPassword);
   };
 
-  const hasToggle = type === "password";
+  const hasToggle = type === 'password';
 
   return (
     <InputContainer>
       <StyledLabel>{label}</StyledLabel>
-      <StyledInput
-        {...inputProps}
-        type={showPassword ? "text" : type}
-        hasError={hasError}
-        hasToggle={hasToggle}
-      />
-      {type !== "password" && (
-        <IconContainer hasError={hasError}>{<Icon size="16" />}</IconContainer>
-      )}
+      <StyledInput {...inputProps} type={showPassword ? 'text' : type} hasError={hasError} hasToggle={hasToggle} />
+      {type !== 'password' && <IconContainer hasError={hasError}>{<Icon size="16" />}</IconContainer>}
       {hasToggle && (
         <EyeIcon hasError onClick={togglePasswordVisibility}>
           {showPassword ? (
             <div
               style={{
-                marginTop: `${hasError ? "0px" : "20px"} `,
-                color: "#ccc",
-              }}
-            >
+                marginTop: `${hasError ? '0px' : '20px'} `,
+                color: '#ccc',
+              }}>
               {<EyeSlash size="16" />}
             </div>
           ) : (
             <div
               style={{
-                marginTop: `${hasError ? "0px" : "20px"} `,
-                color: "#ccc",
-              }}
-            >
+                marginTop: `${hasError ? '0px' : '20px'} `,
+                color: '#ccc',
+              }}>
               {<Eye size="16" />}
             </div>
           )}
         </EyeIcon>
       )}
-      {hasError && (
-        <div style={{ fontSize: "12px", color: "red", marginTop: "5px" }}>
-          {errorMessage}
-        </div>
-      )}
+      {hasError && <div style={{ fontSize: '12px', color: 'red', marginTop: '5px' }}>{errorMessage}</div>}
     </InputContainer>
   );
 };

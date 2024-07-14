@@ -1,14 +1,11 @@
 /* eslint-disable no-console */
-import React, { useEffect, useRef, useState } from "react";
-import { Button, ListItem } from "@mui/material";
-import { ArrowCircleDown } from "iconsax-react";
-import { formatCurrency, formatDateTime } from "../../utils/helpers";
-import {
-  useCompleteOrderMutation,
-  useIncompleteOrdersQuery,
-} from "../../redux/orders";
-import AuthModal from "../../components/auth-modal";
-import EmptyState from "../../components/empty-state";
+import React, { useEffect, useRef, useState } from 'react';
+import { Button, ListItem } from '@mui/material';
+import { ArrowCircleDown } from 'iconsax-react';
+import { formatCurrency, formatDateTime } from '../../utils/helpers';
+import { useCompleteOrderMutation, useIncompleteOrdersQuery } from '../../redux/orders';
+import AuthModal from '../../components/auth-modal';
+import EmptyState from '../../components/empty-state';
 import {
   Table,
   TableHead,
@@ -22,7 +19,7 @@ import {
   ExpandableDataCell,
   ExpandableRow,
   InteractiveIcon,
-} from "./orders.style";
+} from './orders.style';
 
 export const copyToClipboard = (text) => {
   navigator.clipboard.writeText(text);
@@ -30,14 +27,14 @@ export const copyToClipboard = (text) => {
 
 const getStatusColor = (status) => {
   switch (status) {
-    case "PENDING":
-      return "#ffc107"; // Yellow
-    case "COMPLETED":
-      return "#28a745"; // Green
-    case "CANCELLED":
-      return "#dc3545"; // Red
+    case 'PENDING':
+      return '#ffc107'; // Yellow
+    case 'COMPLETED':
+      return '#28a745'; // Green
+    case 'CANCELLED':
+      return '#dc3545'; // Red
     default:
-      return "#333"; // Default color
+      return '#333'; // Default color
   }
 };
 
@@ -46,15 +43,14 @@ const OrderForRider = () => {
     data: incompleteOrders,
 
     error,
-  } = useIncompleteOrdersQuery({ page: 1, size: 10, sort: "DESC" });
-  const [completeOrder, { isLoading: isCompleting, isSuccess }] =
-    useCompleteOrderMutation();
+  } = useIncompleteOrdersQuery({ page: 1, size: 10, sort: 'DESC' });
+  const [completeOrder, { isLoading: isCompleting, isSuccess }] = useCompleteOrderMutation();
   const intervalIdRef = useRef<number>(0);
   const [expandedRow, setExpandedRow] = useState(null);
   //   const { refreshAccessTokenAdmin, logoutAdmin } = useAuth();
   const [, setSelectedRow] = useState<any>(0);
   const [showModal, setShowModal] = useState(false);
-  const [orderId, setOrderId] = useState("");
+  const [orderId, setOrderId] = useState('');
 
   useEffect(() => {
     if (isSuccess) {
@@ -85,9 +81,7 @@ const OrderForRider = () => {
 
   const toggleExpand = ({ id, ind }) => {
     setSelectedRow(ind);
-    setExpandedRow((prevExpandedRow: any) =>
-      prevExpandedRow === id ? null : id
-    );
+    setExpandedRow((prevExpandedRow: any) => (prevExpandedRow === id ? null : id));
   };
   const copyInfo = (
     customer: string,
@@ -101,8 +95,8 @@ const OrderForRider = () => {
   ) => {
     const info = `Customer: ${customer}\nProducts: ${productName
       .map((p) => `${p.productName} quantity: ${p.count}`)
-      .join("\n")}\nAddress: ${address.streetName}, ${address.estate}, ${
-      address.poBox || ""
+      .join('\n')}\nAddress: ${address.streetName}, ${address.estate}, ${
+      address.poBox || ''
     }\nPhone Number: ${phoneNumber}`;
 
     navigator.clipboard.writeText(info);
@@ -113,7 +107,7 @@ const OrderForRider = () => {
   }
 
   return (
-    <div style={{ width: "100%" }}>
+    <div style={{ width: '100%' }}>
       <TableWrapper>
         <Table>
           <TableHead>
@@ -133,14 +127,12 @@ const OrderForRider = () => {
                 <TableRow onClick={() => toggleExpand({ id: item.id, ind })}>
                   <TableDataCell>{item.reference}</TableDataCell>
                   <TableDataCell style={{ color: getStatusColor(item.status) }}>
-                    {item.status === "COMPLETED" ? "PAID ORDER" : item.status}
+                    {item.status === 'COMPLETED' ? 'PAID ORDER' : item.status}
                   </TableDataCell>
                   <TableDataCell>{formatCurrency(item.amount)}</TableDataCell>
                   <TableDataCell>{item.userId}</TableDataCell>
                   <TableDataCell>{item.orderId}</TableDataCell>
-                  <TableDataCell>
-                    {formatDateTime(item.createdAt)}
-                  </TableDataCell>
+                  <TableDataCell>{formatDateTime(item.createdAt)}</TableDataCell>
                   <TableDataCell>
                     <Button>
                       <ArrowCircleDown size="32" color="#00a661" />
@@ -158,41 +150,29 @@ const OrderForRider = () => {
                             {item.items.map((product, idx) => (
                               <div key={product.productId}>
                                 <ListItem>
-                                  Product {idx + 1}: {product.productName} -
-                                  Quantity {product.count}
+                                  Product {idx + 1}: {product.productName} - Quantity {product.count}
                                 </ListItem>
                               </div>
                             ))}
                             <ListItem>
-                              Address: {item.address?.streetName},{" "}
-                              {item.address?.estate}, {item.address?.poBox}
+                              Address: {item.address?.streetName}, {item.address?.estate}, {item.address?.poBox}
                             </ListItem>
-                            <ListItem>
-                              Phone Number: {item.phoneNumber}
-                            </ListItem>
+                            <ListItem>Phone Number: {item.phoneNumber}</ListItem>
                           </ul>
                         </div>
-                        <div style={{ display: "flex" }}>
+                        <div style={{ display: 'flex' }}>
                           <Button
                             onClick={() => handleComplete(item.orderId)}
                             style={{
-                              height: "40px",
-                              marginLeft: "5px",
-                            }}
-                          >
+                              height: '40px',
+                              marginLeft: '5px',
+                            }}>
                             Complete this Order
                           </Button>
                         </div>
                       </Content>
                       <InteractiveIcon
-                        onClick={() =>
-                          copyInfo(
-                            item.customerName,
-                            item.items,
-                            item.address,
-                            item.phoneNumber
-                          )
-                        }
+                        onClick={() => copyInfo(item.customerName, item.items, item.address, item.phoneNumber)}
                       />
                     </ExpandableDataCell>
                   </ExpandableRow>
@@ -204,16 +184,13 @@ const OrderForRider = () => {
       </TableWrapper>
       {showModal && (
         <AuthModal onClose={() => setShowModal(false)}>
-          <p style={{ marginBottom: "10px" }}>
-            Are sure you want to complete this order?
-          </p>
+          <p style={{ marginBottom: '10px' }}>Are sure you want to complete this order?</p>
           <Button
             backgroundColor="#0E5D37"
             onClick={() => setShowModal(false)}
             // loading={loading}
             // spaceTop="10px"
-            spaceBottom="10px"
-          >
+            spaceBottom="10px">
             No
           </Button>
           <Button
@@ -222,9 +199,8 @@ const OrderForRider = () => {
             loading={isCompleting}
             spaceTop="10px"
             spaceBottom="10px"
-            style={{ backgroundColor: "red", color: "white", border: "none" }}
-          >
-            {isCompleting ? "Completing order..." : "Yes"}
+            style={{ backgroundColor: 'red', color: 'white', border: 'none' }}>
+            {isCompleting ? 'Completing order...' : 'Yes'}
           </Button>
         </AuthModal>
       )}
