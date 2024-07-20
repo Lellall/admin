@@ -1,7 +1,8 @@
-import apiSlice from '../api/api.slice';
+// import apiSlice from '../api/api.slice';
+import { baseApi } from '../api/baseApi';
 import { Shop, ShopRequest, ShopsRequest, ShopsResponse } from './typings';
 
-const shops = apiSlice.injectEndpoints({
+const shops = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getShops: builder.query<ShopsResponse, ShopsRequest>({
       query: () => ({

@@ -1,27 +1,28 @@
 /* eslint-disable no-console */
-import apiSlice from '../api/api.slice';
 // import { api } from "../../services/baseApi";
+//ts-nocheck
 import { setAuthState, logout } from '../../features/auth/auth.slice';
-import { LoginRequest, LoginResponse } from './typings';
+// import { LoginRequest, LoginResponse } from './typings';
 import { toast } from 'react-toastify';
+// import { setCredentials } from './auth.slice';
+// import apiSlice from '../api/api.slice';
+import { baseApi } from '../api/baseApi';
 
-const authApi = apiSlice.injectEndpoints({
+const authApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    login: builder.mutation<LoginResponse, LoginRequest>({
+    login: builder.mutation({
       query: (credentials) => ({
         url: '/auth/login',
         method: 'POST',
         body: credentials,
       }),
-      //   transformResponse: (
-      //     response: { access_token: string; refresh_token: string },
-      //     meta,
-      //     arg
-      //   ) => {
-      //     localStorage.setItem("access_token", response.access_token);
-      //     localStorage.setItem("refresh_token", response.refresh_token);
-      //     return response;
-      //   },
+      transformResponse: (response: { access_token: string; refresh_token: string }) => {
+        localStorage.setItem('access_token', response.access_token);
+        localStorage.setItem('refresh_token', response.refresh_token);
+        //@ts-expect-error
+        localStorage.setItem('user', response.user);
+        return response;
+      },
       async onQueryStarted(arg, { dispatch, queryFulfilled }) {
         try {
           const { data } = await queryFulfilled;
@@ -29,6 +30,7 @@ const authApi = apiSlice.injectEndpoints({
             setAuthState({
               isAuthenticated: true,
               accessToken: data.access_token,
+              // user: data.user,
               refreshToken: data.refresh_token,
             })
           );

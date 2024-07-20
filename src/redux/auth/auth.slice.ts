@@ -36,6 +36,7 @@ const initialState: LoginResponse = {
 };
 const setAuthHandler = (state: LoginResponse, { payload: auth }: { payload: LoginResponse }) => {
   state = auth;
+  localStorage.setItem('auth', JSON.stringify(auth));
   return state;
 };
 
@@ -44,7 +45,9 @@ export const AuthSlice = createSlice({
   initialState,
   reducers: {
     setCredentials: setAuthHandler,
+
     logout: () => {
+      localStorage.clear();
       return initialState;
     },
   },

@@ -10,6 +10,7 @@ import AuthLayout from './components/layout/auth.layout';
 import PrivateRoute from './components/routes-helpers/private-route';
 import ScreenLoader from './components/screen-loader';
 import { appPaths } from './components/layout/app-paths';
+import ErrorComponent from './components/error-404-component';
 
 //pages-routes
 const OrderForRider = lazy(() => import('./features/order/orders.component'));
@@ -123,6 +124,7 @@ const App: React.FC = () => {
             {/* <Route path={appPaths.transaction} element={<Transaction />} /> */}
             {/* <Route path={appPaths.myOrders} element={<UserOrders />} /> */}
             {/* <Route path={appPaths.favorites} element={<Favorites />} /> */}
+            <Route path={'*'} element={<ErrorComponent />} />
           </Route>
         </Routes>
       </Router>

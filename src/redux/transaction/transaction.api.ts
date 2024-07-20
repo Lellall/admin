@@ -1,7 +1,8 @@
-import apiSlice from '../api/api.slice';
+// import apiSlice from '../api/api.slice';
+import { baseApi } from '../api/baseApi';
 import { TransactionRequest, TransactionResponse } from './typings';
 
-const transaction = apiSlice.injectEndpoints({
+const transaction = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getTransaction: builder.query<TransactionResponse, TransactionRequest>({
       query: (params: TransactionRequest) => ({

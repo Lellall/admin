@@ -1,16 +1,19 @@
 /* eslint-disable no-console */
 import { toast } from 'react-toastify';
-import apiSlice from '../api/api.slice';
-import { Product, ProductRequest, ProductResponse, UpdateProductRequest } from './typings';
+import { Product, ProductResponse, UpdateProductRequest, ProductRequest } from './typings';
+// import apiSlice from '../api/api.slice';
+import { baseApi } from '../api/baseApi';
 
-const products = apiSlice.injectEndpoints({
+const products = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getProducts: builder.query<ProductResponse, ProductRequest>({
-      query: (params: ProductRequest) => ({
+      query: (params) => ({
         url: `/products`,
-        params: { page: params.page, size: params.size, filter: params.filter },
+        params,
+        method: 'GET',
       }),
-      providesTags: ['PRODUCTS'],
+
+      // providesTags: ['PRODUCTS'],
     }),
     updateProduct: builder.mutation<Product, UpdateProductRequest>({
       query: ({ id, ...rest }) => ({

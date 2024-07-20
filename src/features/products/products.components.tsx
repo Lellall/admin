@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import React, { useState } from 'react';
 import Pagination from 'rc-pagination';
 import EditForm from './product-edit-form';
@@ -30,8 +31,8 @@ const Products = () => {
   } = useGetProductsQuery({
     page: current - 1,
     size: 10,
-    categoryId: '',
     filter: debouncedSearchTerm,
+    categoryId: '',
   });
 
   const [selected, setSelected] = useState(null);

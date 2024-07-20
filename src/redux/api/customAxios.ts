@@ -1,11 +1,12 @@
+/* eslint-disable no-console */
 // src/services/customAxios.ts
 // @ts-nocheck
 import axios from 'axios';
-import { BACKEND_URL } from '../utils/config';
+// import { setSessionExpired } from '../features/auth/auth.slice';
+import { BACKEND_URL } from '../../utils/config';
 
 // const BACKEND_URL = BACKEND_URL;
 // const FRONTEND_URL = process.env.development;
-
 const CustomAxios = axios.create({
   baseURL: `${BACKEND_URL}/`,
   headers: {
@@ -13,10 +14,14 @@ const CustomAxios = axios.create({
   },
 });
 
+// let exp = '';
+
+const endpointsRequiringToken = ['/orders', '/transactions', '/vendors'];
+
 CustomAxios.interceptors.request.use(
   (config) => {
-    const token = JSON.parse(localStorage.getItem('access_token') || 'null');
-    if (token) {
+    const token = localStorage.getItem('access_token');
+    if (token && endpointsRequiringToken.includes(config.url || '')) {
       config.headers['Authorization'] = 'Bearer ' + token;
     }
     return config;
@@ -34,16 +39,20 @@ CustomAxios.interceptors.response.use(
     const originalConfig = err.config;
     if (err.response) {
       // Access Token was expired
-      if (err.response.status === 401 && !originalConfig._retry) {
+      if (err.response.status === 401 || (err.response.status === 403 && !originalConfig._retry)) {
         originalConfig._retry = true;
         try {
           const rs = await refreshToken();
-          const { access } = rs.data;
-          localStorage.setItem('access_token', JSON.stringify(access));
-          CustomAxios.defaults.headers.common['Authorization'] = 'Bearer ' + JSON.parse(localStorage.getItem('access_token') || 'null');
+
+          const { access_token } = rs.data;
+          console.log(access_token);
+          localStorage.setItem('access_token', access_token);
+          // PARSE IT BACKKKK
+          CustomAxios.defaults.headers.common['Authorization'] = 'Bearer ' + access_token;
           return CustomAxios(originalConfig);
         } catch (_error) {
           if (_error.response && _error.response.data) {
+            // store.dispatch(setSessionExpired(true)); // Dispatch action to set session expired
             return Promise.reject(_error.response.data);
           }
           return Promise.reject(_error);
@@ -57,13 +66,14 @@ CustomAxios.interceptors.response.use(
   }
 );
 
-function refreshToken() {
-  let refresh = JSON.parse(localStorage.getItem('refresh_token') || 'null');
+async function refreshToken() {
+  let refresh = localStorage.getItem('refresh_token');
   if (!refresh) refresh = 'null';
-  return CustomAxios.post('token/refresh/', {
-    refresh: JSON.parse(localStorage.getItem('refresh_token') || 'null'),
+  return CustomAxios.post('auth/refresh-token', {
+    refreshToken: localStorage.getItem('refresh_token') || 'null',
+    role: 'ADMIN',
   }).catch((err) => {
-    window.location.href = `/login`;
+    window.location.href = '/login';
     console.log(err);
   });
 }

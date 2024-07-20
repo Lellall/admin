@@ -11,4 +11,4 @@
 // const currentEnv = process.env.NODE_ENV || "development";
 
 // export const BACKEND_URL = config[currentEnv].BACKEND_URL;
-export const BACKEND_URL = "https://api.lellall.com";
+export const BACKEND_URL = 'https://api.dev.lellall.com';

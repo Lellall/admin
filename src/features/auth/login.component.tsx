@@ -3,8 +3,8 @@ import { Controller, useForm } from 'react-hook-form';
 import InputWithIcon from '../../components/Inputs/input';
 import { MessageText, Unlock } from 'iconsax-react';
 import { useNavigate } from 'react-router-dom';
-import { setCredentials } from '../../redux/auth/auth.slice';
-import { useDispatch } from 'react-redux';
+// import { setCredentials } from '../../redux/auth/auth.slice';
+// import { useDispatch } from 'react-redux';
 import { useLoginMutation } from '../../redux/auth';
 
 interface LoginData {
@@ -13,10 +13,10 @@ interface LoginData {
 }
 
 const Login: React.FC = () => {
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const [login, { isLoading, isSuccess, data }] = useLoginMutation();
+  const [login, { isLoading, isSuccess }] = useLoginMutation();
   const {
     handleSubmit,
     control,
@@ -29,15 +29,15 @@ const Login: React.FC = () => {
 
   useEffect(() => {
     if (isSuccess) {
-      dispatch(
-        setCredentials({
-          access_token: data.access_token,
-          isAuthenticated: true,
-          refresh_token: data.refresh_token,
-          token_type: data.token_type,
-          user: data.user,
-        })
-      );
+      // dispatch(
+      //   setCredentials({
+      //     access_token: data.access_token,
+      //     isAuthenticated: true,
+      //     refresh_token: data.refresh_token,
+      //     token_type: data.token_type,
+      //     user: data.user,
+      //   })
+      // );
       navigate('/');
     }
     // eslint-disable-next-line

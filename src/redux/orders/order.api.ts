@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import { toast } from 'react-toastify';
-import apiSlice from '../api/api.slice';
+// import apiSlice from '../api/api.slice';
 
 import {
   CompleteOrderRequest,
@@ -9,15 +9,16 @@ import {
   OrderRequest,
   OrderResponse,
 } from './typings';
+import { baseApi } from '../api/baseApi';
 
-const orders = apiSlice.injectEndpoints({
+const orders = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     incompleteOrders: builder.query<OrderResponse, OrderRequest>({
       query: () => ({
         url: `/transactions/incomplete-order`,
         // params: { pageNo: params.page, pageSize: params.size },
       }),
-      providesTags: ['ORDERS'],
+      // providesTags: ['ORDERS'],
     }),
     completeOrder: builder.mutation<any, CompleteOrderRequest>({
       query: (params) => ({
@@ -37,14 +38,14 @@ const orders = apiSlice.injectEndpoints({
           });
         });
       },
-      invalidatesTags: ['ORDERS'],
+      // invalidatesTags: ['ORDERS'],
     }),
     getConsumerHistory: builder.query<ConsumerHistoryResponse, ConsumerHistoryRequest>({
       query: (params: ConsumerHistoryRequest) => ({
         url: `/orders/consumer/history`,
         params: { page: params.page, size: params.size, status: params.status },
       }),
-      providesTags: ['ORDERS'],
+      // providesTags: ['ORDERS'],
     }),
   }),
 });

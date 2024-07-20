@@ -3,9 +3,16 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import CustomAxios from './customAxios';
 
-const baseQuery = async ({ url, method, body }) => {
+interface CustomAxiosProps {
+  url: string;
+  method?: 'GET' | 'POST' | 'PATCH' | 'DELETE' | 'PUT';
+  params?: any;
+  body?: any;
+}
+
+const baseQuery = async ({ url, method, body, params }: CustomAxiosProps) => {
   try {
-    const result = await CustomAxios({ url, method, data: body });
+    const result = await CustomAxios({ url, method, params, data: body });
     return { data: result.data };
   } catch (axiosError) {
     let err = axiosError;
@@ -21,9 +28,10 @@ const baseQuery = async ({ url, method, body }) => {
   }
 };
 
-export const api = createApi({
+export const baseApi = createApi({
   baseQuery,
+  reducerPath: 'api',
   endpoints: () => ({}),
 });
 
-export const { useGetQuery, usePostMutation } = api;
+export const { useGetQuery, usePostMutation } = baseApi as any;
