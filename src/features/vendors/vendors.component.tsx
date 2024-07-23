@@ -3,10 +3,10 @@ import { useGetShopsQuery } from '../../redux/shops';
 import VendorsTable from './vendors-table';
 import Pagination from 'rc-pagination/lib/Pagination';
 import { useState } from 'react';
-import { SearchInp } from '../../components/ui/base/navbar/navbar.styles';
 import ScreenLoader from '../../components/screen-loader';
 import MiniLoader from '../../components/mini-loader';
 import { useDebounce } from 'react-use';
+import SearchInput from '../../components/Inputs/searchInput';
 
 const Vendor = () => {
   const [page, setPage] = useState(1);
@@ -21,7 +21,7 @@ const Vendor = () => {
   );
 
   const { data, isLoading, isFetching } = useGetShopsQuery({
-    page,
+    page: page - 1,
     size: 10,
     categoryId: '',
     filter: debouncedSearchTerm,
@@ -35,15 +35,11 @@ const Vendor = () => {
   const handleSearchChange = (event: { target: { value: React.SetStateAction<string> } }) => {
     setVendorName(event.target.value);
   };
+
   return (
     <>
       <div className="flex justify-between w-full items-center  ">
-        <SearchInp
-          type="text"
-          placeholder="Who are you looking for?"
-          value={vendorName}
-          onChange={handleSearchChange}
-        />
+        <SearchInput placeholder="Who are you looking for?" value={vendorName} onChange={handleSearchChange} />
         {isFetching && <MiniLoader />}
       </div>
 

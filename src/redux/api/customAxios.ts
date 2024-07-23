@@ -1,12 +1,8 @@
-/* eslint-disable no-console */
-// src/services/customAxios.ts
-// @ts-nocheck
+//@ts-ignore
+//@ts-nocheck
 import axios from 'axios';
-// import { setSessionExpired } from '../features/auth/auth.slice';
 import { BACKEND_URL } from '../../utils/config';
 
-// const BACKEND_URL = BACKEND_URL;
-// const FRONTEND_URL = process.env.development;
 const CustomAxios = axios.create({
   baseURL: `${BACKEND_URL}/`,
   headers: {
@@ -45,7 +41,6 @@ CustomAxios.interceptors.response.use(
           const rs = await refreshToken();
 
           const { access_token } = rs.data;
-          console.log(access_token);
           localStorage.setItem('access_token', access_token);
           // PARSE IT BACKKKK
           CustomAxios.defaults.headers.common['Authorization'] = 'Bearer ' + access_token;
@@ -72,9 +67,8 @@ async function refreshToken() {
   return CustomAxios.post('auth/refresh-token', {
     refreshToken: localStorage.getItem('refresh_token') || 'null',
     role: 'ADMIN',
-  }).catch((err) => {
+  }).catch(() => {
     window.location.href = '/login';
-    console.log(err);
   });
 }
 

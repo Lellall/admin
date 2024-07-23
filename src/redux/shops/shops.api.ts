@@ -1,12 +1,12 @@
-// import apiSlice from '../api/api.slice';
 import { baseApi } from '../api/baseApi';
 import { Shop, ShopRequest, ShopsRequest, ShopsResponse } from './typings';
 
 const shops = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getShops: builder.query<ShopsResponse, ShopsRequest>({
-      query: () => ({
+      query: (params) => ({
         url: `/shops`,
+        params,
       }),
     }),
     getSingleShop: builder.query<Shop, ShopRequest>({

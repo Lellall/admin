@@ -1,11 +1,5 @@
-/* eslint-disable no-console */
-// import { api } from "../../services/baseApi";
-//ts-nocheck
 import { setAuthState, logout } from '../../features/auth/auth.slice';
-// import { LoginRequest, LoginResponse } from './typings';
 import { toast } from 'react-toastify';
-// import { setCredentials } from './auth.slice';
-// import apiSlice from '../api/api.slice';
 import { baseApi } from '../api/baseApi';
 
 const authApi = baseApi.injectEndpoints({
@@ -35,7 +29,7 @@ const authApi = baseApi.injectEndpoints({
             })
           );
         } catch (err) {
-          console.error(err);
+          return err;
         }
       },
     }),
@@ -45,15 +39,7 @@ const authApi = baseApi.injectEndpoints({
         method: 'POST',
         body: credentials,
       }),
-      //   transformResponse: (
-      //     response: { access_token: string; refresh_token: string },
-      //     meta,
-      //     arg
-      //   ) => {
-      //     localStorage.setItem("access_token", response.access_token);
-      //     localStorage.setItem("refresh_token", response.refresh_token);
-      //     return response;
-      //   },
+
       async onQueryStarted(arg, { dispatch, queryFulfilled }) {
         try {
           const { data } = await queryFulfilled;
@@ -65,7 +51,7 @@ const authApi = baseApi.injectEndpoints({
             })
           );
         } catch (err) {
-          console.error(err);
+          return err;
         }
       },
     }),
@@ -81,7 +67,6 @@ const authApi = baseApi.injectEndpoints({
             position: 'top-right',
           })
         ).catch((err) => {
-          console.error(err);
           toast.error(`${err?.status?.message}`, {
             position: 'top-right',
           });

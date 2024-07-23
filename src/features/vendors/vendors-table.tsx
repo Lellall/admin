@@ -1,5 +1,5 @@
-import { useNavigate } from "react-router-dom";
-import { Shop } from "../../redux/shops/typings";
+import { useNavigate } from 'react-router-dom';
+import { Shop } from '../../redux/shops/typings';
 import {
   Table,
   TableHead,
@@ -10,8 +10,8 @@ import {
   TableHeadRow,
   TableRow,
   ShopStatus,
-} from "./vendors.style";
-import { appPaths } from "../../components/layout/app-paths";
+} from './vendors.style';
+import { appPaths } from '../../components/layout/app-paths';
 
 interface VendorsTableProps {
   vendors: Shop[];
@@ -34,10 +34,7 @@ const VendorsTable = ({ vendors }: VendorsTableProps) => {
         </TableHead>
         <TableBody>
           {vendors?.map((vendor) => (
-            <TableRow
-              key={vendor.id}
-              onClick={() => navigate(appPaths.getVendors(vendor.id))}
-            >
+            <TableRow key={vendor.id} onClick={() => navigate(appPaths.getVendors(vendor.id))}>
               <TableDataCell>{vendor.name} </TableDataCell>
               <ShopStatus status={vendor.status}>{vendor.status} </ShopStatus>
               <TableDataCell>{vendor.category.name} </TableDataCell>
