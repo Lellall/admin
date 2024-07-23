@@ -21,11 +21,11 @@ import {
   InteractiveIcon,
 } from './orders.style';
 
-export const copyToClipboard = (text) => {
-  navigator.clipboard.writeText(text);
-};
+// export const copyToClipboard = (text:string) => {
+//   navigator.clipboard.writeText(text);
+// };
 
-const getStatusColor = (status) => {
+const getStatusColor = (status: string) => {
   switch (status) {
     case 'PENDING':
       return '#ffc107'; // Yellow
@@ -58,7 +58,7 @@ const OrderForRider = () => {
     }
   }, [isSuccess]);
 
-  const handleComplete = (id) => {
+  const handleComplete = (id: string) => {
     setOrderId(id);
     setShowModal(true);
   };
@@ -79,7 +79,7 @@ const OrderForRider = () => {
     };
   }, []);
 
-  const toggleExpand = ({ id, ind }) => {
+  const toggleExpand = ({ id, ind }: { id: string; ind: number }) => {
     setSelectedRow(ind);
     setExpandedRow((prevExpandedRow: any) => (prevExpandedRow === id ? null : id));
   };
@@ -141,7 +141,7 @@ const OrderForRider = () => {
                 </TableRow>
                 {expandedRow === item.id && (
                   <ExpandableRow>
-                    <ExpandableDataCell colSpan="7">
+                    <ExpandableDataCell>
                       <Content>
                         <div>
                           <h4>Items</h4>
@@ -186,20 +186,15 @@ const OrderForRider = () => {
         <AuthModal onClose={() => setShowModal(false)}>
           <p style={{ marginBottom: '10px' }}>Are sure you want to complete this order?</p>
           <Button
-            backgroundColor="#0E5D37"
             onClick={() => setShowModal(false)}
             // loading={loading}
             // spaceTop="10px"
-            spaceBottom="10px">
+            style={{ background: '#0E5D37', marginTop: '10px' }}>
             No
           </Button>
           <Button
-            backgroundColor="#F06D06"
             onClick={() => completeOrder({ id: orderId })}
-            loading={isCompleting}
-            spaceTop="10px"
-            spaceBottom="10px"
-            style={{ backgroundColor: 'red', color: 'white', border: 'none' }}>
+            style={{ backgroundColor: 'red', color: 'white', border: 'none', margin: '10px auto' }}>
             {isCompleting ? 'Completing order...' : 'Yes'}
           </Button>
         </AuthModal>
