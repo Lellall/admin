@@ -7,16 +7,14 @@ interface Category {
 }
 
 interface Time {
-  hour: number;
-  minute: number;
-  second: number;
-  nano: number;
+  hour: number | null;
+  minute: number | null;
+  second: number | null;
+  nano: number | null;
 }
 
 interface Metadata {
-  additionalProp1: string;
-  additionalProp2: string;
-  additionalProp3: string;
+  [key: string]: string;
 }
 
 interface Market {
@@ -26,8 +24,8 @@ interface Market {
 }
 
 interface Coordinate {
-  latitude: number;
-  longitude: number;
+  latitude: number | string;
+  longitude: number | string;
 }
 
 export interface Shop {
@@ -43,13 +41,13 @@ export interface Shop {
   updatedAt: string; // ISO 8601 date format
   timeZone: string;
   category: Category;
-  openingTime: Time;
-  closingTime: Time;
-  metadata: Metadata;
+  openingTime?: Time;
+  closingTime?: Time;
+  metadata?: Metadata;
   subAccountId: string;
   vatCharge: number;
   market: Market;
-  coordinate: Coordinate;
+  coordinate?: Coordinate;
 }
 
 export interface ShopRequest {
