@@ -105,10 +105,15 @@ const Products = () => {
           </div>
         </>
       )}
-      <Modal width="100%" style={{ maxWidth: '700px' }} show={isOpen} onClose={() => setIsOpen(false)}>
-        Edit Product
-        <hr />
-        <EditForm product={selected} setIsOpen={setIsOpen} />
+      <Modal
+        width="100%"
+        title="Edit Product"
+        style={{ maxWidth: '700px', margin: 'auto' }}
+        show={isOpen}
+        onClose={() => setIsOpen(false)}>
+        <>
+          <EditForm product={selected} setIsOpen={setIsOpen} />
+        </>
       </Modal>
     </>
   );

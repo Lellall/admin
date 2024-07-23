@@ -12,8 +12,7 @@ const products = baseApi.injectEndpoints({
         params,
         method: 'GET',
       }),
-
-      // providesTags: ['PRODUCTS'],
+      providesTags: ['PRODUCTS'],
     }),
     updateProduct: builder.mutation<Product, UpdateProductRequest>({
       query: ({ id, ...rest }) => ({
