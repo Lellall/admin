@@ -6,13 +6,15 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import InputComponent from '../../components/Inputs/input-component';
 import * as yup from 'yup';
 import styled from 'styled-components';
+import { useUpdateShopMutation } from '../../redux/shops/shops.api';
+import MiniLoader from '../../components/mini-loader';
 
 interface VendorFormProps {
   vendorData: Shop;
-  onSubmit: (data: Shop) => void;
 }
 
-const VendorForm: React.FC<VendorFormProps> = ({ vendorData, onSubmit }) => {
+const VendorForm: React.FC<VendorFormProps> = ({ vendorData }) => {
+  const [updateVendor, { isLoading: isUpdating }] = useUpdateShopMutation();
   const {
     // register,
     reset,
@@ -28,9 +30,12 @@ const VendorForm: React.FC<VendorFormProps> = ({ vendorData, onSubmit }) => {
     reset(vendorData);
   }, [reset, vendorData]);
 
+  // const time = { hour: 1, minute: 30, nano: 0, second: 0 };
   const handleFormSubmit: SubmitHandler<Shop> = (data) => {
-    console.log(data);
-    onSubmit(data);
+    // const restData = { ...data, closingTime: time, openingTime: time };
+    const body = { id: data.id, data };
+
+    updateVendor(body);
   };
 
   return (
@@ -289,8 +294,8 @@ const VendorForm: React.FC<VendorFormProps> = ({ vendorData, onSubmit }) => {
           />
         </div>
       </div>
-      <button className="bg-[green] p-2 w-full mb-4" type="submit">
-        Submit
+      <button className="bg-[green] flex justify-center p-2 w-full mb-4" type="submit">
+        {isUpdating ? <MiniLoader /> : 'Submit'}
       </button>
     </form>
   );
@@ -299,8 +304,6 @@ const VendorForm: React.FC<VendorFormProps> = ({ vendorData, onSubmit }) => {
 export default VendorForm;
 
 const HeaderTitle = styled.h3`
-  /* background: red; */
-  /* color: aliceblue; */
   padding: 10px 0px;
   margin-top: 15px;
   @media screen and (max-width: 765px) {

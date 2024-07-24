@@ -12,7 +12,7 @@ const CustomAxios = axios.create({
 
 // let exp = '';
 
-const endpointsRequiringToken = ['/orders', '/transactions', '/vendors'];
+const endpointsRequiringToken = ['/orders', '/transactions', '/shops', '/products'];
 
 CustomAxios.interceptors.request.use(
   (config) => {
