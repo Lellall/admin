@@ -17,11 +17,10 @@ const Vendor = () => {
 
   return (
     <>
-      <button onClick={() => navigate(-1)}>
-        {' '}
-        <ArrowBack />
-      </button>
-      <div className="flex items-center flex-col justify-around min-h-[50vh] w-[100%] ">
+      <div className="flex  items-start flex-col justify-around min-h-[50vh] w-[95%] ">
+        <button className="px-5 py-2" onClick={() => navigate(-1)}>
+          <ArrowBack />
+        </button>
         <VendorForm onSubmit={handleUserUpdate} vendorData={data} />
       </div>
     </>

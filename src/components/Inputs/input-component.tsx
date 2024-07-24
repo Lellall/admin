@@ -2,9 +2,10 @@ import { TextField } from '@mui/material';
 import { useController } from 'react-hook-form';
 import styled from 'styled-components';
 import Switch from '@mui/material/Switch';
+
 interface InputComponentProps {
   control: any;
-  type?: 'text' | 'number' | 'password' | 'email' | 'date' | 'checkbox';
+  type?: 'text' | 'number' | 'password' | 'email' | 'date' | 'checkbox' | 'time';
   name: string;
   label?: string;
   errorMessage?: string;
@@ -27,7 +28,7 @@ const InputComponent = ({
 }: InputComponentProps) => {
   const {
     field,
-    formState: { errors },
+    // formState: { errors },
   } = useController({
     name,
     control,
@@ -42,8 +43,7 @@ const InputComponent = ({
       formattedDate = dateObject.toISOString().slice(0, 10);
     }
   }
-  // eslint-disable-next-line no-console
-  console.log('HAS ERROR', errors[name]);
+
   return (
     <>
       <InputContainer style={styledContainer}>
@@ -62,6 +62,26 @@ const InputComponent = ({
               style={styledInput}
               // helperText={errorMsg}
             />
+            {Boolean(errorMessage) && (
+              <div style={{ fontSize: '12px', color: 'red', marginTop: '25px' }}>{errorMessage}</div>
+            )}
+          </>
+        )}
+
+        {type === 'time' && (
+          <>
+            <StyledInput
+              onChange={field.onChange}
+              onBlur={field.onBlur}
+              name={field.name}
+              inputRef={field.ref}
+              value={field.value || ''}
+              error={Boolean(errorMessage)}
+              type={'number'}
+              disabled={disabled}
+              style={styledInput}
+            />
+
             {Boolean(errorMessage) && (
               <div style={{ fontSize: '12px', color: 'red', marginTop: '25px' }}>{errorMessage}</div>
             )}
@@ -130,10 +150,8 @@ export default InputComponent;
 const InputContainer = styled.div`
   position: relative;
   margin-bottom: 10px;
-  width: 30%;
+  width: 100%;
   @media screen and (max-width: 765px) {
-    /* background-color: red; */
-    width: 100%;
     margin: 15px;
   }
 `;

@@ -5,6 +5,7 @@ import { Shop } from '../../redux/shops/typings';
 import { yupResolver } from '@hookform/resolvers/yup';
 import InputComponent from '../../components/Inputs/input-component';
 import * as yup from 'yup';
+import styled from 'styled-components';
 
 interface VendorFormProps {
   vendorData: Shop;
@@ -33,9 +34,9 @@ const VendorForm: React.FC<VendorFormProps> = ({ vendorData, onSubmit }) => {
   };
 
   return (
-    <form className="px-5 w-[100%]" onSubmit={handleSubmit(handleFormSubmit)}>
+    <form className="w-[100%] px-4" onSubmit={handleSubmit(handleFormSubmit)}>
       <div className=" w-[100%]">
-        <div className="flex flex-wrap justify-between my-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-5">
           <InputComponent disabled errorMessage={errors?.id?.message} name={'id'} control={control} label={'ID'} />
           <InputComponent
             errorMessage={errors?.description?.message}
@@ -51,7 +52,7 @@ const VendorForm: React.FC<VendorFormProps> = ({ vendorData, onSubmit }) => {
             type={'text'}
           />
         </div>
-        <div className="flex flex-wrap justify-between my-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-5">
           <InputComponent errorMessage={errors?.name?.message} name={'name'} control={control} label={'Name'} />
           <InputComponent
             errorMessage={errors?.address?.message}
@@ -61,7 +62,7 @@ const VendorForm: React.FC<VendorFormProps> = ({ vendorData, onSubmit }) => {
           />
           <InputComponent errorMessage={errors?.status?.message} name={'status'} control={control} label={'Status'} />
         </div>
-        <div className="flex flex-wrap justify-between my-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-5">
           <InputComponent
             errorMessage={errors?.inventory?.message}
             name={'inventory'}
@@ -84,7 +85,7 @@ const VendorForm: React.FC<VendorFormProps> = ({ vendorData, onSubmit }) => {
             type="date"
           />
         </div>
-        <div className="flex flex-wrap justify-between my-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-5">
           <InputComponent
             errorMessage={errors?.updatedAt?.message}
             name={'updatedAt'}
@@ -100,114 +101,107 @@ const VendorForm: React.FC<VendorFormProps> = ({ vendorData, onSubmit }) => {
           />
         </div>
 
-        <div>
-          <h3>Category</h3>
-          <div className="flex flex-wrap flex-col justify-between pb-10 mt-3 md:flex-row">
-            <InputComponent
-              errorMessage={errors?.category?.id?.message}
-              name={'category.id'}
-              control={control}
-              label={'Category ID'}
-            />
-            <InputComponent
-              errorMessage={errors?.category?.name?.message}
-              name={'category.name'}
-              control={control}
-              label={'Category Name'}
-            />
-            <InputComponent
-              errorMessage={errors?.category?.imageUrl?.message}
-              name={'category.imageUrl'}
-              control={control}
-              label={'Category Image URL'}
-              type={'text'}
-              disabled
-            />
-          </div>
-          <div className="flex flex-wrap justify-between my-5">
-            <InputComponent
-              errorMessage={errors?.category?.description?.message}
-              name={'category.description'}
-              control={control}
-              label={'Category Description'}
-            />
-            <InputComponent
-              // errorMessage={errors?.category.type}
-              name={'category.type'}
-              control={control}
-              label={'Category Type'}
-              disabled
-            />
-          </div>
-        </div>
-
-        <div>
-          <h3>Opening Time</h3>
-          <div className="flex flex-wrap justify-between my-5">
-            <InputComponent
-              errorMessage={errors?.openingTime?.hour?.message}
-              name={'openingTime.hour'}
-              control={control}
-              label={'Hour'}
-              type={'number'}
-              disabled
-            />
-            <InputComponent
-              errorMessage={errors?.openingTime?.minute?.message}
-              name={'openingTime.minute'}
-              control={control}
-              label={'Minute'}
-              type={'number'}
-              disabled
-            />
-            <InputComponent
-              errorMessage={errors?.openingTime?.second?.message}
-              name={'openingTime.second'}
-              control={control}
-              label={'Second'}
-              type={'number'}
-              disabled
-            />
-          </div>
+        <HeaderTitle>Category</HeaderTitle>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-5">
           <InputComponent
-            errorMessage={errors?.openingTime?.nano?.message}
-            name={'openingTime.nano'}
+            errorMessage={errors?.category?.id?.message}
+            name={'category.id'}
             control={control}
-            label={'Nano'}
-            type={'number'}
+            label={'Category ID'}
+          />
+          <InputComponent
+            errorMessage={errors?.category?.name?.message}
+            name={'category.name'}
+            control={control}
+            label={'Category Name'}
+          />
+          <InputComponent
+            errorMessage={errors?.category?.imageUrl?.message}
+            name={'category.imageUrl'}
+            control={control}
+            label={'Category Image URL'}
+            type={'text'}
+            disabled
+          />
+
+          <InputComponent
+            errorMessage={errors?.category?.description?.message}
+            name={'category.description'}
+            control={control}
+            label={'Category Description'}
+          />
+          <InputComponent
+            // errorMessage={errors?.category.type}
+            name={'category.type'}
+            control={control}
+            label={'Category Type'}
             disabled
           />
         </div>
 
-        <div>
-          <h3>Closing Time</h3>
-          <div className="flex flex-wrap justify-between my-5">
-            <InputComponent
-              errorMessage={errors?.closingTime?.hour?.message}
-              name={'closingTime.hour'}
-              control={control}
-              label={'Hour'}
-              type={'number'}
-              disabled
-            />
-            <InputComponent
-              errorMessage={errors?.closingTime?.minute?.message}
-              name={'closingTime.minute'}
-              control={control}
-              label={'Minute'}
-              type={'number'}
-              disabled
-            />
-            <InputComponent
-              errorMessage={errors?.closingTime?.second?.message}
-              name={'closingTime.second'}
-              control={control}
-              label={'Second'}
-              type={'number'}
-              disabled
-            />
-          </div>
+        <HeaderTitle>Opening Time</HeaderTitle>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-5">
+          <InputComponent
+            errorMessage={errors?.openingTime?.hour?.message}
+            name={'openingTime.hour'}
+            control={control}
+            label={'Hour'}
+            type={'number'}
+            disabled
+          />
+          <InputComponent
+            errorMessage={errors?.openingTime?.minute?.message}
+            name={'openingTime.minute'}
+            control={control}
+            label={'Minute'}
+            type={'number'}
+            disabled
+          />
+          <InputComponent
+            errorMessage={errors?.openingTime?.second?.message}
+            name={'openingTime.second'}
+            control={control}
+            label={'Second'}
+            type={'number'}
+            disabled
+          />
+        </div>
+        <InputComponent
+          errorMessage={errors?.openingTime?.nano?.message}
+          name={'openingTime.nano'}
+          control={control}
+          label={'Nano'}
+          type={'number'}
+          disabled
+        />
 
+        {/* <div className="flex gap-4 flex-col"> */}
+        <HeaderTitle>Closing Time</HeaderTitle>
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-5">
+          <InputComponent
+            errorMessage={errors?.closingTime?.hour?.message}
+            name={'closingTime.hour'}
+            control={control}
+            label={'Hour'}
+            type={'time'}
+          />
+          <InputComponent
+            errorMessage={errors?.closingTime?.minute?.message}
+            name={'closingTime.minute'}
+            control={control}
+            label={'Minute'}
+            type={'number'}
+            disabled
+          />
+          <InputComponent
+            errorMessage={errors?.closingTime?.second?.message}
+            name={'closingTime.second'}
+            control={control}
+            label={'Second'}
+            type={'number'}
+            disabled
+          />
+          {/* </div> */}
           <InputComponent
             errorMessage={errors?.closingTime?.nano?.message}
             name={'closingTime.nano'}
@@ -218,31 +212,28 @@ const VendorForm: React.FC<VendorFormProps> = ({ vendorData, onSubmit }) => {
           />
         </div>
 
-        <div>
-          <h3>Metadata</h3>
-          <div className="flex flex-wrap justify-between my-5">
-            <InputComponent
-              errorMessage={errors?.metadata?.additionalProp1?.message}
-              name={'metadata.additionalProp1'}
-              control={control}
-              label={'Additional Property 1'}
-            />
-            <InputComponent
-              errorMessage={errors?.metadata?.additionalProp2?.message}
-              name={'metadata.additionalProp2'}
-              control={control}
-              label={'Additional Property 2'}
-            />
-            <InputComponent
-              errorMessage={errors?.metadata?.additionalProp3?.message}
-              name={'metadata.additionalProp3'}
-              control={control}
-              label={'Additional Property 3'}
-            />
-          </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-5">
+          <InputComponent
+            errorMessage={errors?.metadata?.additionalProp1?.message}
+            name={'metadata.additionalProp1'}
+            control={control}
+            label={'Additional Property 1'}
+          />
+          <InputComponent
+            errorMessage={errors?.metadata?.additionalProp2?.message}
+            name={'metadata.additionalProp2'}
+            control={control}
+            label={'Additional Property 2'}
+          />
+          <InputComponent
+            errorMessage={errors?.metadata?.additionalProp3?.message}
+            name={'metadata.additionalProp3'}
+            control={control}
+            label={'Additional Property 3'}
+          />
         </div>
 
-        <div className="flex flex-wrap justify-between my-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-5">
           <InputComponent
             errorMessage={errors?.subAccountId?.message}
             name={'subAccountId'}
@@ -257,57 +248,66 @@ const VendorForm: React.FC<VendorFormProps> = ({ vendorData, onSubmit }) => {
             type={'number'}
           />
         </div>
-        <div>
-          <h3>Market</h3>
-          <div className="flex flex-wrap justify-between my-5">
-            <InputComponent
-              errorMessage={errors?.market?.id?.message}
-              name={'market.id'}
-              control={control}
-              label={'Market ID'}
-            />
-            <InputComponent
-              errorMessage={errors?.market?.name?.message}
-              name={'market.name'}
-              control={control}
-              label={'Market Name'}
-            />
-            <InputComponent
-              errorMessage={errors?.market?.state?.message}
-              name={'market.state'}
-              control={control}
-              label={'Market State'}
-            />
-          </div>
+
+        <HeaderTitle>Market</HeaderTitle>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-5">
+          <InputComponent
+            errorMessage={errors?.market?.id?.message}
+            name={'market.id'}
+            control={control}
+            label={'Market ID'}
+          />
+          <InputComponent
+            errorMessage={errors?.market?.name?.message}
+            name={'market.name'}
+            control={control}
+            label={'Market Name'}
+          />
+          <InputComponent
+            errorMessage={errors?.market?.state?.message}
+            name={'market.state'}
+            control={control}
+            label={'Market State'}
+          />
         </div>
 
-        <div>
-          <h3>Coordinate</h3>
-          <div className="flex flex-wrap justify-between my-5">
-            <InputComponent
-              errorMessage={errors?.coordinate?.latitude.message}
-              name={'coordinate.latitude'}
-              control={control}
-              label={'Latitude'}
-              type={'number'}
-            />
-            <InputComponent
-              errorMessage={errors?.coordinate?.longitude?.message}
-              name={'coordinate.longitude'}
-              control={control}
-              label={'Longitude'}
-              type={'number'}
-            />
-          </div>
+        <HeaderTitle>Coordinate</HeaderTitle>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-5">
+          <InputComponent
+            errorMessage={errors?.coordinate?.latitude.message}
+            name={'coordinate.latitude'}
+            control={control}
+            label={'Latitude'}
+            type={'number'}
+          />
+          <InputComponent
+            errorMessage={errors?.coordinate?.longitude?.message}
+            name={'coordinate.longitude'}
+            control={control}
+            label={'Longitude'}
+            type={'number'}
+          />
         </div>
       </div>
-
-      <button type="submit">Submit</button>
+      <button className="bg-[green] p-2 w-full mb-4" type="submit">
+        Submit
+      </button>
     </form>
   );
 };
 
 export default VendorForm;
+
+const HeaderTitle = styled.h3`
+  /* background: red; */
+  /* color: aliceblue; */
+  padding: 10px 0px;
+  margin-top: 15px;
+  @media screen and (max-width: 765px) {
+    width: 90%;
+    margin: 10px auto;
+  }
+`;
 
 const schema = yup.object().shape({
   id: yup.string().required('ID is required'),
