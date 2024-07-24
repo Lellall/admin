@@ -32,8 +32,6 @@ const VendorForm: React.FC<VendorFormProps> = ({ vendorData, onSubmit }) => {
     onSubmit(data);
   };
 
-  console.log(errors);
-
   return (
     <form className="px-5 w-[100%]" onSubmit={handleSubmit(handleFormSubmit)}>
       <div className=" w-[100%]">
@@ -104,7 +102,7 @@ const VendorForm: React.FC<VendorFormProps> = ({ vendorData, onSubmit }) => {
 
         <div>
           <h3>Category</h3>
-          <div className="flex flex-wrap justify-between my-5">
+          <div className="flex flex-wrap flex-col justify-between pb-10 mt-3 md:flex-row">
             <InputComponent
               errorMessage={errors?.category?.id?.message}
               name={'category.id'}
@@ -317,7 +315,7 @@ const schema = yup.object().shape({
   logoUrl: yup.string().url('Logo URL must be a valid URL').required('Logo URL is required'),
   name: yup.string().required('Name is required'),
   address: yup.string().required('Address is required'),
-  status: yup.string().oneOf(['OPEN'], 'Status must be "OPEN"').required('Status is required'),
+  status: yup.string().required('Status is required'),
   inventory: yup.number().required('Inventory is required'),
   active: yup.boolean().required('Active status is required'),
   createdAt: yup.string().required('Created at date is required'),

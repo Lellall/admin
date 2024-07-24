@@ -11,7 +11,7 @@ const PrivateRoute = ({ children }: { children: ReactNode }) => {
     if (!isAuthenticated) {
       navigate('/login');
     }
-  }, [isAuthenticated]);
+  }, [isAuthenticated, navigate]);
 
   return <Fragment>{children}</Fragment>;
 };

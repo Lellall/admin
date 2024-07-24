@@ -11,6 +11,7 @@ interface InputComponentProps {
   styledContainer?: React.CSSProperties;
   styledInput?: React.CSSProperties;
   disabled?: boolean;
+  rules?: any;
 }
 
 const InputComponent = ({
@@ -22,6 +23,7 @@ const InputComponent = ({
   styledContainer,
   styledInput,
   disabled = false,
+  rules = {},
 }: InputComponentProps) => {
   const {
     field,
@@ -29,25 +31,19 @@ const InputComponent = ({
   } = useController({
     name,
     control,
-    rules: {},
+    rules: rules,
   });
-
-  const hasError = Boolean(errors[name]); // Check for specific field error
-
-  // const dateObject = new Date(field.value);
-
-  // Get YYYY-MM-DD format
-  // const formattedDate = dateObject.toISOString().slice(0, 10);
+  // const hasError = Boolean(errors[name]);
+  // const errorMsg = Boolean(errorMessage) && <span> {errorMessage}</span>;
   let formattedDate = '';
   if (field.value) {
     const dateObject = new Date(field.value);
     if (!isNaN(dateObject.getTime())) {
-      // Check if valid date
       formattedDate = dateObject.toISOString().slice(0, 10);
     }
   }
   // eslint-disable-next-line no-console
-  // console.log(field.name === 'active' ? field.value : 'NONE');
+  console.log('HAS ERROR', errors[name]);
   return (
     <>
       <InputContainer style={styledContainer}>
@@ -60,35 +56,29 @@ const InputComponent = ({
               name={field.name}
               inputRef={field.ref}
               value={field.value || ''}
-              error={hasError}
+              error={Boolean(errorMessage)}
               type={type}
               disabled={disabled}
               style={styledInput}
-              // label={label}
-              // helperText={hasError && errors[name].message} // Display error message
+              // helperText={errorMsg}
             />
-            {hasError && <div style={{ fontSize: '12px', color: 'red', marginTop: '10px' }}>{errorMessage}</div>}
+            {Boolean(errorMessage) && (
+              <div style={{ fontSize: '12px', color: 'red', marginTop: '25px' }}>{errorMessage}</div>
+            )}
           </>
         )}
 
         {type === 'checkbox' && (
           <>
-            <Switch checked={true} onChange={field.onChange} color="primary" value="dynamic-class-name" />
-            {/* <StyledInput
+            <Switch
+              checked={field.value || false}
               onChange={field.onChange}
-              onBlur={field.onBlur}
-              name={field.name}
-              inputRef={field.ref}
-              value={field.value || ''}
-              error={hasError}
-              type={'checkbox'}
-            //  checked={field.value ? true : false}
-              disabled={disabled}
-              
-              // label={label}
-              // helperText={hasError && errors[name].message} // Display error message
-            /> */}
-            {hasError && <div style={{ fontSize: '12px', color: 'red', marginTop: '10px' }}>{errorMessage}</div>}
+              color="primary"
+              value="dynamic-class-name"
+            />
+            {Boolean(errorMessage) && (
+              <div style={{ fontSize: '12px', color: 'red', marginTop: '25px' }}>{errorMessage}</div>
+            )}
           </>
         )}
 
@@ -100,13 +90,15 @@ const InputComponent = ({
               name={field.name}
               inputRef={field.ref}
               value={field.value || ''}
-              error={hasError}
+              error={Boolean(errorMessage)}
               type={'number'}
               disabled={disabled}
               // label={label}
               // helperText={hasError && errors[name].message} // Display error message
             />
-            {hasError && <div style={{ fontSize: '12px', color: 'red', marginTop: '10px' }}>{errorMessage}</div>}
+            {Boolean(errorMessage) && (
+              <div style={{ fontSize: '12px', color: 'red', marginTop: '25px' }}>{errorMessage}</div>
+            )}
           </>
         )}
         {type == 'date' && (
@@ -117,14 +109,15 @@ const InputComponent = ({
               name={field.name}
               inputRef={field.ref}
               value={formattedDate || ''}
-              // value={formattedDate || ''}
-              error={hasError}
+              error={Boolean(errorMessage)}
               type={'date'}
               disabled={disabled}
               // label={label}
               // helperText={hasError && errors[name].message} // Display error message
             />
-            {hasError && <div style={{ fontSize: '12px', color: 'red', marginTop: '10px' }}>{errorMessage}</div>}
+            {Boolean(errorMessage) && (
+              <div style={{ fontSize: '12px', color: 'red', marginTop: '25px' }}>{errorMessage}</div>
+            )}
           </>
         )}
       </InputContainer>
@@ -138,35 +131,31 @@ const InputContainer = styled.div`
   position: relative;
   margin-bottom: 10px;
   width: 30%;
+  @media screen and (max-width: 765px) {
+    /* background-color: red; */
+    width: 100%;
+    margin: 15px;
+  }
 `;
 
 const StyledInput = styled(TextField)`
-  padding: 10px 20px;
-  padding-right: '40px';
+  padding: 10px;
   width: 100%;
   box-sizing: border-box;
   border: 1px solid '#D3D3D3';
   border-radius: 3px;
-  height: 45px;
+  height: 35px;
   font-size: 14px;
   outline: none;
   color: #808080;
   &::placeholder {
-    // color: #ccc;
     font-weight: 300;
     font-size: 10px;
   }
+  &:active {
+    outline: none;
+  }
 `;
-
-// const EyeIcon = styled.button`
-//   position: absolute;
-//   top: ${(props) => (props.hasError ? '55%' : '80%')};
-//   right: 4px;
-//   transform: translateY(-50%);
-//   background: none;
-//   border: none;
-//   cursor: pointer;
-// `;
 
 const StyledLabel = styled.label`
   display: block;
@@ -174,11 +163,3 @@ const StyledLabel = styled.label`
   color: #808080;
   font-size: 13px;
 `;
-
-// const IconContainer = styled.div`
-//   position: absolute;
-//   top: ${(props) => (props.hasError ? '55%' : '70%')};
-//   right: 10px;
-//   transform: translateY(-50%);
-//   color: #ccc;
-// `;

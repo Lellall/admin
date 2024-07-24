@@ -11,7 +11,6 @@ const Vendor = () => {
   const { data } = useGetSingleShopQuery({ id });
   const navigate = useNavigate();
   const handleUserUpdate = (updatedData: Shop) => {
-    // Implement logic to update user data on the backend (e.g., using axios)
     // eslint-disable-next-line no-console
     console.log('Updated user data:', updatedData);
   };
