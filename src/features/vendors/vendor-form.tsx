@@ -34,7 +34,6 @@ const VendorForm: React.FC<VendorFormProps> = ({ vendorData }) => {
   const handleFormSubmit: SubmitHandler<Shop> = (data) => {
     // const restData = { ...data, closingTime: time, openingTime: time };
     const body = { id: data.id, data };
-
     updateVendor(body);
   };
 

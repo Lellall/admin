@@ -22,6 +22,7 @@ const Vendor = lazy(() => import('./features/vendors/vendor.components'));
 const Login = lazy(() => import('./features/auth/login.component'));
 const ForgotPassword = lazy(() => import('./features/auth/forgot-password'));
 const Register = lazy(() => import('./features/auth/register'));
+const VendorsProduct = lazy(() => import('./features/vendors/vendors.product'));
 
 const App: React.FC = () => {
   return (
@@ -116,6 +117,16 @@ const App: React.FC = () => {
                 <Suspense fallback={<ScreenLoader />}>
                   <PrivateRoute>
                     <Vendor />
+                  </PrivateRoute>
+                </Suspense>
+              }
+            />
+            <Route
+              path={appPaths.vendorsProducts}
+              element={
+                <Suspense fallback={<ScreenLoader />}>
+                  <PrivateRoute>
+                    <VendorsProduct />
                   </PrivateRoute>
                 </Suspense>
               }
