@@ -2,14 +2,15 @@ import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
 import { usePagination, DOTS } from './use-pagination';
 import { PageRange } from './pagination.styles';
 
-const Pagination = (props) => {
-  const {
-    onPageChange,
-    totalCount,
-    siblingCount = 1,
-    currentPage,
-    pageSize,
-  } = props;
+interface PaginationProps {
+  onPageChange: any;
+  totalCount: number;
+  siblingCount: number;
+  currentPage: number;
+  pageSize: number;
+}
+const Pagination = (props: PaginationProps) => {
+  const { onPageChange, totalCount, siblingCount = 1, currentPage, pageSize } = props;
 
   const paginationRange = usePagination({
     currentPage,
@@ -34,18 +35,13 @@ const Pagination = (props) => {
 
   return (
     <PageRange>
-      <div
-        className={`pagination-item ${
-          currentPage === 1 ? 'disabled' : 'active'
-        }`}
-        onClick={onPrevious}
-      >
-        <IoIosArrowBack className='' />
+      <div className={`pagination-item ${currentPage === 1 ? 'disabled' : 'active'}`} onClick={onPrevious}>
+        <IoIosArrowBack className="" />
       </div>
       {paginationRange.map((pageNumber, i) => {
         if (pageNumber === DOTS) {
           return (
-            <div className='pagination-item dots' key={i}>
+            <div className="pagination-item dots" key={i}>
               &#8230;
             </div>
           );
@@ -53,22 +49,14 @@ const Pagination = (props) => {
 
         return (
           <div
-            className={`pagination-item ${
-              pageNumber === currentPage ? 'selected' : 'unselected'
-            }`}
+            className={`pagination-item ${pageNumber === currentPage ? 'selected' : 'unselected'}`}
             key={i}
-            onClick={() => onPageChange(pageNumber)}
-          >
+            onClick={() => onPageChange(pageNumber)}>
             {pageNumber}
           </div>
         );
       })}
-      <div
-        className={`pagination-item ${
-          currentPage === lastPage ? 'disabled' : 'active'
-        }`}
-        onClick={onNext}
-      >
+      <div className={`pagination-item ${currentPage === lastPage ? 'disabled' : 'active'}`} onClick={onNext}>
         <IoIosArrowForward />
       </div>
     </PageRange>

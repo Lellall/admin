@@ -1,12 +1,12 @@
-import styled from "styled-components";
-import { Box, Typography } from "@mui/material";
+import styled from 'styled-components';
+import { Box, Typography } from '@mui/material';
 
-import { ViewportWidth } from "../../../../utils/enums";
+import { ViewportWidth } from '../../../../utils/enums';
 
 export const ModalTitle = styled(Typography)`
   color: #aaa !important;
   text-align: center !important;
-  font-feature-settings: "clig" off, "liga" off !important;
+  font-feature-settings: 'clig' off, 'liga' off !important;
   font-family: Raleway !important;
   font-size: 16px !important;
   font-style: normal !important;
@@ -27,14 +27,18 @@ export const Header = styled(Box)`
   }
 `;
 
-export const ModalBody = styled(Box)`
+interface ModalBodyProps {
+  pad?: any;
+}
+
+export const ModalBody = styled(Box)<ModalBodyProps>`
   position: absolute !important;
   display: flex !important;
   top: 50% !important;
   left: 50% !important;
   transform: translate(-50%, -50%) !important;
   width: 34% !important;
-  padding: ${(props) => props.pad ? props.pad : "53.933px 26.966px"} !important;
+  padding: ${(props) => (props.pad ? props.pad : '53.933px 26.966px')} !important;
   flex-direction: column !important;
   align-items: flex-start !important;
   gap: 20.225px !important;

@@ -30,7 +30,7 @@ const Tag = styled.div`
   font-size: 14px;
 `;
 
-const CustomTag = styled(Tag)`
+const CustomTag = styled(Tag)<StatusProps>`
   background: ${({ status }) => {
     switch (status) {
       case 'PENDING':
@@ -45,7 +45,10 @@ const CustomTag = styled(Tag)`
   }};
 `;
 
-const StatusTd = styled(Td)`
+interface StatusProps {
+  status: string;
+}
+const StatusTd = styled(Td)<StatusProps>`
   color: ${({ status }) => {
     switch (status) {
       case 'PENDING':

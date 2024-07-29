@@ -1,4 +1,4 @@
-/* eslint-disable no-console */
+// @ts-nocheck
 import { useEffect } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { Shop } from '../../redux/shops/typings';

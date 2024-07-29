@@ -1,5 +1,4 @@
-/* eslint-disable no-console */
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, ListItem } from '@mui/material';
 import { ArrowCircleDown } from 'iconsax-react';
 import { formatCurrency, formatDateTime } from '../../utils/helpers';
@@ -45,7 +44,7 @@ const OrderForRider = () => {
     error,
   } = useIncompleteOrdersQuery({ page: 1, size: 10, sort: 'DESC' });
   const [completeOrder, { isLoading: isCompleting, isSuccess }] = useCompleteOrderMutation();
-  const intervalIdRef = useRef<number>(0);
+  // const intervalIdRef = useRef(0);
   const [expandedRow, setExpandedRow] = useState(null);
   //   const { refreshAccessTokenAdmin, logoutAdmin } = useAuth();
   const [, setSelectedRow] = useState<any>(0);
@@ -69,15 +68,15 @@ const OrderForRider = () => {
     }
   }, [error]);
 
-  useEffect(() => {
-    intervalIdRef.current = setInterval(() => {
-      //   fetchIncompleteOrders();
-    }, 10000);
+  // useEffect(() => {
+  //   intervalIdRef.current = setInterval(() => {
+  //     //   fetchIncompleteOrders();
+  //   }, 10000);
 
-    return () => {
-      clearInterval(intervalIdRef.current);
-    };
-  }, []);
+  //   return () => {
+  //     clearInterval(intervalIdRef.current);
+  //   };
+  // }, []);
 
   const toggleExpand = ({ id, ind }: { id: string; ind: number }) => {
     setSelectedRow(ind);

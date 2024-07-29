@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 export enum ViewportWidth {
   sm = 600,
   md = 900,

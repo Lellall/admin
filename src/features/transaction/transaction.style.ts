@@ -40,7 +40,10 @@ export const TabContainer = styled(Box)`
   border-bottom: 1px solid rgba(236, 236, 236, 0.93) !important;
 `;
 
-export const StyledButton = styled(Button)`
+interface ButtonProps {
+  active?: boolean;
+}
+export const StyledButton = styled(Button)<ButtonProps>`
   display: flex !important;
   padding: 5px 10px !important;
   flex-direction: column !important;

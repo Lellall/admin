@@ -7,7 +7,11 @@ const InputContainer = styled.div`
   margin-bottom: 10px;
 `;
 
-const StyledInput = styled.input`
+interface InputProps {
+  hasToggle?: boolean;
+  hasError?: boolean;
+}
+const StyledInput = styled.input<InputProps>`
   padding: 10px 20px;
   padding-right: ${(props) => (props.hasToggle ? '40px' : '20px')};
   width: 100%;
@@ -25,7 +29,10 @@ const StyledInput = styled.input`
   }
 `;
 
-const EyeIcon = styled.button`
+interface ButtonProps {
+  hasError?: boolean;
+}
+const EyeIcon = styled.button<ButtonProps>`
   position: absolute;
   top: ${(props) => (props.hasError ? '55%' : '80%')};
   right: 4px;
@@ -42,13 +49,22 @@ const StyledLabel = styled.label`
   font-size: 13px;
 `;
 
-const IconContainer = styled.div`
+const IconContainer = styled.div<ButtonProps>`
   position: absolute;
   top: ${(props) => (props.hasError ? '55%' : '70%')};
   right: 10px;
   transform: translateY(-50%);
   color: #ccc;
 `;
+
+interface InputWithIconProps {
+  icon?: any;
+  label?: string;
+  name?: string;
+  type: string;
+  hasError?: boolean;
+  errorMessage?: string;
+}
 
 const InputWithIcon = ({
   icon: Icon,
@@ -59,10 +75,10 @@ const InputWithIcon = ({
   hasError,
   errorMessage,
   ...inputProps
-}) => {
+}: InputWithIconProps) => {
   const [showPassword, setShowPassword] = useState(false);
 
-  const togglePasswordVisibility = (e) => {
+  const togglePasswordVisibility = (e: { preventDefault: () => void }) => {
     e.preventDefault();
     setShowPassword(!showPassword);
   };
