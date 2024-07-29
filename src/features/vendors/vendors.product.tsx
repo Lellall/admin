@@ -9,14 +9,17 @@ import Modal from '../../components/modal';
 import { useDebounce } from 'react-use';
 import MiniLoader from '../../components/mini-loader';
 import ScreenLoader from '../../components/screen-loader';
-import { useGetProductsQuery } from '../../redux/products';
 import { Table, TableHead, TableWrapper, TableDataCell, TableHeadCell, TableRow, TableHeadRow } from './vendors.style';
 import SearchInput from '../../components/Inputs/searchInput';
 import VendorsProductForm from './vendors-product.form';
+import { useGetShopProductsQuery } from '../../redux/shops/shops.api';
+import { useParams } from 'react-router-dom';
 
 const VendorsProducts = () => {
   const [current, setCurrent] = useState(1);
   const [isOpen, setIsOpen] = useState(false);
+  const { id } = useParams();
+
   const [produtName, setProductName] = useState<string>('');
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
   useDebounce(
@@ -31,11 +34,12 @@ const VendorsProducts = () => {
     data: products,
     isLoading,
     isFetching,
-  } = useGetProductsQuery({
+  } = useGetShopProductsQuery({
     page: current - 1,
     size: 10,
     filter: debouncedSearchTerm,
     categoryId: '',
+    id,
   });
 
   const [selected, setSelected] = useState(null);

@@ -29,8 +29,9 @@ const VendorsTable = ({ vendors }: VendorsTableProps) => {
   const handleClose = () => {
     setAnchorEl(null);
   };
-  const handleViewProducts = (id) => {
+  const handleViewVendor = (id: string) => {
     navigate(appPaths.getVendors(id));
+    handleClose();
   };
   return (
     <TableWrapper>
@@ -72,10 +73,15 @@ const VendorsTable = ({ vendors }: VendorsTableProps) => {
                   anchorEl={anchorEl}
                   open={open}
                   onClose={handleClose}>
-                  <MenuItem style={{ fontSize: 'small' }} onClick={handleClose} disableRipple>
-                    View Vendor
+                  <MenuItem style={{ fontSize: 'small' }} onClick={() => handleViewVendor(vendor.id)} disableRipple>
+                    Edit Vendor
                   </MenuItem>
-                  <MenuItem style={{ fontSize: 'small' }} onClick={handleViewProducts} disableRipple>
+                  <MenuItem
+                    style={{ fontSize: 'small' }}
+                    onClick={() => {
+                      navigate(`/vendors-products/${vendor.id}`);
+                    }}
+                    disableRipple>
                     View Products
                   </MenuItem>
                 </Menu>

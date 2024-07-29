@@ -122,7 +122,7 @@ const App: React.FC = () => {
               }
             />
             <Route
-              path={appPaths.vendorsProducts}
+              path={`${appPaths.vendorsProducts}/:id`}
               element={
                 <Suspense fallback={<ScreenLoader />}>
                   <PrivateRoute>

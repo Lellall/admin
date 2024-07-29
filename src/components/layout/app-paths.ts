@@ -11,11 +11,11 @@ export const appPaths = {
 
   // USER
   profile: '/account',
+  vendorsProducts: 'vendors-products',
   myOrders: 'my-orders',
   vendors: 'vendors',
   getVendors: (id = ':id') => `/vendors/${id}`,
   notification: 'notification',
-  vendorsProducts: 'vendors-products',
   products: 'products',
   favorites: 'favorites',
   discount: 'discount',

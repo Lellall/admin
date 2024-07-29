@@ -64,3 +64,7 @@ export interface ShopsRequest {
   categoryId?: string;
   filter?: string;
 }
+
+export interface ShopsProductsRequest extends ShopsRequest {
+  id: string;
+}

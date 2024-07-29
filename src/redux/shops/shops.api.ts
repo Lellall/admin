@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import { toast } from 'react-toastify';
 import { baseApi } from '../api/baseApi';
-import { Shop, ShopRequest, ShopsRequest, ShopsResponse } from './typings';
+import { Shop, ShopRequest, ShopsProductsRequest, ShopsRequest, ShopsResponse } from './typings';
 
 const shops = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -14,6 +14,11 @@ const shops = baseApi.injectEndpoints({
     getSingleShop: builder.query<Shop, ShopRequest>({
       query: (params: ShopRequest) => ({
         url: `/shops/${params.id}`,
+      }),
+    }),
+    getShopProducts: builder.query<ShopsResponse, ShopsProductsRequest>({
+      query: (params: ShopsProductsRequest) => ({
+        url: `/shops/${params.id}/products`,
       }),
     }),
     updateShop: builder.mutation<Shop, any>({
@@ -37,4 +42,4 @@ const shops = baseApi.injectEndpoints({
   }),
 });
 
-export const { useGetSingleShopQuery, useGetShopsQuery, useUpdateShopMutation } = shops;
+export const { useGetSingleShopQuery, useGetShopsQuery, useUpdateShopMutation, useGetShopProductsQuery } = shops;
