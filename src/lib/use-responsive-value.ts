@@ -1,13 +1,7 @@
-import { ViewportWidth } from '../utils/enums.ts';
+import { ViewportWidth } from '../utils/enums';
 import { useEffect, useState } from 'react';
 
-type ViewportValue =
-  | string
-  | boolean
-  | number
-  | undefined
-  | React.CSSProperties
-  | null;
+type ViewportValue = string | boolean | number | undefined | React.CSSProperties | null;
 
 type ResponsiveValueOptions = {
   sm: ViewportValue;
@@ -17,9 +11,9 @@ type ResponsiveValueOptions = {
 };
 
 export function useResponsiveValue(opts: ResponsiveValueOptions) {
-  const [responsiveValue, setResponsiveVaue] = useState<
-    ViewportValue | undefined
-  >(() => getRespValue(opts, window.innerWidth));
+  const [responsiveValue, setResponsiveVaue] = useState<ViewportValue | undefined>(() =>
+    getRespValue(opts, window.innerWidth)
+  );
 
   useEffect(() => {
     const handleViewChange = () => {
