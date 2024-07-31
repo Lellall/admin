@@ -34,11 +34,11 @@ export interface Shop {
   logoUrl: string;
   name: string;
   address: string;
-  status: 'OPEN'; // Enum value based on the provided example
+  status: 'OPEN';
   inventory: number;
   active: boolean;
-  createdAt: string; // ISO 8601 date format
-  updatedAt: string; // ISO 8601 date format
+  createdAt: string;
+  updatedAt: string;
   timeZone: string;
   category: Category;
   openingTime?: Time;
@@ -48,6 +48,25 @@ export interface Shop {
   vatCharge: number;
   market: Market;
   coordinate?: Coordinate;
+}
+
+export interface UpdateShopsRequest {
+  id: string;
+  name: string;
+  address: string;
+  status: 'OPEN';
+  active: boolean;
+  description: string;
+  logoUrl: string;
+  timeZone: string;
+  inventory: number;
+  categoryId: string;
+  openingTime: Time;
+  closingTime: Time;
+  marketId: string;
+  coordinate: Coordinate;
+  paystackAccountId: string;
+  vatCharge: number;
 }
 
 export interface ShopRequest {
@@ -63,4 +82,23 @@ export interface ShopsRequest {
   size: number;
   categoryId?: string;
   filter?: string;
+}
+
+export interface VendorsProductResponse {
+  resultTotal: number;
+  pageTotal: number;
+  data: {
+    name: string;
+    id: string;
+    description: string;
+    shop: {
+      name: string;
+      id: string;
+    };
+    imageUrl: string;
+    price: number;
+  }[];
+}
+export interface ShopsProductsRequest extends ShopsRequest {
+  id: string;
 }

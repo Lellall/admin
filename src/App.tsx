@@ -21,7 +21,7 @@ const Vendors = lazy(() => import('./features/vendors/vendors.component'));
 const Vendor = lazy(() => import('./features/vendors/vendor.components'));
 const Login = lazy(() => import('./features/auth/login.component'));
 const ForgotPassword = lazy(() => import('./features/auth/forgot-password'));
-const Register = lazy(() => import('./features/auth/register'));
+const VendorsProduct = lazy(() => import('./features/vendors/vendors.product'));
 
 const App: React.FC = () => {
   return (
@@ -38,16 +38,7 @@ const App: React.FC = () => {
               </Suspense>
             }
           />
-          <Route
-            path="/register"
-            element={
-              <Suspense fallback={<ScreenLoader />}>
-                <AuthLayout>
-                  <Register />
-                </AuthLayout>
-              </Suspense>
-            }
-          />
+
           <Route
             path="/forgot-password"
             element={
@@ -111,11 +102,21 @@ const App: React.FC = () => {
               }
             />
             <Route
-              path={appPaths.getVendors()}
+              path={`${appPaths.getVendors()}`}
               element={
                 <Suspense fallback={<ScreenLoader />}>
                   <PrivateRoute>
                     <Vendor />
+                  </PrivateRoute>
+                </Suspense>
+              }
+            />
+            <Route
+              path={`${appPaths.vendorsProducts}/:id`}
+              element={
+                <Suspense fallback={<ScreenLoader />}>
+                  <PrivateRoute>
+                    <VendorsProduct />
                   </PrivateRoute>
                 </Suspense>
               }

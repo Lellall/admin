@@ -54,11 +54,15 @@ export interface Product {
   height: number;
   width: number;
   depth: number;
-  createdAt: string;
-  updatedAt: string;
+  createdAt?: string;
+  updatedAt?: string;
   tags: string[];
-  shop: Shop;
-  category: Category;
+  shop?: Shop;
+  category?: Category;
+  pricingDetails?: {
+    measurement: string;
+    price: number;
+  }[];
 }
 export interface Category {
   id: string;
