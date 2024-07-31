@@ -1,4 +1,5 @@
-// @ts-nocheck
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable no-console */
 import { useEffect } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { Shop } from '../../redux/shops/typings';
@@ -6,14 +7,13 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import InputComponent from '../../components/Inputs/input-component';
 import * as yup from 'yup';
 import styled from 'styled-components';
-import { useUpdateShopMutation } from '../../redux/shops/shops.api';
+import { useGetShopQuery, useUpdateShopMutation } from '../../redux/shops/shops.api';
 import MiniLoader from '../../components/mini-loader';
+import { useParams } from 'react-router-dom';
 
-interface VendorFormProps {
-  vendorData: Shop;
-}
-
-const VendorForm: React.FC<VendorFormProps> = ({ vendorData }) => {
+const VendorForm = () => {
+  const { id } = useParams();
+  const { data: vendorData } = useGetShopQuery({ id });
   const [updateVendor, { isLoading: isUpdating }] = useUpdateShopMutation();
   const {
     // register,
@@ -23,6 +23,7 @@ const VendorForm: React.FC<VendorFormProps> = ({ vendorData }) => {
     formState: { errors },
   } = useForm<Shop>({
     defaultValues: vendorData,
+    // @ts-expect-error
     resolver: yupResolver(schema),
   });
 
@@ -30,11 +31,15 @@ const VendorForm: React.FC<VendorFormProps> = ({ vendorData }) => {
     reset(vendorData);
   }, [reset, vendorData]);
 
-  // const time = { hour: 1, minute: 30, nano: 0, second: 0 };
   const handleFormSubmit: SubmitHandler<Shop> = (data) => {
-    // const restData = { ...data, closingTime: time, openingTime: time };
-    const body = { id: data.id, data };
-    updateVendor(body);
+    const { market, category, openingTime, closingTime, metadata, createdAt, updatedAt, ...restData } = data;
+    const dataToSubmit = {
+      ...restData,
+      marketId: market?.id,
+      categoryId: category.id,
+      paystackAccountId: metadata.PAYSTACK_ACCOUNT_CODE,
+    };
+    updateVendor({ id: data.id, ...dataToSubmit });
   };
 
   return (
@@ -82,167 +87,22 @@ const VendorForm: React.FC<VendorFormProps> = ({ vendorData }) => {
             type={'checkbox'}
           />
           <InputComponent
-            errorMessage={errors?.createdAt?.message}
-            name={'createdAt'}
-            control={control}
-            label={'Created At (ISO 8601)'}
-            type="date"
-          />
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-5">
-          <InputComponent
-            errorMessage={errors?.updatedAt?.message}
-            name={'updatedAt'}
-            control={control}
-            label={'Updated At (ISO 8601)'}
-            type="date"
-          />
-          <InputComponent
             errorMessage={errors?.timeZone?.message}
             name={'timeZone'}
             control={control}
             label={'Timezone'}
+            disabled
           />
         </div>
 
-        <HeaderTitle>Category</HeaderTitle>
+        {/* <HeaderTitle>Category</HeaderTitle> */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-5">
           <InputComponent
             errorMessage={errors?.category?.id?.message}
             name={'category.id'}
             control={control}
             label={'Category ID'}
-          />
-          <InputComponent
-            errorMessage={errors?.category?.name?.message}
-            name={'category.name'}
-            control={control}
-            label={'Category Name'}
-          />
-          <InputComponent
-            errorMessage={errors?.category?.imageUrl?.message}
-            name={'category.imageUrl'}
-            control={control}
-            label={'Category Image URL'}
-            type={'text'}
             disabled
-          />
-
-          <InputComponent
-            errorMessage={errors?.category?.description?.message}
-            name={'category.description'}
-            control={control}
-            label={'Category Description'}
-          />
-          <InputComponent
-            // errorMessage={errors?.category.type}
-            name={'category.type'}
-            control={control}
-            label={'Category Type'}
-            disabled
-          />
-        </div>
-
-        <HeaderTitle>Opening Time</HeaderTitle>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-5">
-          <InputComponent
-            errorMessage={errors?.openingTime?.hour?.message}
-            name={'openingTime.hour'}
-            control={control}
-            label={'Hour'}
-            type={'number'}
-            disabled
-          />
-          <InputComponent
-            errorMessage={errors?.openingTime?.minute?.message}
-            name={'openingTime.minute'}
-            control={control}
-            label={'Minute'}
-            type={'number'}
-            disabled
-          />
-          <InputComponent
-            errorMessage={errors?.openingTime?.second?.message}
-            name={'openingTime.second'}
-            control={control}
-            label={'Second'}
-            type={'number'}
-            disabled
-          />
-        </div>
-        <InputComponent
-          errorMessage={errors?.openingTime?.nano?.message}
-          name={'openingTime.nano'}
-          control={control}
-          label={'Nano'}
-          type={'number'}
-          disabled
-        />
-
-        {/* <div className="flex gap-4 flex-col"> */}
-        <HeaderTitle>Closing Time</HeaderTitle>
-        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-5">
-          <InputComponent
-            errorMessage={errors?.closingTime?.hour?.message}
-            name={'closingTime.hour'}
-            control={control}
-            label={'Hour'}
-            type={'time'}
-          />
-          <InputComponent
-            errorMessage={errors?.closingTime?.minute?.message}
-            name={'closingTime.minute'}
-            control={control}
-            label={'Minute'}
-            type={'number'}
-            disabled
-          />
-          <InputComponent
-            errorMessage={errors?.closingTime?.second?.message}
-            name={'closingTime.second'}
-            control={control}
-            label={'Second'}
-            type={'number'}
-            disabled
-          />
-          {/* </div> */}
-          <InputComponent
-            errorMessage={errors?.closingTime?.nano?.message}
-            name={'closingTime.nano'}
-            control={control}
-            label={'Nano'}
-            type={'number'}
-            disabled
-          />
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-5">
-          <InputComponent
-            errorMessage={errors?.metadata?.additionalProp1?.message}
-            name={'metadata.additionalProp1'}
-            control={control}
-            label={'Additional Property 1'}
-          />
-          <InputComponent
-            errorMessage={errors?.metadata?.additionalProp2?.message}
-            name={'metadata.additionalProp2'}
-            control={control}
-            label={'Additional Property 2'}
-          />
-          <InputComponent
-            errorMessage={errors?.metadata?.additionalProp3?.message}
-            name={'metadata.additionalProp3'}
-            control={control}
-            label={'Additional Property 3'}
-          />
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-5">
-          <InputComponent
-            errorMessage={errors?.subAccountId?.message}
-            name={'subAccountId'}
-            control={control}
-            label={'Subaccount ID'}
           />
           <InputComponent
             errorMessage={errors?.vatCharge?.message}
@@ -251,31 +111,93 @@ const VendorForm: React.FC<VendorFormProps> = ({ vendorData }) => {
             label={'VAT Charge'}
             type={'number'}
           />
-        </div>
-
-        <HeaderTitle>Market</HeaderTitle>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-5">
           <InputComponent
             errorMessage={errors?.market?.id?.message}
             name={'market.id'}
             control={control}
             label={'Market ID'}
-          />
-          <InputComponent
-            errorMessage={errors?.market?.name?.message}
-            name={'market.name'}
-            control={control}
-            label={'Market Name'}
-          />
-          <InputComponent
-            errorMessage={errors?.market?.state?.message}
-            name={'market.state'}
-            control={control}
-            label={'Market State'}
+            disabled
           />
         </div>
 
-        <HeaderTitle>Coordinate</HeaderTitle>
+        <section className="hidden">
+          <HeaderTitle>Opening Time</HeaderTitle>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-5">
+            <InputComponent
+              errorMessage={errors?.openingTime?.hour?.message}
+              name={'openingTime.hour'}
+              control={control}
+              label={'Hour'}
+              type={'number'}
+              disabled
+            />
+            <InputComponent
+              errorMessage={errors?.openingTime?.minute?.message}
+              name={'openingTime.minute'}
+              control={control}
+              label={'Minute'}
+              type={'number'}
+              disabled
+            />
+            <InputComponent
+              errorMessage={errors?.openingTime?.second?.message}
+              name={'openingTime.second'}
+              control={control}
+              label={'Second'}
+              type={'number'}
+              disabled
+            />
+          </div>
+
+          <InputComponent
+            errorMessage={errors?.openingTime?.nano?.message}
+            name={'openingTime.nano'}
+            control={control}
+            label={'Nano'}
+            type={'number'}
+            disabled
+          />
+        </section>
+
+        <section className="hidden">
+          <HeaderTitle>Closing Time</HeaderTitle>
+          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-5">
+            <InputComponent
+              errorMessage={errors?.closingTime?.hour?.message}
+              name={'closingTime.hour'}
+              control={control}
+              label={'Hour'}
+              type={'time'}
+            />
+            <InputComponent
+              errorMessage={errors?.closingTime?.minute?.message}
+              name={'closingTime.minute'}
+              control={control}
+              label={'Minute'}
+              type={'number'}
+              disabled
+            />
+            <InputComponent
+              errorMessage={errors?.closingTime?.second?.message}
+              name={'closingTime.second'}
+              control={control}
+              label={'Second'}
+              type={'number'}
+              disabled
+            />
+            {/* </div> */}
+            <InputComponent
+              errorMessage={errors?.closingTime?.nano?.message}
+              name={'closingTime.nano'}
+              control={control}
+              label={'Nano'}
+              type={'number'}
+              disabled
+            />
+          </div>
+        </section>
+
+        {/* <HeaderTitle>Coordinate</HeaderTitle> */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-5">
           <InputComponent
             errorMessage={errors?.coordinate?.latitude.message}
@@ -323,13 +245,7 @@ const schema = yup.object().shape({
   createdAt: yup.string().required('Created at date is required'),
   updatedAt: yup.string().required('Updated at date is required'),
   timeZone: yup.string().required('Timezone is required'),
-  category: yup.object().shape({
-    id: yup.string().required('Category ID is required'),
-    name: yup.string().required('Category name is required'),
-    imageUrl: yup.string().url('Category image URL must be a valid URL').required('Category image URL is required'),
-    description: yup.string().required('Category description is required'),
-    type: yup.string().required('Category type is required'),
-  }),
+  categoryId: yup.string(),
   openingTime: yup.object().shape({
     hour: yup.number().nullable(),
     minute: yup.number().nullable(),
@@ -342,18 +258,9 @@ const schema = yup.object().shape({
     second: yup.number().nullable(),
     nano: yup.number().nullable(),
   }),
-  metadata: yup.object().shape({
-    additionalProp1: yup.string(),
-    additionalProp2: yup.string(),
-    additionalProp3: yup.string(),
-  }),
   subAccountId: yup.string().required('Subaccount ID is required'),
   vatCharge: yup.number().required('VAT charge is required'),
-  market: yup.object().shape({
-    id: yup.string().required('Market ID is required'),
-    name: yup.string().required('Market name is required'),
-    state: yup.string().required('Market state is required'),
-  }),
+  marketId: yup.string(),
   coordinate: yup.object().shape({
     latitude: yup.number().required('Latitude is required'),
     longitude: yup.number().required('Longitude is required'),

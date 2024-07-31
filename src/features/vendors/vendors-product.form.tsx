@@ -1,8 +1,13 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Select from 'react-select';
 import { Product } from '../../redux/products/typings';
-import { useUpdateProductMutation } from '../../redux/products';
+import { useUpdateShopProductMutation } from '../../redux/shops/shops.api';
+import { useForm } from 'react-hook-form';
+import * as yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
+import InputComponent from '../../components/Inputs/input-component';
 
 interface EditFormProps {
   product: Product;
@@ -11,43 +16,23 @@ interface EditFormProps {
   setIsOpen?: any;
 }
 
-interface Option {
-  value: boolean;
-  label: string;
-}
-
 const VendorsProductForm = ({ product, setIsOpen }: EditFormProps) => {
-  const [updateProduct, { isLoading, isSuccess }] = useUpdateProductMutation();
-  const [selectedOption, setSelectedOption] = useState<Option>(
-    product?.available ? { value: true, label: 'Available' } : { value: false, label: 'Unavailable' }
-  );
-  const [price, setPrice] = useState(product?.price);
-  const [description, setDescription] = useState<string>(product?.description);
+  const [updateProduct, { isLoading, isSuccess }] = useUpdateShopProductMutation();
 
-  const options = [
-    { value: true, label: 'Available' },
-    { value: false, label: 'Unavailable' },
-  ];
+  const {
+    // register,
+    reset,
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = useForm<Product>({
+    defaultValues: product,
+    // @ts-expect-error
+    resolver: yupResolver(productSchema),
+  });
 
-  const handleSelectChange = (selectedOption: Option) => {
-    setSelectedOption(selectedOption);
-  };
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPrice(Number(e.target.value));
-  };
-
-  const handleTextareaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setDescription(e.target.value);
-  };
-
-  const handleSubmit = () => {
-    updateProduct({
-      description,
-      id: product.id,
-      isAvailable: selectedOption.value,
-      price,
-    });
+  const handleFormSubmit = () => {
+    // updateProduct({});
   };
 
   useEffect(() => {
@@ -58,25 +43,92 @@ const VendorsProductForm = ({ product, setIsOpen }: EditFormProps) => {
 
   return (
     <Container>
-      <RowContainer>
-        <ColumnContainer>
-          <Label>Status:</Label>
-          <StyledSelect options={options} value={selectedOption} onChange={handleSelectChange} />
-        </ColumnContainer>
-        <ColumnContainer>
-          <Label>Price:</Label>
-          <PriceInput type="number" min="0" value={price} onChange={handleInputChange} placeholder="Price" />
-        </ColumnContainer>
-        <ColumnContainer style={{ width: '100%' }}>
-          <Label>Description:</Label>
-          <DescriptionInput value={description} onChange={handleTextareaChange} placeholder="description" />
-        </ColumnContainer>
-        <ColumnContainer>
-          <SubmitButton disabled={isLoading} onClick={handleSubmit}>
-            {isLoading ? 'Updating...' : 'Update'}
-          </SubmitButton>
-        </ColumnContainer>
-      </RowContainer>
+      <form onSubmit={handleSubmit(handleFormSubmit)}>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-5">
+          <InputComponent disabled errorMessage={errors?.id?.message} name={'id'} control={control} label={'ID'} />
+          <InputComponent
+            disabled
+            errorMessage={errors?.name?.message}
+            name={'name'}
+            control={control}
+            label={'Name'}
+          />
+          <InputComponent errorMessage={errors?.price?.message} name={'price'} control={control} label={'Price'} />
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-5">
+          <InputComponent
+            errorMessage={errors?.minPurchasePrice?.message}
+            name={'minPurchasePrice'}
+            control={control}
+            label={'Min Purchase Price'}
+          />
+          <InputComponent
+            errorMessage={errors?.description?.message}
+            name={'description'}
+            control={control}
+            label={'Description'}
+          />
+          <InputComponent
+            errorMessage={errors?.quantity?.message}
+            name={'quantity'}
+            control={control}
+            label={'Quantity'}
+          />
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-5">
+          <InputComponent
+            errorMessage={errors?.inventory?.message}
+            name={'inventory'}
+            control={control}
+            label={'Inventory'}
+          />
+          <InputComponent
+            errorMessage={errors?.imageUrl?.message}
+            name={'imageUrl'}
+            control={control}
+            label={'ImageUrl'}
+          />
+          <InputComponent
+            errorMessage={errors?.discount?.message}
+            name={'discount'}
+            control={control}
+            label={'Discount'}
+          />
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-5">
+          <InputComponent
+            disabled
+            errorMessage={errors?.currency?.message}
+            name={'currency'}
+            control={control}
+            label={'Currency'}
+          />
+          <InputComponent
+            errorMessage={errors?.featured?.message}
+            name={'featured'}
+            control={control}
+            label={'Featured'}
+          />
+          <InputComponent
+            errorMessage={errors?.available?.message}
+            name={'available'}
+            control={control}
+            label={'Available'}
+          />
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-5">
+          <InputComponent errorMessage={errors?.weight?.message} name={'weight'} control={control} label={'Weight'} />
+          <InputComponent errorMessage={errors?.height?.message} name={'height'} control={control} label={'Height'} />
+          <InputComponent errorMessage={errors?.width?.message} name={'width'} control={control} label={'Width'} />
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-5">
+          <InputComponent errorMessage={errors?.depth?.message} name={'depth'} control={control} label={'Depth'} />
+          <InputComponent errorMessage={errors?.tags?.message} name={'tags'} control={control} label={'Tags'} />
+          <InputComponent errorMessage={errors?.id?.message} name={'id'} control={control} label={'ID'} />
+        </div>
+      </form>
+      <SubmitButton>Clicked</SubmitButton>
     </Container>
   );
 };
@@ -84,61 +136,9 @@ const VendorsProductForm = ({ product, setIsOpen }: EditFormProps) => {
 export default VendorsProductForm;
 
 const Container = styled.div`
-  display: flex;
-  justify-content: center;
+  /* display: flex; */
+  /* justify-content: center; */
   width: 100%;
-`;
-
-const RowContainer = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  width: 100%;
-  flex-direction: column;
-  margin-bottom: 10px;
-  gap: 20px;
-  align-items: start;
-  box-sizing: border-box;
-
-  div {
-    width: 100%;
-  }
-  input {
-    width: 100%;
-    box-sizing: border-box;
-  }
-`;
-
-const ColumnContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-`;
-
-const Label = styled.label`
-  font-size: 11px;
-  margin-bottom: 5px;
-`;
-
-const StyledSelect = styled(Select)`
-  width: 200px;
-  font-size: 11px;
-`;
-
-const PriceInput = styled.input`
-  padding: 12px;
-  border: 1px solid hsl(0, 0%, 80%);
-  border-radius: 4px;
-  font-size: 11px;
-  width: 100%;
-`;
-const DescriptionInput = styled.textarea`
-  padding: 10px;
-  border: 1px solid hsl(0, 0%, 80%);
-  border-radius: 4px;
-  font-size: 13px;
-  height: 100%;
-  outline: none;
 `;
 
 const SubmitButton = styled.button`
@@ -152,3 +152,63 @@ const SubmitButton = styled.button`
   font-size: 11px;
   width: 100%;
 `;
+
+const productSchema = yup.object().shape({
+  id: yup.string().required('ID is required'),
+  name: yup.string().required('Name is required'),
+  price: yup.number().required('Price is required').positive('Price must be a positive number'),
+  minPurchasePrice: yup
+    .number()
+    .required('Minimum purchase price is required')
+    .positive('Minimum purchase price must be a positive number'),
+  description: yup.string().required('Description is required'),
+  quantity: yup
+    .number()
+    .required('Quantity is required')
+    .integer('Quantity must be an integer')
+    .min(0, 'Quantity cannot be negative'),
+  inventory: yup
+    .number()
+    .required('Inventory is required')
+    .integer('Inventory must be an integer')
+    .min(0, 'Inventory cannot be negative'),
+  imageUrl: yup.string().url('Image URL must be a valid URL').required('Image URL is required'),
+  discount: yup
+    .number()
+    .required('Discount is required')
+    .min(0, 'Discount cannot be negative')
+    .max(100, 'Discount cannot exceed 100'),
+  currency: yup.string().required('Currency is required'),
+  featured: yup.boolean().required('Featured status is required'),
+  available: yup.boolean().required('Availability status is required'),
+  manufacturer: yup.string().required('Manufacturer is required'),
+  weight: yup.number().required('Weight is required').positive('Weight must be a positive number'),
+  height: yup.number().required('Height is required').positive('Height must be a positive number'),
+  width: yup.number().required('Width is required').positive('Width must be a positive number'),
+  depth: yup.number().required('Depth is required').positive('Depth must be a positive number'),
+  createdAt: yup.string().optional().nullable(),
+  updatedAt: yup.string().optional().nullable(),
+  tags: yup.array().of(yup.string()).required('Tags are required').min(1, 'At least one tag is required'),
+  shop: yup
+    .object()
+    .shape({
+      // Define the schema for Shop if needed
+    })
+    .nullable(),
+  category: yup
+    .object()
+    .shape({
+      // Define the schema for Category if needed
+    })
+    .nullable(),
+  pricingDetails: yup
+    .array()
+    .of(
+      yup.object().shape({
+        measurement: yup.string().required('Measurement is required'),
+        price: yup.number().required('Price is required').positive('Price must be a positive number'),
+      })
+    )
+    .optional()
+    .nullable(),
+});

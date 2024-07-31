@@ -39,7 +39,7 @@ const VendorsProducts = () => {
     size: 10,
     filter: debouncedSearchTerm,
     categoryId: '',
-    id,
+    id: id,
   });
 
   const [selected, setSelected] = useState(null);
@@ -75,20 +75,20 @@ const VendorsProducts = () => {
                   <TableHeadRow>
                     <TableHeadCell>Name</TableHeadCell>
                     <TableHeadCell>Price</TableHeadCell>
-                    <TableHeadCell>Quantity</TableHeadCell>
-                    <TableHeadCell>Available</TableHeadCell>
-                    <TableHeadCell>category</TableHeadCell>
+                    <TableHeadCell>Description</TableHeadCell>
+                    {/* <TableHeadCell>Available</TableHeadCell> */}
+                    {/* <TableHeadCell>category</TableHeadCell> */}
                     <TableHeadCell>Action</TableHeadCell>
                   </TableHeadRow>
                 </TableHead>
                 <TableBody>
                   {products?.data?.map((product) => (
                     <TableRow key={product.id}>
-                      <TableDataCell>{product.name}</TableDataCell>
-                      <TableDataCell>{product.price}</TableDataCell>
-                      <TableDataCell>{product.quantity}</TableDataCell>
-                      <TableDataCell>{product.available ? 'Yes' : 'No'}</TableDataCell>
-                      <TableDataCell>{product.category?.name}</TableDataCell>
+                      <TableDataCell>{product?.name}</TableDataCell>
+                      <TableDataCell>{product?.price}</TableDataCell>
+                      <TableDataCell>{product?.description}</TableDataCell>
+                      {/* <TableDataCell>{product?.available ? 'Yes' : 'No'}</TableDataCell> */}
+                      {/* <TableDataCell>{product?.category?.name}</TableDataCell> */}
                       <TableDataCell>
                         <button
                           style={{

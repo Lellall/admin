@@ -1,13 +1,8 @@
-import { useParams } from 'react-router-dom';
-import { useGetSingleShopQuery } from '../../redux/shops';
 import VendorForm from './vendor-form';
-import WysiwygIcon from '@mui/icons-material/Wysiwyg';
 import { ArrowBack } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 
 const Vendor = () => {
-  const { id } = useParams();
-  const { data } = useGetSingleShopQuery({ id });
   const navigate = useNavigate();
 
   return (
@@ -17,13 +12,9 @@ const Vendor = () => {
           <button className="px-5 py-2" onClick={() => navigate(-1)}>
             <ArrowBack />
           </button>
-
-          <button className="px-5 py-2" onClick={() => navigate(`/vendors-products`)}>
-            <WysiwygIcon />
-          </button>
         </div>
 
-        <VendorForm vendorData={data} />
+        <VendorForm />
       </div>
     </>
   );

@@ -1,4 +1,3 @@
-// src/services/baseApi.ts
 // @ts-nocheck
 import { createApi } from '@reduxjs/toolkit/query/react';
 import CustomAxios from './customAxios';

@@ -112,7 +112,7 @@ const App: React.FC = () => {
               }
             />
             <Route
-              path={appPaths.getVendors()}
+              path={`${appPaths.getVendors()}`}
               element={
                 <Suspense fallback={<ScreenLoader />}>
                   <PrivateRoute>
