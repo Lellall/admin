@@ -117,19 +117,6 @@ const Login: React.FC = () => {
         </button>
       </form>
       <hr className="my-6 border-t border-gray-300" />
-      <div onClick={() => navigate('/register')} className="text-center mb-5">
-        <span
-          className="mt-5"
-          style={{
-            color: '#AAAAAA',
-            fontSize: '16px',
-            textAlign: 'center',
-            fontWeight: 300,
-            cursor: 'pointer',
-          }}>
-          Don't have an account ?, sign up!.
-        </span>
-      </div>
     </div>
     // </section>
   );
