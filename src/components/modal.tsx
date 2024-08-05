@@ -45,6 +45,7 @@ const ModalOverlay = styled.div`
   justify-content: center;
   align-items: center;
   z-index: 1001;
+  overflow-y: scroll;
 `;
 
 const CloseButton = styled.button`

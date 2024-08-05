@@ -10,10 +10,11 @@ import styled from 'styled-components';
 import { useGetShopQuery, useUpdateShopMutation } from '../../redux/shops/shops.api';
 import MiniLoader from '../../components/mini-loader';
 import { useParams } from 'react-router-dom';
+import ScreenLoader from '../../components/screen-loader';
 
-const VendorForm = () => {
+const ShopForm = () => {
   const { id } = useParams();
-  const { data: vendorData } = useGetShopQuery({ id });
+  const { data: shopData, isLoading } = useGetShopQuery({ id });
   const [updateVendor, { isLoading: isUpdating }] = useUpdateShopMutation();
   const {
     // register,
@@ -22,14 +23,14 @@ const VendorForm = () => {
     control,
     formState: { errors },
   } = useForm<Shop>({
-    defaultValues: vendorData,
+    defaultValues: shopData,
     // @ts-expect-error
     resolver: yupResolver(schema),
   });
 
   useEffect(() => {
-    reset(vendorData);
-  }, [reset, vendorData]);
+    reset(shopData);
+  }, [reset, shopData]);
 
   const handleFormSubmit: SubmitHandler<Shop> = (data) => {
     const { market, category, openingTime, closingTime, metadata, createdAt, updatedAt, ...restData } = data;
@@ -41,6 +42,9 @@ const VendorForm = () => {
     };
     updateVendor({ id: data.id, ...dataToSubmit });
   };
+  if (isLoading) {
+    return <ScreenLoader />;
+  }
 
   return (
     <form className="w-[100%] px-4" onSubmit={handleSubmit(handleFormSubmit)}>
@@ -222,7 +226,7 @@ const VendorForm = () => {
   );
 };
 
-export default VendorForm;
+export default ShopForm;
 
 const HeaderTitle = styled.h3`
   padding: 10px 0px;

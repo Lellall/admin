@@ -9,13 +9,13 @@ import Modal from '../../components/modal';
 import { useDebounce } from 'react-use';
 import MiniLoader from '../../components/mini-loader';
 import ScreenLoader from '../../components/screen-loader';
-import { Table, TableHead, TableWrapper, TableDataCell, TableHeadCell, TableRow, TableHeadRow } from './vendors.style';
+import { Table, TableHead, TableWrapper, TableDataCell, TableHeadCell, TableRow, TableHeadRow } from './shops.style';
 import SearchInput from '../../components/Inputs/searchInput';
-import VendorsProductForm from './vendors-product.form';
 import { useGetShopProductsQuery } from '../../redux/shops/shops.api';
 import { useParams } from 'react-router-dom';
+import ShopsProductForm from './shops-product.form';
 
-const VendorsProducts = () => {
+const ShopsProducts = () => {
   const [current, setCurrent] = useState(1);
   const [isOpen, setIsOpen] = useState(false);
   const { id } = useParams();
@@ -114,15 +114,15 @@ const VendorsProducts = () => {
       <Modal
         width="100%"
         title="Edit Product"
-        style={{ maxWidth: '700px', margin: 'auto' }}
+        style={{ maxWidth: '700px', width: '90%', margin: 'auto', overflowY: 'auto' }}
         show={isOpen}
         onClose={() => setIsOpen(false)}>
         <>
-          <VendorsProductForm product={selected} setIsOpen={setIsOpen} />
+          <ShopsProductForm product={selected} setIsOpen={setIsOpen} />
         </>
       </Modal>
     </>
   );
 };
 
-export default VendorsProducts;
+export default ShopsProducts;

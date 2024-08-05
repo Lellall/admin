@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import { useGetShopsQuery } from '../../redux/shops';
-import VendorsTable from './vendors-table';
+import ShopsTable from './shops-table';
 import Pagination from 'rc-pagination/lib/Pagination';
 import { useState } from 'react';
 import ScreenLoader from '../../components/screen-loader';
@@ -8,7 +8,7 @@ import MiniLoader from '../../components/mini-loader';
 import { useDebounce } from 'react-use';
 import SearchInput from '../../components/Inputs/searchInput';
 
-const Vendor = () => {
+const Shop = () => {
   const [page, setPage] = useState(1);
   const [vendorName, setVendorName] = useState<string>('');
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
@@ -48,7 +48,7 @@ const Vendor = () => {
       ) : (
         <>
           <div style={{ width: '100%' }}>
-            <VendorsTable vendors={data.data} />
+            <ShopsTable shops={data.data} />
           </div>
           <div style={{ float: 'right', margin: '10px' }}>
             <Pagination onChange={handlePageClick} current={page} total={data?.resultTotal} />
@@ -58,4 +58,4 @@ const Vendor = () => {
     </>
   );
 };
-export default Vendor;
+export default Shop;

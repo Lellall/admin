@@ -17,11 +17,11 @@ const OrderForRider = lazy(() => import('./features/order/orders.component'));
 const Products = lazy(() => import('./features/products/products.components'));
 const Transaction = lazy(() => import('./features/transaction/transaction-history.components'));
 const OrderHistory = lazy(() => import('./features/order/order-history.component'));
-const Vendors = lazy(() => import('./features/vendors/vendors.component'));
-const Vendor = lazy(() => import('./features/vendors/vendor.components'));
+const Vendors = lazy(() => import('./features/shop/shop.component'));
+const Vendor = lazy(() => import('./features/shop/shop.components'));
 const Login = lazy(() => import('./features/auth/login.component'));
 const ForgotPassword = lazy(() => import('./features/auth/forgot-password'));
-const VendorsProduct = lazy(() => import('./features/vendors/vendors.product'));
+const VendorsProduct = lazy(() => import('./features/shop/shops.product'));
 
 const App: React.FC = () => {
   return (
@@ -92,7 +92,7 @@ const App: React.FC = () => {
             />
 
             <Route
-              path={appPaths.vendors}
+              path={appPaths.shops}
               element={
                 <Suspense fallback={<ScreenLoader />}>
                   <PrivateRoute>
@@ -102,7 +102,7 @@ const App: React.FC = () => {
               }
             />
             <Route
-              path={`${appPaths.getVendors()}`}
+              path={`${appPaths.getShops()}`}
               element={
                 <Suspense fallback={<ScreenLoader />}>
                   <PrivateRoute>
@@ -112,7 +112,7 @@ const App: React.FC = () => {
               }
             />
             <Route
-              path={`${appPaths.vendorsProducts}/:id`}
+              path={`${appPaths.shopsProducts}/:id`}
               element={
                 <Suspense fallback={<ScreenLoader />}>
                   <PrivateRoute>

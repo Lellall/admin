@@ -40,8 +40,8 @@ const AdminLayout = () => {
     {
       id: 4,
       icon: <Additem size="20" />,
-      text: 'Manage Vendors',
-      url: appPaths.vendors,
+      text: 'Manage Shops',
+      url: appPaths.shops,
     },
     {
       id: 5,
