@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const TableWrapper = styled.div`
   width: 100%;
@@ -55,15 +55,15 @@ export const TableDataCell = styled.td`
   white-space: pre-wrap;
 `;
 
-export const ShopStatus = styled(TableDataCell)<{ status: "OPEN" | "CLOSE" }>`
+export const ShopStatus = styled(TableDataCell)<{ status: 'OPEN' | 'CLOSE' }>`
   color: ${({ status }) => {
     switch (status) {
-      case "OPEN":
-        return "GREEN";
-      case "CLOSE":
-        return "RED";
+      case 'OPEN':
+        return 'GREEN';
+      case 'CLOSE':
+        return 'RED';
       default:
-        return "black";
+        return 'black';
     }
   }};
 `;

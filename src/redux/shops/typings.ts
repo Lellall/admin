@@ -84,7 +84,7 @@ export interface ShopsRequest {
   filter?: string;
 }
 
-export interface VendorsProductResponse {
+export interface ShopsProductResponse {
   resultTotal: number;
   pageTotal: number;
   data: {
@@ -101,4 +101,9 @@ export interface VendorsProductResponse {
 }
 export interface ShopsProductsRequest extends ShopsRequest {
   id: string;
+}
+
+export interface SingleShopProductRequest {
+  productId: string;
+  shopId: string;
 }

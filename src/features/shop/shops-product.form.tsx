@@ -1,13 +1,13 @@
+/* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
-import Select from 'react-select';
-import { Product } from '../../redux/products/typings';
-import { useUpdateShopProductMutation } from '../../redux/shops/shops.api';
-import { useForm } from 'react-hook-form';
-import * as yup from 'yup';
+import { Product, productSchema } from '../../redux/products/typings';
+import { useGetSingleShopProductsQuery, useUpdateShopProductMutation } from '../../redux/shops/shops.api';
+import { SubmitHandler, useFieldArray, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import InputComponent from '../../components/Inputs/input-component';
+import ScreenLoader from '../../components/screen-loader';
 
 interface EditFormProps {
   product: Product;
@@ -16,24 +16,59 @@ interface EditFormProps {
   setIsOpen?: any;
 }
 
-const VendorsProductForm = ({ product, setIsOpen }: EditFormProps) => {
-  const [updateProduct, { isLoading, isSuccess }] = useUpdateShopProductMutation();
+const ShopsProductForm = ({ product, setIsOpen }: EditFormProps) => {
+  const [updateProduct, { isLoading: isUpdating, isSuccess }] = useUpdateShopProductMutation();
+
+  const [pricingLabel, setPricinglabel] = useState('');
+  const [pricingValue, setPricingValue] = useState<number>(0);
+  const { isLoading, data } = useGetSingleShopProductsQuery({ productId: product.id, shopId: product.shop.id });
 
   const {
-    // register,
-    reset,
     handleSubmit,
     control,
+    reset,
+    setValue,
+    register,
+    getValues,
     formState: { errors },
   } = useForm<Product>({
-    defaultValues: product,
+    defaultValues: { ...data, pricingDetails: [{ measurement: 'Basket', price: 32 }] },
     // @ts-expect-error
     resolver: yupResolver(productSchema),
   });
 
-  const handleFormSubmit = () => {
-    // updateProduct({});
+  const { fields } = useFieldArray({
+    name: 'pricingDetails',
+    control,
+  });
+
+  console.log('fields', fields);
+  console.log([pricingLabel, pricingValue]);
+  console.log('Err:', errors);
+  const handleFormSubmit: SubmitHandler<Product> = (data) => {
+    const { category, ...restData } = data;
+    const dataToSubmit = {
+      ...restData,
+      categoryId: category.id,
+    };
+    console.log('Data Submit:', dataToSubmit);
+
+    updateProduct({
+      productId: product.id,
+      shopId: product.shop.id,
+      data: dataToSubmit,
+    });
   };
+
+  useEffect(() => {
+    reset(data);
+  }, [reset, data]);
+
+  useEffect(() => {
+    // if (pricingLabel) {
+    setValue('pricingDetails', [{ measurement: pricingLabel, price: pricingValue }]);
+    // }
+  }, [pricingLabel, pricingValue, setValue]);
 
   useEffect(() => {
     if (isSuccess) {
@@ -41,18 +76,16 @@ const VendorsProductForm = ({ product, setIsOpen }: EditFormProps) => {
     }
   }, [isSuccess, setIsOpen]);
 
+  if (isLoading) {
+    return <ScreenLoader />;
+  }
+
   return (
     <Container>
       <form onSubmit={handleSubmit(handleFormSubmit)}>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-5">
           <InputComponent disabled errorMessage={errors?.id?.message} name={'id'} control={control} label={'ID'} />
-          <InputComponent
-            disabled
-            errorMessage={errors?.name?.message}
-            name={'name'}
-            control={control}
-            label={'Name'}
-          />
+          <InputComponent errorMessage={errors?.name?.message} name={'name'} control={control} label={'Name'} />
           <InputComponent errorMessage={errors?.price?.message} name={'price'} control={control} label={'Price'} />
         </div>
 
@@ -88,6 +121,7 @@ const VendorsProductForm = ({ product, setIsOpen }: EditFormProps) => {
             name={'imageUrl'}
             control={control}
             label={'ImageUrl'}
+            disabled
           />
           <InputComponent
             errorMessage={errors?.discount?.message}
@@ -109,12 +143,14 @@ const VendorsProductForm = ({ product, setIsOpen }: EditFormProps) => {
             name={'featured'}
             control={control}
             label={'Featured'}
+            type="checkbox"
           />
           <InputComponent
             errorMessage={errors?.available?.message}
             name={'available'}
             control={control}
             label={'Available'}
+            type="checkbox"
           />
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-5">
@@ -125,20 +161,35 @@ const VendorsProductForm = ({ product, setIsOpen }: EditFormProps) => {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-5">
           <InputComponent errorMessage={errors?.depth?.message} name={'depth'} control={control} label={'Depth'} />
           <InputComponent errorMessage={errors?.tags?.message} name={'tags'} control={control} label={'Tags'} />
-          <InputComponent errorMessage={errors?.id?.message} name={'id'} control={control} label={'ID'} />
         </div>
+        <div>
+          {fields.map((field, index) => {
+            return (
+              <section key={field.id} className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-5">
+                <InputComponent
+                  label="Measurement"
+                  control={control}
+                  {...register(`pricingDetails.${index}.measurement`)}
+                />
+                <InputComponent label="Prive value" control={control} {...register(`pricingDetails.${index}.price`)} />
+              </section>
+            );
+          })}
+        </div>
+
+        <SubmitButton type="submit">{isUpdating ? 'Updating...' : 'Update'}</SubmitButton>
       </form>
-      <SubmitButton>Clicked</SubmitButton>
     </Container>
   );
 };
 
-export default VendorsProductForm;
+export default ShopsProductForm;
 
 const Container = styled.div`
-  /* display: flex; */
-  /* justify-content: center; */
   width: 100%;
+
+  /* overflow-y: scroll; */
+  overflow: scroll;
 `;
 
 const SubmitButton = styled.button`
@@ -152,63 +203,3 @@ const SubmitButton = styled.button`
   font-size: 11px;
   width: 100%;
 `;
-
-const productSchema = yup.object().shape({
-  id: yup.string().required('ID is required'),
-  name: yup.string().required('Name is required'),
-  price: yup.number().required('Price is required').positive('Price must be a positive number'),
-  minPurchasePrice: yup
-    .number()
-    .required('Minimum purchase price is required')
-    .positive('Minimum purchase price must be a positive number'),
-  description: yup.string().required('Description is required'),
-  quantity: yup
-    .number()
-    .required('Quantity is required')
-    .integer('Quantity must be an integer')
-    .min(0, 'Quantity cannot be negative'),
-  inventory: yup
-    .number()
-    .required('Inventory is required')
-    .integer('Inventory must be an integer')
-    .min(0, 'Inventory cannot be negative'),
-  imageUrl: yup.string().url('Image URL must be a valid URL').required('Image URL is required'),
-  discount: yup
-    .number()
-    .required('Discount is required')
-    .min(0, 'Discount cannot be negative')
-    .max(100, 'Discount cannot exceed 100'),
-  currency: yup.string().required('Currency is required'),
-  featured: yup.boolean().required('Featured status is required'),
-  available: yup.boolean().required('Availability status is required'),
-  manufacturer: yup.string().required('Manufacturer is required'),
-  weight: yup.number().required('Weight is required').positive('Weight must be a positive number'),
-  height: yup.number().required('Height is required').positive('Height must be a positive number'),
-  width: yup.number().required('Width is required').positive('Width must be a positive number'),
-  depth: yup.number().required('Depth is required').positive('Depth must be a positive number'),
-  createdAt: yup.string().optional().nullable(),
-  updatedAt: yup.string().optional().nullable(),
-  tags: yup.array().of(yup.string()).required('Tags are required').min(1, 'At least one tag is required'),
-  shop: yup
-    .object()
-    .shape({
-      // Define the schema for Shop if needed
-    })
-    .nullable(),
-  category: yup
-    .object()
-    .shape({
-      // Define the schema for Category if needed
-    })
-    .nullable(),
-  pricingDetails: yup
-    .array()
-    .of(
-      yup.object().shape({
-        measurement: yup.string().required('Measurement is required'),
-        price: yup.number().required('Price is required').positive('Price must be a positive number'),
-      })
-    )
-    .optional()
-    .nullable(),
-});

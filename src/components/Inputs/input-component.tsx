@@ -2,7 +2,6 @@ import { TextField } from '@mui/material';
 import { useController } from 'react-hook-form';
 import styled from 'styled-components';
 import Switch from '@mui/material/Switch';
-
 interface InputComponentProps {
   control: any;
   type?: 'text' | 'number' | 'password' | 'email' | 'date' | 'checkbox' | 'time';
@@ -26,16 +25,12 @@ const InputComponent = ({
   disabled = false,
   rules = {},
 }: InputComponentProps) => {
-  const {
-    field,
-    // formState: { errors },
-  } = useController({
+  const { field } = useController({
     name,
     control,
     rules: rules,
   });
-  // const hasError = Boolean(errors[name]);
-  // const errorMsg = Boolean(errorMessage) && <span> {errorMessage}</span>;
+
   let formattedDate = '';
   if (field.value) {
     const dateObject = new Date(field.value);
@@ -113,8 +108,6 @@ const InputComponent = ({
               error={Boolean(errorMessage)}
               type={'number'}
               disabled={disabled}
-              // label={label}
-              // helperText={hasError && errors[name].message} // Display error message
             />
             {Boolean(errorMessage) && (
               <div style={{ fontSize: '12px', color: 'red', marginTop: '25px' }}>{errorMessage}</div>

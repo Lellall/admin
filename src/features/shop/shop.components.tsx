@@ -1,8 +1,8 @@
-import VendorForm from './vendor-form';
+import ShopFrom from './shop-form';
 import { ArrowBack } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 
-const Vendor = () => {
+const Shop = () => {
   const navigate = useNavigate();
 
   return (
@@ -14,11 +14,11 @@ const Vendor = () => {
           </button>
         </div>
 
-        <VendorForm />
+        <ShopFrom />
       </div>
     </>
   );
 };
 
-export default Vendor;
+export default Shop;
 // walin ganye founders  2nd week august engagrment later

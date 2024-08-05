@@ -7,7 +7,8 @@ import {
   ShopsProductsRequest,
   ShopsRequest,
   ShopsResponse,
-  VendorsProductResponse,
+  ShopsProductResponse,
+  SingleShopProductRequest,
 } from './typings';
 import { Product } from '../products/typings';
 
@@ -26,9 +27,15 @@ const shops = baseApi.injectEndpoints({
       }),
       providesTags: ['SHOPS'],
     }),
-    getShopProducts: builder.query<VendorsProductResponse, ShopsProductsRequest>({
+    getShopProducts: builder.query<ShopsProductResponse, ShopsProductsRequest>({
       query: (params: ShopsProductsRequest) => ({
         url: `/shops/${params.id}/products`,
+      }),
+      providesTags: ['SHOPS'],
+    }),
+    getSingleShopProducts: builder.query<Shop, SingleShopProductRequest>({
+      query: (params: SingleShopProductRequest) => ({
+        url: `/shops/${params.shopId}/products/${params.productId}`,
       }),
       providesTags: ['SHOPS'],
     }),
@@ -52,8 +59,8 @@ const shops = baseApi.injectEndpoints({
       },
     }),
     updateShopProduct: builder.mutation<Product, Product>({
-      query: ({ id, productId, ...data }: any) => ({
-        url: `/shops/${id}/products/${productId}`,
+      query: ({ productId, shopId, ...data }: any) => ({
+        url: `/shops/${shopId}/products/${productId}`,
         body: data,
         method: 'PUT',
       }),
@@ -79,4 +86,5 @@ export const {
   useUpdateShopMutation,
   useGetShopProductsQuery,
   useUpdateShopProductMutation,
+  useGetSingleShopProductsQuery,
 } = shops;
