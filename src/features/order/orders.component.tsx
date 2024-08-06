@@ -19,6 +19,7 @@ import {
   ExpandableRow,
   InteractiveIcon,
 } from './orders.style';
+import ScreenLoader from '../../components/screen-loader';
 
 // export const copyToClipboard = (text:string) => {
 //   navigator.clipboard.writeText(text);
@@ -38,11 +39,7 @@ const getStatusColor = (status: string) => {
 };
 
 const OrderForRider = () => {
-  const {
-    data: incompleteOrders,
-
-    error,
-  } = useIncompleteOrdersQuery({ page: 1, size: 10, sort: 'DESC' });
+  const { data: incompleteOrders, isLoading, error } = useIncompleteOrdersQuery({ page: 1, size: 10, sort: 'DESC' });
   const [completeOrder, { isLoading: isCompleting, isSuccess }] = useCompleteOrderMutation();
   // const intervalIdRef = useRef(0);
   const [expandedRow, setExpandedRow] = useState(null);
@@ -105,6 +102,9 @@ const OrderForRider = () => {
     return <EmptyState />;
   }
 
+  if (isLoading) {
+    return <ScreenLoader />;
+  }
   return (
     <div style={{ width: '100%' }}>
       <TableWrapper>
