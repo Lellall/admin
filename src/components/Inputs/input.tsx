@@ -82,6 +82,7 @@ const InputWithIcon = ({
             <div
               style={{
                 marginTop: `${hasError ? '0px' : '20px'} `,
+                marginRight: '5px',
                 color: '#ccc',
               }}>
               {<EyeSlash size="16" />}
@@ -90,6 +91,7 @@ const InputWithIcon = ({
             <div
               style={{
                 marginTop: `${hasError ? '0px' : '20px'} `,
+                marginRight: '5px',
                 color: '#ccc',
               }}>
               {<Eye size="16" />}
