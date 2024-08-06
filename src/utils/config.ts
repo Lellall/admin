@@ -8,7 +8,7 @@ const config = {
   },
 };
 
-const currentEnv = process.env.NODE_ENV || 'production';
+const currentEnv = process.env.NODE_ENV || 'development';
 
-// export const BACKEND_URL = config[currentEnv].BACKEND_URL;
-export const BACKEND_URL = (config as { [key: string]: { BACKEND_URL: string } })[currentEnv].BACKEND_URL;
+export const BACKEND_URL = config[currentEnv].BACKEND_URL;
+// export const BACKEND_URL = (config as { [key: string]: { BACKEND_URL: string } })[currentEnv].BACKEND_URL;
