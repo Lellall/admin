@@ -12,6 +12,7 @@ import ScreenLoader from '../../components/screen-loader';
 import { useGetProductsQuery } from '../../redux/products';
 import { Table, TableHead, TableWrapper, TableDataCell, TableHeadCell, TableRow, TableHeadRow } from './product.style';
 import SearchInput from '../../components/Inputs/searchInput';
+import EmptyState from '../../components/empty-state';
 const Products = () => {
   const [current, setCurrent] = useState(1);
   const [isOpen, setIsOpen] = useState(false);
@@ -51,6 +52,7 @@ const Products = () => {
   const handleSearchChange = (event: { target: { value: React.SetStateAction<string> } }) => {
     setProductName(event.target.value);
   };
+
   return (
     <>
       <div className="flex justify-between w-full items-center  ">
@@ -76,32 +78,42 @@ const Products = () => {
                   </TableHeadRow>
                 </TableHead>
                 <TableBody>
-                  {products?.data?.map((product) => (
-                    <TableRow key={product.id}>
-                      <TableDataCell>{product.name}</TableDataCell>
-                      <TableDataCell>{product.price}</TableDataCell>
-                      <TableDataCell>{product.quantity}</TableDataCell>
-                      <TableDataCell>{product.available ? 'Yes' : 'No'}</TableDataCell>
-                      <TableDataCell>{product.category?.name}</TableDataCell>
-                      <TableDataCell>
-                        <button
-                          style={{
-                            textAlign: 'center',
-                            border: 'none',
-                            cursor: 'pointer',
-                          }}
-                          onClick={() => openMenu(product)}>
-                          <Menu size="16" color="#FF8A65" />
-                        </button>
+                  {!products.data.length ? (
+                    <TableRow>
+                      <TableDataCell colSpan={6} style={{ height: '40vh' }}>
+                        <EmptyState />
                       </TableDataCell>
                     </TableRow>
-                  ))}
+                  ) : (
+                    products?.data?.map((product) => (
+                      <TableRow key={product.id}>
+                        <TableDataCell>{product.name}</TableDataCell>
+                        <TableDataCell>{product.price}</TableDataCell>
+                        <TableDataCell>{product.quantity}</TableDataCell>
+                        <TableDataCell>{product.available ? 'Yes' : 'No'}</TableDataCell>
+                        <TableDataCell>{product.category?.name}</TableDataCell>
+                        <TableDataCell>
+                          <button
+                            style={{
+                              textAlign: 'center',
+                              border: 'none',
+                              cursor: 'pointer',
+                            }}
+                            onClick={() => openMenu(product)}>
+                            <Menu size="16" color="#FF8A65" />
+                          </button>
+                        </TableDataCell>
+                      </TableRow>
+                    ))
+                  )}
                 </TableBody>
               </Table>
             </TableWrapper>
           </div>
           <div style={{ float: 'right', margin: '10px' }}>
-            <Pagination onChange={handlePageClick} current={current} total={products?.resultTotal} />
+            {products.data.length ? (
+              <Pagination onChange={handlePageClick} current={current} total={products?.resultTotal} />
+            ) : null}
           </div>
         </>
       )}
