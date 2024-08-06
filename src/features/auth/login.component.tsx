@@ -113,7 +113,7 @@ const Login: React.FC = () => {
         <button
           disabled={isLoading}
           className="bg-green-800 hover:bg-[#0e5737] text-white w-full mt-4 py-2 px-4 rounded-full">
-          LOGIN
+          {isLoading ? 'Logging in...' : ' LOGIN'}
         </button>
       </form>
       <hr className="my-6 border-t border-gray-300" />
