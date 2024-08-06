@@ -30,6 +30,7 @@ const shops = baseApi.injectEndpoints({
     getShopProducts: builder.query<ShopsProductResponse, ShopsProductsRequest>({
       query: (params: ShopsProductsRequest) => ({
         url: `/shops/${params.id}/products`,
+        params,
       }),
       providesTags: ['SHOPS'],
     }),

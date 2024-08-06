@@ -14,6 +14,7 @@ import SearchInput from '../../components/Inputs/searchInput';
 import { useGetShopProductsQuery } from '../../redux/shops/shops.api';
 import { useParams } from 'react-router-dom';
 import ShopsProductForm from './shops-product.form';
+import EmptyState from '../../components/empty-state';
 
 const ShopsProducts = () => {
   const [current, setCurrent] = useState(1);
@@ -82,26 +83,34 @@ const ShopsProducts = () => {
                   </TableHeadRow>
                 </TableHead>
                 <TableBody>
-                  {products?.data?.map((product) => (
-                    <TableRow key={product.id}>
-                      <TableDataCell>{product?.name}</TableDataCell>
-                      <TableDataCell>{product?.price}</TableDataCell>
-                      <TableDataCell>{product?.description}</TableDataCell>
-                      {/* <TableDataCell>{product?.available ? 'Yes' : 'No'}</TableDataCell> */}
-                      {/* <TableDataCell>{product?.category?.name}</TableDataCell> */}
-                      <TableDataCell>
-                        <button
-                          style={{
-                            textAlign: 'center',
-                            border: 'none',
-                            cursor: 'pointer',
-                          }}
-                          onClick={() => openMenu(product)}>
-                          <Menu size="16" color="#FF8A65" />
-                        </button>
+                  {!products.data.length ? (
+                    <TableRow>
+                      <TableDataCell colSpan={6} style={{ height: '40vh' }}>
+                        <EmptyState />
                       </TableDataCell>
                     </TableRow>
-                  ))}
+                  ) : (
+                    products?.data?.map((product) => (
+                      <TableRow key={product.id}>
+                        <TableDataCell>{product?.name}</TableDataCell>
+                        <TableDataCell>{product?.price}</TableDataCell>
+                        <TableDataCell>{product?.description}</TableDataCell>
+                        {/* <TableDataCell>{product?.available ? 'Yes' : 'No'}</TableDataCell> */}
+                        {/* <TableDataCell>{product?.category?.name}</TableDataCell> */}
+                        <TableDataCell>
+                          <button
+                            style={{
+                              textAlign: 'center',
+                              border: 'none',
+                              cursor: 'pointer',
+                            }}
+                            onClick={() => openMenu(product)}>
+                            <Menu size="16" color="#FF8A65" />
+                          </button>
+                        </TableDataCell>
+                      </TableRow>
+                    ))
+                  )}
                 </TableBody>
               </Table>
             </TableWrapper>

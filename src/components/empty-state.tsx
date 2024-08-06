@@ -1,12 +1,14 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 const EmptyState = () => {
   return (
     <Empty>
       <img src="/assets/user-order.svg" alt="favorites" />
       <div className="text-container">
-        <p className="bold">Nothing Yet!</p>
-        <p>All your Closed Orders will be saved here.</p>
+        <p className="bold">Empty for Now</p>
+        <p>
+          It looks like there’s nothing here right now— browse our store for some great finds or check back with us soon
+        </p>
       </div>
     </Empty>
   );
@@ -29,10 +31,11 @@ export const Empty = styled.div`
     justify-content: center;
     align-items: center;
     gap: 10px;
+    width: 100%;
 
     p {
       color: #2f313f;
-      font-feature-settings: "clig" off, "liga" off;
+      font-feature-settings: 'clig' off, 'liga' off;
       font-family: Open Sans;
       font-size: 16px;
       font-style: normal;

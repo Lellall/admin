@@ -7,6 +7,7 @@ import ScreenLoader from '../../components/screen-loader';
 import MiniLoader from '../../components/mini-loader';
 import { useDebounce } from 'react-use';
 import SearchInput from '../../components/Inputs/searchInput';
+import EmptyState from '../../components/empty-state';
 
 const Shop = () => {
   const [page, setPage] = useState(1);
@@ -47,11 +48,11 @@ const Shop = () => {
         <ScreenLoader style={{ height: '50vh' }} />
       ) : (
         <>
-          <div style={{ width: '100%' }}>
-            <ShopsTable shops={data.data} />
-          </div>
+          <div style={{ width: '100%' }}>{!data.data.length ? <EmptyState /> : <ShopsTable shops={data.data} />}</div>
           <div style={{ float: 'right', margin: '10px' }}>
-            <Pagination onChange={handlePageClick} current={page} total={data?.resultTotal} />
+            {data.data.length ? (
+              <Pagination onChange={handlePageClick} current={page} total={data?.resultTotal} />
+            ) : null}
           </div>
         </>
       )}

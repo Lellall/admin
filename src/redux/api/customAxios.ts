@@ -13,8 +13,6 @@ const CustomAxios = axios.create({
 
 // let exp = '';
 
-// The regex is used to match the URL because the search parameters for products are not functioning correctly when the endpoints include a token in the header.
-
 const endpointsRequiringToken = ['/orders', '/transactions', '/shops', /^\/products\/[a-fA-F0-9-]+$/];
 CustomAxios.interceptors.request.use(
   (config) => {
@@ -22,7 +20,8 @@ CustomAxios.interceptors.request.use(
     if (token && endpointsRequiringToken.some((pattern) => config.url?.match(pattern))) {
       config.headers['Authorization'] = 'Bearer ' + token;
     } else {
-      delete config.headers['Authorization']; // Remove any existing Authorization header
+      config.headers['Authorization'] = 'Bearer ' + '';
+      // delete config.headers['Authorization'];
     }
     return config;
   },
