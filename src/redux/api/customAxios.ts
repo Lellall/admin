@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 //@ts-ignore
 //@ts-nocheck
 import axios from 'axios';
@@ -12,13 +13,16 @@ const CustomAxios = axios.create({
 
 // let exp = '';
 
-const endpointsRequiringToken = ['/orders', '/transactions', '/shops', '/products'];
+// The regex is used to match the URL because the search parameters for products are not functioning correctly when the endpoints include a token in the header.
 
+const endpointsRequiringToken = [/^\/orders$/, /^\/transactions$/, /^\/shops$/, /^\/products\/[a-fA-F0-9-]+$/];
 CustomAxios.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('access_token');
-    if (token && endpointsRequiringToken.includes(config.url || '')) {
+    if (token && endpointsRequiringToken.some((pattern) => config.url?.match(pattern))) {
       config.headers['Authorization'] = 'Bearer ' + token;
+    } else {
+      delete config.headers['Authorization']; // Remove any existing Authorization header
     }
     return config;
   },

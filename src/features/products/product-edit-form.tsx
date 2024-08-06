@@ -123,6 +123,8 @@ const Label = styled.label`
 const StyledSelect = styled(Select)`
   width: 200px;
   font-size: 11px;
+  display: flex;
+  flex-direction: row;
 `;
 
 const PriceInput = styled.input`
@@ -137,7 +139,7 @@ const DescriptionInput = styled.textarea`
   border: 1px solid hsl(0, 0%, 80%);
   border-radius: 4px;
   font-size: 13px;
-  height: 100%;
+  height: 140px;
   outline: none;
 `;
 

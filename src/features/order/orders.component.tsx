@@ -139,42 +139,44 @@ const OrderForRider = () => {
                   </TableDataCell>
                 </TableRow>
                 {expandedRow === item.id && (
-                  <ExpandableRow>
-                    <ExpandableDataCell>
-                      <Content>
-                        <div>
-                          <h4>Items</h4>
-                          <ul>
-                            <ListItem>Customer: {item.customerName}</ListItem>
-                            {item.items.map((product, idx) => (
-                              <div key={product.productId}>
-                                <ListItem>
-                                  Product {idx + 1}: {product.productName} - Quantity {product.count}
-                                </ListItem>
-                              </div>
-                            ))}
-                            <ListItem>
-                              Address: {item.address?.streetName}, {item.address?.estate}, {item.address?.poBox}
-                            </ListItem>
-                            <ListItem>Phone Number: {item.phoneNumber}</ListItem>
-                          </ul>
-                        </div>
-                        <div style={{ display: 'flex' }}>
-                          <Button
-                            onClick={() => handleComplete(item.orderId)}
-                            style={{
-                              height: '40px',
-                              marginLeft: '5px',
-                            }}>
-                            Complete this Order
-                          </Button>
-                        </div>
-                      </Content>
-                      <InteractiveIcon
-                        onClick={() => copyInfo(item.customerName, item.items, item.address, item.phoneNumber)}
-                      />
-                    </ExpandableDataCell>
-                  </ExpandableRow>
+                  <div>
+                    <ExpandableRow>
+                      <ExpandableDataCell>
+                        <Content>
+                          <div>
+                            <h4>Items</h4>
+                            <ul>
+                              <ListItem>Customer: {item.customerName}</ListItem>
+                              {item.items.map((product, idx) => (
+                                <div key={product.productId}>
+                                  <ListItem>
+                                    Product {idx + 1}: {product.productName} - Quantity {product.count}
+                                  </ListItem>
+                                </div>
+                              ))}
+                              <ListItem>
+                                Address: {item.address?.streetName}, {item.address?.estate}, {item.address?.poBox}
+                              </ListItem>
+                              <ListItem>Phone Number: {item.phoneNumber}</ListItem>
+                            </ul>
+                          </div>
+                          <div style={{ display: 'flex' }}>
+                            <Button
+                              onClick={() => handleComplete(item.orderId)}
+                              style={{
+                                height: '40px',
+                                marginLeft: '5px',
+                              }}>
+                              Complete this Order
+                            </Button>
+                          </div>
+                        </Content>
+                        <InteractiveIcon
+                          onClick={() => copyInfo(item.customerName, item.items, item.address, item.phoneNumber)}
+                        />
+                      </ExpandableDataCell>
+                    </ExpandableRow>
+                  </div>
                 )}
               </React.Fragment>
             ))}
@@ -183,17 +185,13 @@ const OrderForRider = () => {
       </TableWrapper>
       {showModal && (
         <AuthModal onClose={() => setShowModal(false)}>
-          <p style={{ marginBottom: '10px' }}>Are sure you want to complete this order?</p>
-          <Button
-            onClick={() => setShowModal(false)}
-            // loading={loading}
-            // spaceTop="10px"
-            style={{ background: '#0E5D37', marginTop: '10px' }}>
+          <p style={{ marginBottom: '30px' }}>Are sure you want to complete this order?</p>
+          <Button onClick={() => setShowModal(false)} style={{ background: '#0E5D37', marginTop: '0px' }}>
             No
           </Button>
           <Button
             onClick={() => completeOrder({ id: orderId })}
-            style={{ backgroundColor: 'red', color: 'white', border: 'none', margin: '10px auto' }}>
+            style={{ backgroundColor: 'red', color: 'white', border: 'none', margin: '0px 20px' }}>
             {isCompleting ? 'Completing order...' : 'Yes'}
           </Button>
         </AuthModal>

@@ -58,9 +58,10 @@ const shops = baseApi.injectEndpoints({
         });
       },
     }),
-    updateShopProduct: builder.mutation<Product, Product>({
+    updateShopProduct: builder.mutation<Product, any>({
       query: ({ productId, shopId, ...data }: any) => ({
         url: `/shops/${shopId}/products/${productId}`,
+        // url: `/products/${productId}`,
         body: data,
         method: 'PUT',
       }),
