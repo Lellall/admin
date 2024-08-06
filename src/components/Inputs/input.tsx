@@ -90,6 +90,7 @@ const InputWithIcon = ({
             <div
               style={{
                 marginTop: `${hasError ? '0px' : '20px'} `,
+                marginRight: '10px',
                 color: '#ccc',
               }}>
               {<Eye size="16" />}
