@@ -30,6 +30,7 @@ const ShopsProductForm = ({ product, setIsOpen }: EditFormProps) => {
     formState: { errors },
   } = useForm<Product>({
     defaultValues: sampleData,
+    //@ts-expect-error
     resolver: yupResolver(productSchema),
   });
 
