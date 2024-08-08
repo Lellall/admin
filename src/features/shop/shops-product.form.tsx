@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { useEffect } from 'react';
 import styled from 'styled-components';
 import { Product, productSchema } from '../../redux/products/typings';
@@ -19,33 +18,30 @@ const ShopsProductForm = ({ product, setIsOpen }: EditFormProps) => {
   const [updateProduct, { isLoading: isUpdating, isSuccess }] = useUpdateShopProductMutation();
 
   const { isLoading, data } = useGetSingleShopProductsQuery({ productId: product.id, shopId: product.shop.id });
-  // const { isLoading, data } = useGetSingleShopProductsQuery({ productId: product.id });
-  const sampleData = { ...data, pricingDetails: [{ measurement: 'Basket', price: 111 }] };
+
   const {
     handleSubmit,
     control,
     reset,
-    // setValue,
     getValues,
     formState: { errors },
   } = useForm<Product>({
-    defaultValues: sampleData,
+    defaultValues: data,
     //@ts-expect-error
     resolver: yupResolver(productSchema),
   });
 
-  console.log('Err:', errors);
   const handleFormSubmit: SubmitHandler<Product> = (data) => {
     const { category, ...restData } = data;
     const dataToSubmit = {
       ...restData,
       categoryId: category.id,
     };
-    console.log('Data Submit:', dataToSubmit);
 
     updateProduct({
       productId: product.id,
       data: dataToSubmit,
+      // shopId: product.shop.id,
     });
   };
 
@@ -149,14 +145,20 @@ const ShopsProductForm = ({ product, setIsOpen }: EditFormProps) => {
         </div>
 
         {pricingDetails?.length > 0 ? (
-          <>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-5">
             <InputComponent
               label="Measurement"
               control={control}
-              name={`pricingDetails[0]?.measument?.value`}
-              // errorMessage={errors?.pricingDetails[0]?.message}
+              name={`pricingDetails.0.measurement`}
+              errorMessage={errors?.pricingDetails?.message}
             />
-          </>
+            <InputComponent
+              label="Measurement"
+              control={control}
+              name={`pricingDetails.0.price`}
+              errorMessage={errors?.pricingDetails?.message}
+            />
+          </div>
         ) : null}
 
         <SubmitButton type="submit">{isUpdating ? 'Updating...' : 'Update'}</SubmitButton>

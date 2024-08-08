@@ -77,8 +77,6 @@ const ShopsProducts = () => {
                     <TableHeadCell>Name</TableHeadCell>
                     <TableHeadCell>Price</TableHeadCell>
                     <TableHeadCell>Description</TableHeadCell>
-                    {/* <TableHeadCell>Available</TableHeadCell> */}
-                    {/* <TableHeadCell>category</TableHeadCell> */}
                     <TableHeadCell>Action</TableHeadCell>
                   </TableHeadRow>
                 </TableHead>
@@ -95,14 +93,13 @@ const ShopsProducts = () => {
                         <TableDataCell>{product?.name}</TableDataCell>
                         <TableDataCell>{product?.price}</TableDataCell>
                         <TableDataCell>{product?.description}</TableDataCell>
-                        {/* <TableDataCell>{product?.available ? 'Yes' : 'No'}</TableDataCell> */}
-                        {/* <TableDataCell>{product?.category?.name}</TableDataCell> */}
                         <TableDataCell>
                           <button
                             style={{
                               textAlign: 'center',
                               border: 'none',
                               cursor: 'pointer',
+                              padding: '8px',
                             }}
                             onClick={() => openMenu(product)}>
                             <Menu size="16" color="#FF8A65" />

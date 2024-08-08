@@ -98,6 +98,7 @@ const Products = () => {
                               textAlign: 'center',
                               border: 'none',
                               cursor: 'pointer',
+                              padding: '6px',
                             }}
                             onClick={() => openMenu(product)}>
                             <Menu size="16" color="#FF8A65" />

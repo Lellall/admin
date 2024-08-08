@@ -65,6 +65,7 @@ const ShopsTable = ({ shops }: ShopsTableProps) => {
                     textAlign: 'center',
                     border: 'none',
                     cursor: 'pointer',
+                    padding: '8px',
                   }}
                   onClick={(event) => handleClick(event, shop)}>
                   <MenuIcon color="#FF8A65" size={16} />
