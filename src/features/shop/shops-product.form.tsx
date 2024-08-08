@@ -60,7 +60,7 @@ const ShopsProductForm = ({ product, setIsOpen }: EditFormProps) => {
   }
 
   const pricingDetails = getValues().pricingDetails;
-  console.log(pricingDetails);
+
   return (
     <Container>
       <form onSubmit={handleSubmit(handleFormSubmit)}>
