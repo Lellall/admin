@@ -30,7 +30,6 @@ const Shops = () => {
 
   const handlePageClick = (pageNumber: number) => {
     setPage(pageNumber);
-    // refetch(pageNumber);
   };
 
   const handleSearchChange = (event: { target: { value: React.SetStateAction<string> } }) => {
