@@ -89,4 +89,5 @@ export const {
   useGetShopProductsQuery,
   useUpdateShopProductMutation,
   useGetSingleShopProductsQuery,
+  useLazyGetSingleShopProductsQuery,
 } = shops;

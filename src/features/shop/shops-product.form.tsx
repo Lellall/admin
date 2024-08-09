@@ -1,24 +1,18 @@
 import { useEffect } from 'react';
 import styled from 'styled-components';
 import { Product, productSchema } from '../../redux/products/typings';
-import { useGetSingleShopProductsQuery, useUpdateShopProductMutation } from '../../redux/shops/shops.api';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import InputComponent from '../../components/Inputs/input-component';
 import ScreenLoader from '../../components/screen-loader';
 
 interface EditFormProps {
-  product: Product;
-  fetchProducts?: () => void;
-  current?: string;
-  setIsOpen?: any;
+  data: any;
+  isLoading: boolean;
+  onSubmit: SubmitHandler<Product>;
 }
 
-const ShopsProductForm = ({ product, setIsOpen }: EditFormProps) => {
-  const [updateProduct, { isLoading: isUpdating, isSuccess }] = useUpdateShopProductMutation();
-
-  const { isLoading, data } = useGetSingleShopProductsQuery({ productId: product.id, shopId: product.shop.id });
-
+const ShopsProductForm = ({ data, onSubmit, isLoading }: EditFormProps) => {
   const {
     handleSubmit,
     control,
@@ -32,34 +26,17 @@ const ShopsProductForm = ({ product, setIsOpen }: EditFormProps) => {
   });
 
   const handleFormSubmit: SubmitHandler<Product> = (data) => {
-    const { category, ...restData } = data;
-    const dataToSubmit = {
-      ...restData,
-      categoryId: category.id,
-    };
-
-    updateProduct({
-      productId: product.id,
-      data: dataToSubmit,
-      // shopId: product.shop.id,
-    });
+    onSubmit(data);
   };
 
   useEffect(() => {
     reset(data);
   }, [reset, data]);
-
-  useEffect(() => {
-    if (isSuccess) {
-      setIsOpen(false);
-    }
-  }, [isSuccess, setIsOpen]);
+  const pricingDetails = getValues().pricingDetails;
 
   if (isLoading) {
     return <ScreenLoader />;
   }
-
-  const pricingDetails = getValues().pricingDetails;
 
   return (
     <Container>
@@ -161,7 +138,7 @@ const ShopsProductForm = ({ product, setIsOpen }: EditFormProps) => {
           </div>
         ) : null}
 
-        <SubmitButton type="submit">{isUpdating ? 'Updating...' : 'Update'}</SubmitButton>
+        <SubmitButton type="submit">{'Submit'}</SubmitButton>
       </form>
     </Container>
   );
@@ -187,21 +164,3 @@ const SubmitButton = styled.button`
   font-size: 11px;
   width: 100%;
 `;
-
-/*
-
-  <div>
-          {fields.map((field, index) => {
-            return (
-              <section key={field.id} className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-5">
-                <InputComponent
-                  label="Measurement"
-                  control={control}
-                  {...register(`pricingDetails.${index}.measurement`)}
-                />
-                <InputComponent label="Prive value" control={control} {...register(`pricingDetails.${index}.price`)} />
-              </section>
-            );
-          })}
-        </div>
-*/

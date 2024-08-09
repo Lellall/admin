@@ -1,9 +1,8 @@
-/* eslint-disable no-console */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Pagination from 'rc-pagination';
 // import EditForm from './product-edit-form';
 import { TableBody } from '@mui/material';
-import { Menu } from 'iconsax-react';
+import { Add, Menu } from 'iconsax-react';
 // import { SearchInp } from '../../components/ui/base/navbar/navbar.styles';
 import Modal from '../../components/modal';
 import { useDebounce } from 'react-use';
@@ -11,18 +10,41 @@ import MiniLoader from '../../components/mini-loader';
 import ScreenLoader from '../../components/screen-loader';
 import { Table, TableHead, TableWrapper, TableDataCell, TableHeadCell, TableRow, TableHeadRow } from './shops.style';
 import SearchInput from '../../components/Inputs/searchInput';
-import { useGetShopProductsQuery } from '../../redux/shops/shops.api';
+import {
+  useGetShopProductsQuery,
+  useLazyGetSingleShopProductsQuery,
+  useUpdateShopProductMutation,
+} from '../../redux/shops/shops.api';
 import { useParams } from 'react-router-dom';
 import ShopsProductForm from './shops-product.form';
 import EmptyState from '../../components/empty-state';
+import { Product } from '../../redux/products/typings';
 
 const ShopsProducts = () => {
-  const [current, setCurrent] = useState(1);
-  const [isOpen, setIsOpen] = useState(false);
   const { id } = useParams();
-
+  const [current, setCurrent] = useState(1);
+  const [selected, setSelected] = useState<Product | null>(null);
   const [produtName, setProductName] = useState<string>('');
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
+  // const [isAddModalOpen, setIsAdddModalOpen] = useState(false);
+
+  const [fetchSingleProduct, { data: singleProduct, isLoading: loadSingleProduct }] =
+    useLazyGetSingleShopProductsQuery();
+  const [updateProduct, { isSuccess }] = useUpdateShopProductMutation();
+
+  const handleProductUpdate = (data: Product) => {
+    const { category, ...restData } = data;
+    const dataToSubmit = {
+      ...restData,
+      categoryId: category.id,
+    };
+    updateProduct({
+      productId: selected.id,
+      data: dataToSubmit,
+      shopId: selected.shop.id,
+    });
+  };
   useDebounce(
     () => {
       setDebouncedSearchTerm(produtName);
@@ -43,17 +65,30 @@ const ShopsProducts = () => {
     id: id,
   });
 
-  const [selected, setSelected] = useState(null);
-
   const handlePageClick = (page: number) => {
     setCurrent(page);
   };
 
-  const openMenu = (product: any) => {
+  const openProductModal = (product: any) => {
     setSelected(product);
-    setIsOpen(true);
-    // openView();
+    setIsEditModalOpen(true);
   };
+  const closeProductModal = () => {
+    setSelected(null);
+    setIsEditModalOpen(false);
+  };
+
+  useEffect(() => {
+    if (selected) {
+      fetchSingleProduct({ productId: selected.id, shopId: selected.shop.id });
+    }
+  }, [fetchSingleProduct, selected]);
+
+  useEffect(() => {
+    if (isSuccess) {
+      closeProductModal();
+    }
+  }, [isSuccess]);
 
   const handleSearchChange = (event: { target: { value: React.SetStateAction<string> } }) => {
     setProductName(event.target.value);
@@ -63,6 +98,9 @@ const ShopsProducts = () => {
       <div className="flex justify-between w-full items-center  ">
         <SearchInput placeholder="What are you looking for?" value={produtName} onChange={handleSearchChange} />
         {isFetching && <MiniLoader />}
+        <button>
+          <Add />
+        </button>
       </div>
 
       {isLoading ? (
@@ -101,7 +139,7 @@ const ShopsProducts = () => {
                               cursor: 'pointer',
                               padding: '8px',
                             }}
-                            onClick={() => openMenu(product)}>
+                            onClick={() => openProductModal(product)}>
                             <Menu size="16" color="#FF8A65" />
                           </button>
                         </TableDataCell>
@@ -121,10 +159,10 @@ const ShopsProducts = () => {
         width="100%"
         title="Edit Product"
         style={{ maxWidth: '700px', width: '90%', margin: 'auto', overflowY: 'auto' }}
-        show={isOpen}
-        onClose={() => setIsOpen(false)}>
+        show={isEditModalOpen}
+        onClose={closeProductModal}>
         <>
-          <ShopsProductForm product={selected} setIsOpen={setIsOpen} />
+          <ShopsProductForm isLoading={loadSingleProduct} data={singleProduct} onSubmit={handleProductUpdate} />
         </>
       </Modal>
     </>
