@@ -1,109 +1,31 @@
-import React, { useEffect, useState } from 'react';
 import Pagination from 'rc-pagination';
-// import EditForm from './product-edit-form';
 import { TableBody } from '@mui/material';
-import { Add, Menu } from 'iconsax-react';
-// import { SearchInp } from '../../components/ui/base/navbar/navbar.styles';
+import { Menu } from 'iconsax-react';
 import Modal from '../../components/modal';
-import { useDebounce } from 'react-use';
 import MiniLoader from '../../components/mini-loader';
 import ScreenLoader from '../../components/screen-loader';
 import { Table, TableHead, TableWrapper, TableDataCell, TableHeadCell, TableRow, TableHeadRow } from './shops.style';
 import SearchInput from '../../components/Inputs/searchInput';
-import {
-  useGetShopProductsQuery,
-  useLazyGetSingleShopProductsQuery,
-  useUpdateShopProductMutation,
-} from '../../redux/shops/shops.api';
-import { useParams } from 'react-router-dom';
 import ShopsProductForm from './shops-product.form';
 import EmptyState from '../../components/empty-state';
-import { Product } from '../../redux/products/typings';
+import { useShop } from './shop.controller';
 
 const ShopsProducts = () => {
-  const { id } = useParams();
-  const [current, setCurrent] = useState(1);
-  const [selected, setSelected] = useState<Product | null>(null);
-  const [produtName, setProductName] = useState<string>('');
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
-  // const [isAddModalOpen, setIsAdddModalOpen] = useState(false);
+  const { actions, loading, variables } = useShop();
+  const { fetchingProducts, loadingProduct, loadingProducts, updatingProduct, addingProduct } = loading;
+  const { produtName, product, page, products, isAddModalOpen, isEditModalOpen } = variables;
 
-  const [fetchSingleProduct, { data: singleProduct, isLoading: loadSingleProduct }] =
-    useLazyGetSingleShopProductsQuery();
-  const [updateProduct, { isSuccess }] = useUpdateShopProductMutation();
-
-  const handleProductUpdate = (data: Product) => {
-    const { category, ...restData } = data;
-    const dataToSubmit = {
-      ...restData,
-      categoryId: category.id,
-    };
-    updateProduct({
-      productId: selected.id,
-      data: dataToSubmit,
-      shopId: selected.shop.id,
-    });
-  };
-  useDebounce(
-    () => {
-      setDebouncedSearchTerm(produtName);
-    },
-    500,
-    [produtName]
-  );
-
-  const {
-    data: products,
-    isLoading,
-    isFetching,
-  } = useGetShopProductsQuery({
-    page: current - 1,
-    size: 10,
-    filter: debouncedSearchTerm,
-    categoryId: '',
-    id: id,
-  });
-
-  const handlePageClick = (page: number) => {
-    setCurrent(page);
-  };
-
-  const openProductModal = (product: any) => {
-    setSelected(product);
-    setIsEditModalOpen(true);
-  };
-  const closeProductModal = () => {
-    setSelected(null);
-    setIsEditModalOpen(false);
-  };
-
-  useEffect(() => {
-    if (selected) {
-      fetchSingleProduct({ productId: selected.id, shopId: selected.shop.id });
-    }
-  }, [fetchSingleProduct, selected]);
-
-  useEffect(() => {
-    if (isSuccess) {
-      closeProductModal();
-    }
-  }, [isSuccess]);
-
-  const handleSearchChange = (event: { target: { value: React.SetStateAction<string> } }) => {
-    setProductName(event.target.value);
-  };
   return (
     <>
       <div className="flex justify-between w-full items-center  ">
-        <SearchInput placeholder="What are you looking for?" value={produtName} onChange={handleSearchChange} />
-        {isFetching && <MiniLoader />}
-        <button>
-          <Add />
+        <SearchInput placeholder="What are you looking for?" value={produtName} onChange={actions.handleSearchChange} />
+        {fetchingProducts && <MiniLoader />}
+        <button className="bg-[#F06D04] p-1 m-3 rounded-sm shadow-lg" onClick={() => actions.setIsAdddModalOpen(true)}>
+          Add Product
         </button>
       </div>
 
-      {isLoading ? (
+      {loadingProducts ? (
         <ScreenLoader style={{ height: '50vh' }} />
       ) : (
         <>
@@ -139,7 +61,7 @@ const ShopsProducts = () => {
                               cursor: 'pointer',
                               padding: '8px',
                             }}
-                            onClick={() => openProductModal(product)}>
+                            onClick={() => actions.openProductModal(product)}>
                             <Menu size="16" color="#FF8A65" />
                           </button>
                         </TableDataCell>
@@ -151,7 +73,7 @@ const ShopsProducts = () => {
             </TableWrapper>
           </div>
           <div style={{ float: 'right', margin: '10px' }}>
-            <Pagination onChange={handlePageClick} current={current} total={products?.resultTotal} />
+            <Pagination onChange={actions.handlePageClick} current={page} total={products?.resultTotal} />
           </div>
         </>
       )}
@@ -160,9 +82,24 @@ const ShopsProducts = () => {
         title="Edit Product"
         style={{ maxWidth: '700px', width: '90%', margin: 'auto', overflowY: 'auto' }}
         show={isEditModalOpen}
-        onClose={closeProductModal}>
+        onClose={actions.closeProductModal}>
         <>
-          <ShopsProductForm isLoading={loadSingleProduct} data={singleProduct} onSubmit={handleProductUpdate} />
+          <ShopsProductForm
+            loading={updatingProduct}
+            fetching={loadingProduct}
+            data={product}
+            onSubmit={actions.handleProductUpdate}
+          />
+        </>
+      </Modal>
+      <Modal
+        width="100%"
+        title="Add Product"
+        style={{ maxWidth: '700px', width: '90%', margin: 'auto', overflowY: 'auto' }}
+        show={isAddModalOpen}
+        onClose={actions.closeProductModal}>
+        <>
+          <ShopsProductForm loading={addingProduct} data={null} onSubmit={actions.handleAddProduct} />
         </>
       </Modal>
     </>

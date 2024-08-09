@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import Switch from '@mui/material/Switch';
 interface InputComponentProps {
   control: any;
-  type?: 'text' | 'number' | 'password' | 'email' | 'date' | 'checkbox' | 'time';
+  type?: 'text' | 'number' | 'password' | 'email' | 'date' | 'checkbox' | 'time' | 'textArea';
   name: string;
   label?: string;
   errorMessage?: string;
@@ -53,6 +53,25 @@ const InputComponent = ({
               value={field.value || ''}
               error={Boolean(errorMessage)}
               type={type}
+              disabled={disabled}
+              style={styledInput}
+              // helperText={errorMsg}
+            />
+            {Boolean(errorMessage) && (
+              <div style={{ fontSize: '12px', color: 'red', marginTop: '25px' }}>{errorMessage}</div>
+            )}
+          </>
+        )}
+        {type === 'textArea' && (
+          <>
+            <TextAreaInput
+              onChange={field.onChange}
+              onBlur={field.onBlur}
+              name={field.name}
+              ref={field.ref}
+              value={field.value || ''}
+              // error={Boolean(errorMessage)}
+              // type={type}
               disabled={disabled}
               style={styledInput}
               // helperText={errorMsg}
@@ -166,6 +185,18 @@ const StyledInput = styled(TextField)`
   &:active {
     outline: none;
   }
+`;
+
+const TextAreaInput = styled.textarea`
+  height: 120px;
+  width: 100%;
+  padding: 10px;
+  box-sizing: border-box;
+  border: 1px solid #d3d3d3;
+  border-radius: 3px;
+  font-size: 14px;
+  outline: none;
+  font-weight: 400;
 `;
 
 const StyledLabel = styled.label`

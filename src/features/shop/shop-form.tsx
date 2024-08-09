@@ -219,7 +219,7 @@ const ShopForm = () => {
           />
         </div>
       </div>
-      <button className="bg-[green] flex justify-center p-2 w-full mb-4" type="submit">
+      <button className="bg-[#F06D04] rounded-md shadow-lg flex justify-center p-2 w-full mb-4" type="submit">
         {isUpdating ? <MiniLoader /> : 'Submit'}
       </button>
     </form>
