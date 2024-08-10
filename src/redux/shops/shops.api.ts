@@ -10,7 +10,7 @@ import {
   ShopsProductResponse,
   SingleShopProductRequest,
 } from './typings';
-import { Product } from '../products/typings';
+import { Category, Product } from '../products/typings';
 
 const shops = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -40,6 +40,12 @@ const shops = baseApi.injectEndpoints({
       }),
       providesTags: ['SHOPS'],
     }),
+    getShopCategories: builder.query<Category[], { shopId: string }>({
+      query: ({ shopId }) => ({
+        url: `/shops/${shopId}/products/categories`,
+      }),
+      providesTags: ['SHOPS'],
+    }),
     updateShop: builder.mutation<Shop, any>({
       query: ({ id, ...data }: any) => ({
         url: `/shops/${id}`,
@@ -59,6 +65,25 @@ const shops = baseApi.injectEndpoints({
         });
       },
     }),
+    addShopProduct: builder.mutation<Product, { shopId: string; data: Product }>({
+      query: ({ shopId, data }: any) => ({
+        url: `/shops/${shopId}/products`,
+        body: data,
+        method: 'POST',
+      }),
+      invalidatesTags: ['SHOPS'],
+      onQueryStarted(_args, { queryFulfilled: qf }) {
+        qf.then(() => {
+          toast.success(`Product Added Successfully `, {
+            position: 'top-right',
+          });
+        }).catch((err) => {
+          toast.error(`${err.error.data.title}`, {
+            position: 'top-right',
+          });
+        });
+      },
+    }),
     updateShopProduct: builder.mutation<Product, any>({
       query: ({ productId, data }: any) => ({
         // url: `/shops/${shopId}/products/${productId}`,
@@ -69,7 +94,7 @@ const shops = baseApi.injectEndpoints({
       invalidatesTags: ['SHOPS'],
       onQueryStarted(_args, { queryFulfilled: qf }) {
         qf.then(() => {
-          toast.success(`Vendor Updated Successfully `, {
+          toast.success(`Product Updated Successfully `, {
             position: 'top-right',
           });
         }).catch((err) => {
@@ -89,4 +114,7 @@ export const {
   useGetShopProductsQuery,
   useUpdateShopProductMutation,
   useGetSingleShopProductsQuery,
+  useLazyGetSingleShopProductsQuery,
+  useAddShopProductMutation,
+  useGetShopCategoriesQuery,
 } = shops;

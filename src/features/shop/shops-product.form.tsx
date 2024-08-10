@@ -1,29 +1,24 @@
 import { useEffect } from 'react';
 import styled from 'styled-components';
 import { Product, productSchema } from '../../redux/products/typings';
-import { useGetSingleShopProductsQuery, useUpdateShopProductMutation } from '../../redux/shops/shops.api';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import InputComponent from '../../components/Inputs/input-component';
 import ScreenLoader from '../../components/screen-loader';
 
 interface EditFormProps {
-  product: Product;
-  fetchProducts?: () => void;
-  current?: string;
-  setIsOpen?: any;
+  data?: any;
+  loading?: boolean; //loading can either be updating or adding
+  fetching?: boolean; // fetching is the default is the default loadingState of initial render
+  onSubmit: SubmitHandler<Product>;
 }
 
-const ShopsProductForm = ({ product, setIsOpen }: EditFormProps) => {
-  const [updateProduct, { isLoading: isUpdating, isSuccess }] = useUpdateShopProductMutation();
-
-  const { isLoading, data } = useGetSingleShopProductsQuery({ productId: product.id, shopId: product.shop.id });
-
+const ShopsProductForm = ({ data, onSubmit, loading, fetching }: EditFormProps) => {
   const {
     handleSubmit,
     control,
     reset,
-    getValues,
+    // getValues,
     formState: { errors },
   } = useForm<Product>({
     defaultValues: data,
@@ -32,62 +27,47 @@ const ShopsProductForm = ({ product, setIsOpen }: EditFormProps) => {
   });
 
   const handleFormSubmit: SubmitHandler<Product> = (data) => {
-    const { category, ...restData } = data;
-    const dataToSubmit = {
-      ...restData,
-      categoryId: category.id,
-    };
-
-    updateProduct({
-      productId: product.id,
-      data: dataToSubmit,
-      // shopId: product.shop.id,
-    });
+    onSubmit(data);
   };
 
   useEffect(() => {
     reset(data);
   }, [reset, data]);
+  // const pricingDetails = getValues().pricingDetails;
 
-  useEffect(() => {
-    if (isSuccess) {
-      setIsOpen(false);
-    }
-  }, [isSuccess, setIsOpen]);
-
-  if (isLoading) {
+  if (fetching) {
     return <ScreenLoader />;
   }
-
-  const pricingDetails = getValues().pricingDetails;
 
   return (
     <Container>
       <form onSubmit={handleSubmit(handleFormSubmit)}>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-5">
-          <InputComponent disabled errorMessage={errors?.id?.message} name={'id'} control={control} label={'ID'} />
+          <InputComponent
+            disabled
+            styledContainer={{ display: 'none' }}
+            errorMessage={errors?.id?.message}
+            name={'id'}
+            control={control}
+            label={'ID'}
+          />
           <InputComponent errorMessage={errors?.name?.message} name={'name'} control={control} label={'Name'} />
           <InputComponent errorMessage={errors?.price?.message} name={'price'} control={control} label={'Price'} />
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-5">
           <InputComponent
             errorMessage={errors?.minPurchasePrice?.message}
             name={'minPurchasePrice'}
             control={control}
             label={'Min Purchase Price'}
           />
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-1 gap-4 mb-5">
           <InputComponent
             errorMessage={errors?.description?.message}
             name={'description'}
             control={control}
             label={'Description'}
-          />
-          <InputComponent
-            errorMessage={errors?.quantity?.message}
-            name={'quantity'}
-            control={control}
-            label={'Quantity'}
+            type="textArea"
           />
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-5">
@@ -98,12 +78,12 @@ const ShopsProductForm = ({ product, setIsOpen }: EditFormProps) => {
             label={'Inventory'}
           />
           <InputComponent
-            errorMessage={errors?.imageUrl?.message}
-            name={'imageUrl'}
+            errorMessage={errors?.quantity?.message}
+            name={'quantity'}
             control={control}
-            label={'ImageUrl'}
-            disabled
+            label={'Quantity'}
           />
+
           <InputComponent
             errorMessage={errors?.discount?.message}
             name={'discount'}
@@ -118,6 +98,7 @@ const ShopsProductForm = ({ product, setIsOpen }: EditFormProps) => {
             name={'currency'}
             control={control}
             label={'Currency'}
+            styledContainer={{ display: 'none' }}
           />
           <InputComponent
             errorMessage={errors?.featured?.message}
@@ -141,27 +122,31 @@ const ShopsProductForm = ({ product, setIsOpen }: EditFormProps) => {
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-5">
           <InputComponent errorMessage={errors?.depth?.message} name={'depth'} control={control} label={'Depth'} />
-          <InputComponent errorMessage={errors?.tags?.message} name={'tags'} control={control} label={'Tags'} />
+          <InputComponent errorMessage={errors?.tags?.message} name={'tags.0'} control={control} label={'Tags'} />
+          <InputComponent
+            errorMessage={errors?.imageUrl?.message}
+            name={'imageUrl'}
+            control={control}
+            label={'ImageUrl'}
+          />
         </div>
 
-        {pricingDetails?.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-5">
-            <InputComponent
-              label="Measurement"
-              control={control}
-              name={`pricingDetails.0.measurement`}
-              errorMessage={errors?.pricingDetails?.message}
-            />
-            <InputComponent
-              label="Measurement"
-              control={control}
-              name={`pricingDetails.0.price`}
-              errorMessage={errors?.pricingDetails?.message}
-            />
-          </div>
-        ) : null}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-5">
+          <InputComponent
+            label="Measurement"
+            control={control}
+            name={`pricingDetails.0.measurement`}
+            errorMessage={errors?.pricingDetails?.message}
+          />
+          <InputComponent
+            label="Price"
+            control={control}
+            name={`pricingDetails.0.price`}
+            errorMessage={errors?.pricingDetails?.message}
+          />
+        </div>
 
-        <SubmitButton type="submit">{isUpdating ? 'Updating...' : 'Update'}</SubmitButton>
+        <SubmitButton type="submit">{loading ? 'Loading...' : 'Submit'}</SubmitButton>
       </form>
     </Container>
   );
@@ -171,8 +156,6 @@ export default ShopsProductForm;
 
 const Container = styled.div`
   width: 100%;
-
-  /* overflow-y: scroll; */
   overflow: scroll;
 `;
 
@@ -187,21 +170,3 @@ const SubmitButton = styled.button`
   font-size: 11px;
   width: 100%;
 `;
-
-/*
-
-  <div>
-          {fields.map((field, index) => {
-            return (
-              <section key={field.id} className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-5">
-                <InputComponent
-                  label="Measurement"
-                  control={control}
-                  {...register(`pricingDetails.${index}.measurement`)}
-                />
-                <InputComponent label="Prive value" control={control} {...register(`pricingDetails.${index}.price`)} />
-              </section>
-            );
-          })}
-        </div>
-*/
