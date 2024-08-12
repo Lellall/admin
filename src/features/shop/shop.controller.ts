@@ -19,14 +19,15 @@ export function useShop() {
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
   const [isAddModalOpen, setIsAdddModalOpen] = useState(false);
   const [fetchSingleProduct, { data: product, isLoading: loadingProduct }] = useLazyGetSingleShopProductsQuery();
-  const [addProduct, { isLoading: addingProduct }] = useAddShopProductMutation();
+  const [addProduct, { isLoading: addingProduct, isSuccess: isProdcutSucess }] = useAddShopProductMutation();
   const [updateProduct, { isSuccess, isLoading: updatingProduct }] = useUpdateShopProductMutation();
   const { data: categories, isLoading: loadingCategories } = useGetShopCategoriesQuery({ shopId: id });
   const handleAddProduct = (data: Product) => {
     const dataToSubmit = {
       ...data,
-      categories,
+      category: { id: categories[0].id, type: categories[0].type },
     };
+    //@ts-expect-error
     addProduct({ data: dataToSubmit, shopId: id });
   };
 
@@ -88,6 +89,12 @@ export function useShop() {
       closeProductModal();
     }
   }, [isSuccess]);
+
+  useEffect(() => {
+    if (isProdcutSucess) {
+      closeProductModal();
+    }
+  }, [isProdcutSucess]);
 
   const handleSearchChange = (event: { target: { value: React.SetStateAction<string> } }) => {
     setProductName(event.target.value);

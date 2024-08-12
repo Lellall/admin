@@ -29,7 +29,7 @@ const ShopsProductForm = ({ data, onSubmit, loading, fetching }: EditFormProps) 
   const handleFormSubmit: SubmitHandler<Product> = (data) => {
     onSubmit(data);
   };
-
+  console.log(errors);
   useEffect(() => {
     reset(data);
   }, [reset, data]);
@@ -99,6 +99,12 @@ const ShopsProductForm = ({ data, onSubmit, loading, fetching }: EditFormProps) 
             control={control}
             label={'Currency'}
             styledContainer={{ display: 'none' }}
+          />
+          <InputComponent
+            errorMessage={errors?.manufacturer?.message}
+            name={'manufacturer'}
+            control={control}
+            label={'Manufacturer'}
           />
           <InputComponent
             errorMessage={errors?.featured?.message}

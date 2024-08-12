@@ -76,7 +76,7 @@ export interface Category {
 }
 
 export const productSchema = yup.object().shape({
-  id: yup.string().required('ID is required'),
+  id: yup.string().nullable(),
   name: yup.string().required('Name is required'),
   price: yup.number().required('Price is required').positive('Price must be a positive number'),
   minPurchasePrice: yup

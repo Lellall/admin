@@ -39,7 +39,12 @@ const getStatusColor = (status: string) => {
 };
 
 const OrderForRider = () => {
-  const { data: incompleteOrders, isLoading, error } = useIncompleteOrdersQuery({ page: 1, size: 10, sort: 'DESC' });
+  const {
+    data: incompleteOrders,
+    isLoading,
+    error,
+    refetch,
+  } = useIncompleteOrdersQuery({ page: 1, size: 10, sort: 'DESC' });
   const [completeOrder, { isLoading: isCompleting, isSuccess }] = useCompleteOrderMutation();
   // const intervalIdRef = useRef(0);
   const [expandedRow, setExpandedRow] = useState(null);
@@ -65,15 +70,15 @@ const OrderForRider = () => {
     }
   }, [error]);
 
-  // useEffect(() => {
-  //   intervalIdRef.current = setInterval(() => {
-  //     //   fetchIncompleteOrders();
-  //   }, 10000);
+  useEffect(() => {
+    const interval = setInterval(() => {
+      refetch();
+    }, 10000);
 
-  //   return () => {
-  //     clearInterval(intervalIdRef.current);
-  //   };
-  // }, []);
+    return () => {
+      clearInterval(interval);
+    };
+  }, [refetch]);
 
   const toggleExpand = ({ id, ind }: { id: string; ind: number }) => {
     setSelectedRow(ind);
