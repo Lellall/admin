@@ -29,7 +29,7 @@ const ShopsProductForm = ({ data, onSubmit, loading, fetching }: EditFormProps) 
   const handleFormSubmit: SubmitHandler<Product> = (data) => {
     onSubmit(data);
   };
-  console.log(errors);
+
   useEffect(() => {
     reset(data);
   }, [reset, data]);
