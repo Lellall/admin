@@ -101,6 +101,12 @@ const ShopsProductForm = ({ data, onSubmit, loading, fetching }: EditFormProps) 
             styledContainer={{ display: 'none' }}
           />
           <InputComponent
+            errorMessage={errors?.manufacturer?.message}
+            name={'manufacturer'}
+            control={control}
+            label={'Manufacturer'}
+          />
+          <InputComponent
             errorMessage={errors?.featured?.message}
             name={'featured'}
             control={control}

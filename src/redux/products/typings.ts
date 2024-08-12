@@ -76,7 +76,7 @@ export interface Category {
 }
 
 export const productSchema = yup.object().shape({
-  id: yup.string().required('ID is required'),
+  id: yup.string().nullable(),
   name: yup.string().required('Name is required'),
   price: yup.number().required('Price is required').positive('Price must be a positive number'),
   minPurchasePrice: yup
@@ -105,9 +105,9 @@ export const productSchema = yup.object().shape({
   available: yup.boolean().required('Availability status is required'),
   manufacturer: yup.string().required('Manufacturer is required'),
   weight: yup.number().required('Weight is required').positive('Weight must be a positive number'),
-  height: yup.number().required('Height is required').positive('Height must be a positive number'),
-  width: yup.number().required('Width is required').positive('Width must be a positive number'),
-  depth: yup.number().required('Depth is required').positive('Depth must be a positive number'),
+  height: yup.number().nullable().positive('Height must be a positive number'),
+  width: yup.number().positive('Width must be a positive number').nullable(),
+  depth: yup.number().positive('Depth must be a positive number').nullable(),
   createdAt: yup.string().optional().nullable(),
   updatedAt: yup.string().optional().nullable(),
   tags: yup.array().of(yup.string()).required('Tags are required').min(1, 'At least one tag is required'),

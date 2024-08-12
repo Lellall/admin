@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable no-console */
 import { useEffect } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { Shop } from '../../redux/shops/typings';
@@ -33,7 +31,7 @@ const ShopForm = () => {
   }, [reset, shopData]);
 
   const handleFormSubmit: SubmitHandler<Shop> = (data) => {
-    const { market, category, openingTime, closingTime, metadata, createdAt, updatedAt, ...restData } = data;
+    const { market, category, metadata, ...restData } = data;
     const dataToSubmit = {
       ...restData,
       marketId: market?.id,
