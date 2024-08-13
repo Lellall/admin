@@ -1,70 +1,73 @@
-import { useState } from 'react';
-import { Outlet, NavLink } from 'react-router-dom';
-import { BookSaved, Additem, Heart, TicketDiscount, Clock, MonitorRecorder, MoneyRecive } from 'iconsax-react';
-import styled from 'styled-components';
-import { Box, Typography } from '@mui/material';
+import { useState } from "react";
+import { Outlet, NavLink } from "react-router-dom";
+import {
+  BookSaved,
+  Additem,
+  Heart,
+  TicketDiscount,
+  Clock,
+  MonitorRecorder,
+  MoneyRecive,
+} from "iconsax-react";
+import styled from "styled-components";
+import { Box, Typography } from "@mui/material";
 
-import { useResponsiveValue } from '../../lib/use-responsive-value.js';
-import { ViewportWidth } from '../../utils/enums.js';
-import { appPaths } from './app-paths.js';
-import { Modal } from '../ui/index.js';
-import { logout } from '../../features/auth/auth.slice.js';
-import { useDispatch } from 'react-redux';
-import { NetworkIndicator } from '../ui/network-indicator/network-indicator-component.js';
+import { useResponsiveValue } from "../../lib/use-responsive-value.js";
+import { ViewportWidth } from "../../utils/enums.js";
+import { appPaths } from "./app-paths.js";
+import { Modal } from "../ui/index.js";
+import { NetworkIndicator } from "../ui/network-indicator/network-indicator-component.js";
+import { useLogoutMutation } from "../../redux/auth/auth.api.js";
 
 const AdminLayout = () => {
-  //   const { logoutAdmin } = useAuth();
-  const dispatch = useDispatch();
-  const handleLogOut = () => {
-    dispatch(logout());
-  };
+  const [logout, { isLoading }] = useLogoutMutation();
   const navItems = [
     {
       id: 1,
       icon: <MonitorRecorder size="20" />,
-      text: 'Manage Orders & Riders',
-      url: '/',
+      text: "Manage Orders & Riders",
+      url: "/",
     },
     {
       id: 2,
       icon: <MoneyRecive size="20" />,
-      text: 'Transaction History',
+      text: "Transaction History",
       url: appPaths.transaction,
     },
     {
       id: 3,
       icon: <BookSaved size="20" />,
-      text: 'Order History',
+      text: "Order History",
       url: appPaths.myOrders,
     },
     {
       id: 4,
       icon: <Additem size="20" />,
-      text: 'Manage Shops',
+      text: "Manage Shops",
       url: appPaths.shops,
     },
     {
       id: 5,
       icon: <Additem size="20" />,
-      text: 'Manage Products',
+      text: "Manage Products",
       url: appPaths.products,
     },
     {
       id: 6,
       icon: <Heart size="20" />,
-      text: 'Favorites',
+      text: "Favorites",
       url: appPaths.favorites,
     },
     {
       id: 7,
       icon: <TicketDiscount size="20" />,
-      text: 'Discount',
+      text: "Discount",
       url: appPaths.discount,
     },
     {
       id: 8,
       icon: <Clock size="20" />,
-      text: 'Recently viewed',
+      text: "Recently viewed",
       url: appPaths.recentlyViewed,
     },
   ];
@@ -90,7 +93,7 @@ const AdminLayout = () => {
             ))}
           </div>
           <div className="deactivate">
-            <button onClick={handleLogOut}>Logout </button>
+            <button onClick={logout}>{isLoading ? "Logging out" : "Logout"}</button>
           </div>
         </NavContainer>
         <ContentContainer>
@@ -107,10 +110,12 @@ const AdminLayout = () => {
         </ContentContainer>
       </MainContainer>
 
-      <Modal isOpen={showModal} withCloseButton={false} pad={'20px 10px'}>
+      <Modal isOpen={showModal} withCloseButton={false} pad={"20px 10px"}>
         <ModalContent>
           <ModalHeading>Are you sure?</ModalHeading>
-          <p className="sub-text">Your account will be deactivated, and all your information will be cleared.</p>
+          <p className="sub-text">
+            Your account will be deactivated, and all your information will be cleared.
+          </p>
           <div className="buttons">
             <button className="danger">Yes, Deactivate Account</button>
             <button className="cancel" onClick={() => setShowModal(false)}>
@@ -130,7 +135,7 @@ const MainContainer = styled.div`
   align-items: flex-start !important;
   padding: 40px 60px 200px !important;
   gap: 30px !important;
-  background: url('/assets/background.svg') !important;
+  background: url("/assets/background.svg") !important;
   background-repeat: no-repeat !important;
   background-size: cover !important;
   background-color: lightgray !important;
@@ -253,7 +258,7 @@ const StyledMenuItem = styled(NavLink)`
       font-style: normal;
       font-weight: 400;
       line-height: 24px;
-      font-feature-settings: 'clig' off, 'liga' off;
+      font-feature-settings: "clig" off, "liga" off;
     }
   }
 
@@ -272,7 +277,7 @@ const StyledMenuItem = styled(NavLink)`
   }
 `;
 StyledMenuItem.defaultProps = {
-  className: ({ isActive }) => (isActive ? 'active' : ''),
+  className: ({ isActive }) => (isActive ? "active" : ""),
 };
 
 const ContentContainer = styled(Box)`
@@ -301,7 +306,7 @@ const ContentContainer = styled(Box)`
 
 const MobileNav = styled(NavLink)`
   color: #2f313f !important;
-  font-feature-settings: 'clig' off, 'liga' off !important;
+  font-feature-settings: "clig" off, "liga" off !important;
   font-family: Raleway !important;
   font-size: 16px !important;
   font-style: normal !important;
@@ -317,13 +322,13 @@ const MobileNav = styled(NavLink)`
   }
 `;
 MobileNav.defaultProps = {
-  className: ({ isActive }) => (isActive ? 'active' : ''),
+  className: ({ isActive }) => (isActive ? "active" : ""),
 };
 
 const ModalHeading = styled(Typography)`
   color: #2f313f !important;
   text-align: center !important;
-  font-feature-settings: 'clig' off, 'liga' off !important;
+  font-feature-settings: "clig" off, "liga" off !important;
   font-family: Raleway !important;
   font-size: 34px !important;
   font-style: normal !important;
@@ -355,7 +360,7 @@ const ModalContent = styled(Box)`
   .sub-text {
     color: #2f313f !important;
     text-align: center !important;
-    font-feature-settings: 'clig' off, 'liga' off !important;
+    font-feature-settings: "clig" off, "liga" off !important;
     font-family: Open Sans !important;
     font-size: 22px !important;
     font-style: normal !important;
@@ -379,7 +384,7 @@ const ModalContent = styled(Box)`
       justify-content: center;
       align-items: center;
       gap: 10px;
-      font-feature-settings: 'clig' off, 'liga' off;
+      font-feature-settings: "clig" off, "liga" off;
       font-family: Open Sans;
       font-size: 14px;
       font-style: normal;
