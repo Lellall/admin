@@ -1,5 +1,5 @@
-import { useNavigate } from 'react-router-dom';
-import { Shop } from '../../redux/shops/typings';
+import { useNavigate } from "react-router-dom";
+import { Shop } from "../../../redux/shops/typings";
 import {
   Table,
   TableHead,
@@ -10,11 +10,11 @@ import {
   TableHeadRow,
   TableRow,
   ShopStatus,
-} from './shops.style';
-import { appPaths } from '../../components/layout/app-paths';
-import { Menu, MenuItem } from '@mui/material';
-import React, { useState } from 'react';
-import { Menu as MenuIcon } from 'iconsax-react';
+} from "./shops.style";
+import { appPaths } from "../../../components/layout/app-paths";
+import { Menu, MenuItem } from "@mui/material";
+import React, { useState } from "react";
+import { Menu as MenuIcon } from "iconsax-react";
 
 interface ShopsTableProps {
   shops: Shop[];
@@ -62,32 +62,39 @@ const ShopsTable = ({ shops }: ShopsTableProps) => {
               <TableDataCell>
                 <button
                   style={{
-                    textAlign: 'center',
-                    border: 'none',
-                    cursor: 'pointer',
-                    padding: '8px',
+                    textAlign: "center",
+                    border: "none",
+                    cursor: "pointer",
+                    padding: "8px",
                   }}
-                  onClick={(event) => handleClick(event, shop)}>
+                  onClick={(event) => handleClick(event, shop)}
+                >
                   <MenuIcon color="#FF8A65" size={16} />
                 </button>
                 <Menu
                   id="demo-customized-menu"
                   elevation={0}
                   MenuListProps={{
-                    'aria-labelledby': 'demo-customized-button',
+                    "aria-labelledby": "demo-customized-button",
                   }}
                   anchorEl={anchorEl}
                   open={Boolean(anchorEl && currentVendor === shop)}
-                  onClose={handleClose}>
-                  <MenuItem style={{ fontSize: 'small' }} onClick={() => handleEditVendor(shop)} disableRipple>
+                  onClose={handleClose}
+                >
+                  <MenuItem
+                    style={{ fontSize: "small" }}
+                    onClick={() => handleEditVendor(shop)}
+                    disableRipple
+                  >
                     Edit Vendor
                   </MenuItem>
                   <MenuItem
-                    style={{ fontSize: 'small' }}
+                    style={{ fontSize: "small" }}
                     onClick={() => {
                       navigate(`/shops-products/${shop.id}`);
                     }}
-                    disableRipple>
+                    disableRipple
+                  >
                     View Products
                   </MenuItem>
                 </Menu>
