@@ -1,27 +1,30 @@
-import React, { lazy, Suspense } from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import './App.css';
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import React, { lazy, Suspense } from "react";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import "./App.css";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 //components
-import AdminLayout from './components/layout/admin.layout';
-import AuthLayout from './components/layout/auth.layout';
-import PrivateRoute from './components/routes-helpers/private-route';
-import ScreenLoader from './components/screen-loader';
-import { appPaths } from './components/layout/app-paths';
-import ErrorComponent from './components/error-404-component';
+import AdminLayout from "./components/layout/admin.layout";
+import AuthLayout from "./components/layout/auth.layout";
+import PrivateRoute from "./components/routes-helpers/private-route";
+import ScreenLoader from "./components/screen-loader";
+import { appPaths } from "./components/layout/app-paths";
+import ErrorComponent from "./components/error-404-component";
+import Restaurant from "./features/restaurant";
 
 //pages-routes
-const OrderForRider = lazy(() => import('./features/order/orders.component'));
-const Products = lazy(() => import('./features/products/products.components'));
-const Transaction = lazy(() => import('./features/transaction/transaction-history.components'));
-const OrderHistory = lazy(() => import('./features/order/order-history.component'));
-const Vendors = lazy(() => import('./features/shop/shops.component'));
-const Vendor = lazy(() => import('./features/shop/shop.component'));
-const Login = lazy(() => import('./features/auth/login.component'));
-const ForgotPassword = lazy(() => import('./features/auth/forgot-password'));
-const VendorsProduct = lazy(() => import('./features/shop/shops.product'));
+const OrderForRider = lazy(() => import("./features/admin/order/orders.component"));
+const Products = lazy(() => import("./features/admin/products/products.components"));
+const Transaction = lazy(
+  () => import("./features/admin/transaction/transaction-history.components")
+);
+const OrderHistory = lazy(() => import("./features/admin/order/order-history.component"));
+const Vendors = lazy(() => import("./features/admin/shop/shops.component"));
+const Vendor = lazy(() => import("./features/admin/shop/shop.component"));
+const Login = lazy(() => import("./features/auth/login.component"));
+const ForgotPassword = lazy(() => import("./features/auth/forgot-password"));
+const VendorsProduct = lazy(() => import("./features/admin/shop/shops.product"));
 
 const App: React.FC = () => {
   return (
@@ -121,12 +124,19 @@ const App: React.FC = () => {
                 </Suspense>
               }
             />
-            {/* <Route path={appPaths.products} element={<Products />} /> */}
-            {/* <Route path={appPaths.transaction} element={<Transaction />} /> */}
-            {/* <Route path={appPaths.myOrders} element={<UserOrders />} /> */}
-            {/* <Route path={appPaths.favorites} element={<Favorites />} /> */}
-            <Route path={'*'} element={<ErrorComponent />} />
+
+            <Route path={"*"} element={<ErrorComponent />} />
           </Route>
+          <Route
+            path="/restaurant"
+            element={
+              <Suspense fallback={<ScreenLoader />}>
+                <>
+                  <Restaurant />
+                </>
+              </Suspense>
+            }
+          />
         </Routes>
       </Router>
       <ToastContainer />

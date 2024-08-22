@@ -1,6 +1,6 @@
-import styled from 'styled-components';
-import { formatCurrency } from '../../utils/helpers';
-import { Order } from '../../redux/transaction/typings';
+import styled from "styled-components";
+import { formatCurrency } from "../../../utils/helpers";
+import { Order } from "../../../redux/transaction/typings";
 
 const TableContainer = styled.div`
   width: 100%;
@@ -33,14 +33,14 @@ const Tag = styled.div`
 const CustomTag = styled(Tag)<StatusProps>`
   background: ${({ status }) => {
     switch (status) {
-      case 'PENDING':
-        return '#ffa6004a';
-      case 'PROCESSING':
-        return '#0000ff55';
-      case 'COMPLETED':
-        return '#00800063';
+      case "PENDING":
+        return "#ffa6004a";
+      case "PROCESSING":
+        return "#0000ff55";
+      case "COMPLETED":
+        return "#00800063";
       default:
-        return 'transparent';
+        return "transparent";
     }
   }};
 `;
@@ -51,26 +51,26 @@ interface StatusProps {
 const StatusTd = styled(Td)<StatusProps>`
   color: ${({ status }) => {
     switch (status) {
-      case 'PENDING':
-        return 'orange';
-      case 'PROCESSING':
-        return 'blue';
-      case 'COMPLETED':
-        return 'green';
+      case "PENDING":
+        return "orange";
+      case "PROCESSING":
+        return "blue";
+      case "COMPLETED":
+        return "green";
       default:
-        return 'black';
+        return "black";
     }
   }};
 `;
 
 function formatDate(dateString: string | number | Date) {
   const date = new Date(dateString);
-  const day = String(date.getDate()).padStart(2, '0');
-  const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed
+  const day = String(date.getDate()).padStart(2, "0");
+  const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are zero-indexed
   const year = String(date.getFullYear()).slice(-2);
-  const hour = String(date.getHours()).padStart(2, '0');
-  const minutes = String(date.getMinutes()).padStart(2, '0');
-  const seconds = String(date.getSeconds()).padStart(2, '0');
+  const hour = String(date.getHours()).padStart(2, "0");
+  const minutes = String(date.getMinutes()).padStart(2, "0");
+  const seconds = String(date.getSeconds()).padStart(2, "0");
 
   return `${day}/${month}/${year} ${hour}:${minutes}:${seconds}`;
 }
@@ -99,7 +99,7 @@ const TransactionTable = ({ transactions }: TransactionTableProps) => {
             <tr key={order.id}>
               {/* <Td>{++index}</Td> */}
               <Td>
-                {order.user.firstName} {order.user.lastName}{' '}
+                {order.user.firstName} {order.user.lastName}{" "}
               </Td>
               <Td>{formatCurrency(order.amount)}</Td>
               <Td>{order.items.length}</Td>

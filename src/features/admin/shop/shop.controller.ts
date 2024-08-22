@@ -1,27 +1,32 @@
-import { useParams } from 'react-router-dom';
+import { useParams } from "react-router-dom";
 import {
   useAddShopProductMutation,
   useGetShopCategoriesQuery,
   useGetShopProductsQuery,
   useLazyGetSingleShopProductsQuery,
   useUpdateShopProductMutation,
-} from '../../redux/shops/shops.api';
-import { useEffect, useState } from 'react';
-import { Product } from '../../redux/products/typings';
-import { useDebounce } from 'react-use';
+} from "../../../redux/shops/shops.api";
+import { useEffect, useState } from "react";
+import { Product } from "../../../redux/products/typings";
+import { useDebounce } from "react-use";
 
 export function useShop() {
   const { id } = useParams();
   const [page, setPage] = useState(1);
   const [selected, setSelected] = useState<Product | null>(null);
-  const [produtName, setProductName] = useState<string>('');
+  const [produtName, setProductName] = useState<string>("");
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
   const [isAddModalOpen, setIsAdddModalOpen] = useState(false);
-  const [fetchSingleProduct, { data: product, isLoading: loadingProduct }] = useLazyGetSingleShopProductsQuery();
-  const [addProduct, { isLoading: addingProduct, isSuccess: isProdcutSucess }] = useAddShopProductMutation();
-  const [updateProduct, { isSuccess, isLoading: updatingProduct }] = useUpdateShopProductMutation();
-  const { data: categories, isLoading: loadingCategories } = useGetShopCategoriesQuery({ shopId: id });
+  const [fetchSingleProduct, { data: product, isLoading: loadingProduct }] =
+    useLazyGetSingleShopProductsQuery();
+  const [addProduct, { isLoading: addingProduct, isSuccess: isProdcutSucess }] =
+    useAddShopProductMutation();
+  const [updateProduct, { isSuccess, isLoading: updatingProduct }] =
+    useUpdateShopProductMutation();
+  const { data: categories, isLoading: loadingCategories } = useGetShopCategoriesQuery({
+    shopId: id,
+  });
   const handleAddProduct = (data: Product) => {
     const dataToSubmit = {
       ...data,
@@ -60,7 +65,7 @@ export function useShop() {
     page: page - 1,
     size: 10,
     filter: debouncedSearchTerm,
-    categoryId: '',
+    categoryId: "",
     id: id,
   });
 
@@ -96,7 +101,9 @@ export function useShop() {
     }
   }, [isProdcutSucess]);
 
-  const handleSearchChange = (event: { target: { value: React.SetStateAction<string> } }) => {
+  const handleSearchChange = (event: {
+    target: { value: React.SetStateAction<string> };
+  }) => {
     setProductName(event.target.value);
   };
   const actions = {
@@ -108,7 +115,15 @@ export function useShop() {
     closeProductModal,
     handleAddProduct,
   };
-  const variables = { page, produtName, products, product, isAddModalOpen, isEditModalOpen, categories };
+  const variables = {
+    page,
+    produtName,
+    products,
+    product,
+    isAddModalOpen,
+    isEditModalOpen,
+    categories,
+  };
   const loading = {
     addingProduct,
     loadingCategories,
