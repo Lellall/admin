@@ -12,6 +12,7 @@ import ScreenLoader from "./components/screen-loader";
 import { appPaths } from "./components/layout/app-paths";
 import ErrorComponent from "./components/error-404-component";
 import Restaurant from "./features/restaurant";
+import RestaurantLayout from "./features/restaurants/layout";
 
 //pages-routes
 const OrderForRider = lazy(() => import("./features/admin/order/orders.component"));
@@ -38,6 +39,14 @@ const App: React.FC = () => {
                 <AuthLayout>
                   <Login />
                 </AuthLayout>
+              </Suspense>
+            }
+          />
+          <Route
+            path="/restaurant"
+            element={
+              <Suspense fallback={false}>
+                  <RestaurantLayout />
               </Suspense>
             }
           />
