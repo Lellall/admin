@@ -11,6 +11,7 @@ import PrivateRoute from './components/routes-helpers/private-route';
 import ScreenLoader from './components/screen-loader';
 import { appPaths } from './components/layout/app-paths';
 import ErrorComponent from './components/error-404-component';
+import RestaurantLayout from './features/restaurants/layout';
 
 //pages-routes
 const OrderForRider = lazy(() => import('./features/order/orders.component'));
@@ -20,6 +21,7 @@ const OrderHistory = lazy(() => import('./features/order/order-history.component
 const Vendors = lazy(() => import('./features/shop/shops.component'));
 const Vendor = lazy(() => import('./features/shop/shop.component'));
 const Login = lazy(() => import('./features/auth/login.component'));
+// const Restaurant = lazy(() => import('./features/restaurants/restaurant'));
 const ForgotPassword = lazy(() => import('./features/auth/forgot-password'));
 const VendorsProduct = lazy(() => import('./features/shop/shops.product'));
 
@@ -35,6 +37,14 @@ const App: React.FC = () => {
                 <AuthLayout>
                   <Login />
                 </AuthLayout>
+              </Suspense>
+            }
+          />
+          <Route
+            path="/restaurant"
+            element={
+              <Suspense fallback={false}>
+                  <RestaurantLayout />
               </Suspense>
             }
           />
