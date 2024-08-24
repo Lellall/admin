@@ -34,6 +34,7 @@
     "react-use": "^17.5.0",
     "redux-persist": "^6.0.0",
     "styled-components": "^6.1.11",
+    "vite-plugin-svgr": "^4.2.0",
     "yup": "^1.4.0"
   },
   "devDependencies": {
