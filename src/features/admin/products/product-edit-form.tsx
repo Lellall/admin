@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react';
-import styled from 'styled-components';
-import Select from 'react-select';
-import { Product } from '../../redux/products/typings';
-import { useUpdateProductMutation } from '../../redux/products';
+import { useEffect, useState } from "react";
+import styled from "styled-components";
+import Select from "react-select";
+import { Product } from "../../../redux/products/typings";
+import { useUpdateProductMutation } from "../../../redux/products";
 
 interface EditFormProps {
   product: Product;
@@ -19,14 +19,16 @@ interface Option {
 const EditForm = ({ product, setIsOpen }: EditFormProps) => {
   const [updateProduct, { isLoading, isSuccess }] = useUpdateProductMutation();
   const [selectedOption, setSelectedOption] = useState<Option>(
-    product?.available ? { value: true, label: 'Available' } : { value: false, label: 'Unavailable' }
+    product?.available
+      ? { value: true, label: "Available" }
+      : { value: false, label: "Unavailable" }
   );
   const [price, setPrice] = useState(product?.price);
   const [description, setDescription] = useState<string>(product?.description);
 
   const options = [
-    { value: true, label: 'Available' },
-    { value: false, label: 'Unavailable' },
+    { value: true, label: "Available" },
+    { value: false, label: "Unavailable" },
   ];
 
   const handleSelectChange = (selectedOption: Option) => {
@@ -61,19 +63,33 @@ const EditForm = ({ product, setIsOpen }: EditFormProps) => {
       <RowContainer>
         <ColumnContainer>
           <Label>Status:</Label>
-          <StyledSelect options={options} value={selectedOption} onChange={handleSelectChange} />
+          <StyledSelect
+            options={options}
+            value={selectedOption}
+            onChange={handleSelectChange}
+          />
         </ColumnContainer>
         <ColumnContainer>
           <Label>Price:</Label>
-          <PriceInput type="number" min="0" value={price} onChange={handleInputChange} placeholder="Price" />
+          <PriceInput
+            type="number"
+            min="0"
+            value={price}
+            onChange={handleInputChange}
+            placeholder="Price"
+          />
         </ColumnContainer>
-        <ColumnContainer style={{ width: '100%' }}>
+        <ColumnContainer style={{ width: "100%" }}>
           <Label>Description:</Label>
-          <DescriptionInput value={description} onChange={handleTextareaChange} placeholder="description" />
+          <DescriptionInput
+            value={description}
+            onChange={handleTextareaChange}
+            placeholder="description"
+          />
         </ColumnContainer>
         <ColumnContainer>
           <SubmitButton disabled={isLoading} onClick={handleSubmit}>
-            {isLoading ? 'Updating...' : 'Update'}
+            {isLoading ? "Updating..." : "Update"}
           </SubmitButton>
         </ColumnContainer>
       </RowContainer>
@@ -144,8 +160,8 @@ const DescriptionInput = styled.textarea`
 `;
 
 const SubmitButton = styled.button`
-  background-color: ${(props) => (props.disabled ? '#ccc' : '#007bff')};
-  cursor: ${(props) => (props.disabled ? 'not-allowed' : 'pointer')};
+  background-color: ${(props) => (props.disabled ? "#ccc" : "#007bff")};
+  cursor: ${(props) => (props.disabled ? "not-allowed" : "pointer")};
   padding: 12px 20px;
   margin-top: 17px;
   color: white;

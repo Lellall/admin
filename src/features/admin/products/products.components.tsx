@@ -1,23 +1,31 @@
 /* eslint-disable no-console */
-import React, { useState } from 'react';
-import Pagination from 'rc-pagination';
-import EditForm from './product-edit-form';
-import { TableBody } from '@mui/material';
-import { Menu } from 'iconsax-react';
+import React, { useState } from "react";
+import Pagination from "rc-pagination";
+import EditForm from "./product-edit-form";
+import { TableBody } from "@mui/material";
+import { Menu } from "iconsax-react";
 // import { SearchInp } from '../../components/ui/base/navbar/navbar.styles';
-import Modal from '../../components/modal';
-import { useDebounce } from 'react-use';
-import MiniLoader from '../../components/mini-loader';
-import ScreenLoader from '../../components/screen-loader';
-import { useGetProductsQuery } from '../../redux/products';
-import { Table, TableHead, TableWrapper, TableDataCell, TableHeadCell, TableRow, TableHeadRow } from './product.style';
-import SearchInput from '../../components/Inputs/searchInput';
-import EmptyState from '../../components/empty-state';
+import Modal from "../../../components/modal";
+import { useDebounce } from "react-use";
+import MiniLoader from "../../../components/mini-loader";
+import ScreenLoader from "../../../components/screen-loader";
+import { useGetProductsQuery } from "../../../redux/products";
+import {
+  Table,
+  TableHead,
+  TableWrapper,
+  TableDataCell,
+  TableHeadCell,
+  TableRow,
+  TableHeadRow,
+} from "./product.style";
+import SearchInput from "../../../components/Inputs/searchInput";
+import EmptyState from "../../../components/empty-state";
 const Products = () => {
   const [current, setCurrent] = useState(1);
   const [isOpen, setIsOpen] = useState(false);
-  const [produtName, setProductName] = useState<string>('');
-  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
+  const [produtName, setProductName] = useState<string>("");
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
   useDebounce(
     () => {
       setDebouncedSearchTerm(produtName);
@@ -34,7 +42,7 @@ const Products = () => {
     page: current - 1,
     size: 10,
     filter: debouncedSearchTerm,
-    categoryId: '',
+    categoryId: "",
   });
 
   const [selected, setSelected] = useState(null);
@@ -49,22 +57,28 @@ const Products = () => {
     // openView();
   };
 
-  const handleSearchChange = (event: { target: { value: React.SetStateAction<string> } }) => {
+  const handleSearchChange = (event: {
+    target: { value: React.SetStateAction<string> };
+  }) => {
     setProductName(event.target.value);
   };
 
   return (
     <>
       <div className="flex justify-between w-full items-center  ">
-        <SearchInput placeholder="What are you looking for?" value={produtName} onChange={handleSearchChange} />
+        <SearchInput
+          placeholder="What are you looking for?"
+          value={produtName}
+          onChange={handleSearchChange}
+        />
         {isFetching && <MiniLoader />}
       </div>
 
       {isLoading ? (
-        <ScreenLoader style={{ height: '50vh' }} />
+        <ScreenLoader style={{ height: "50vh" }} />
       ) : (
         <>
-          <div style={{ width: '100%' }}>
+          <div style={{ width: "100%" }}>
             <TableWrapper>
               <Table>
                 <TableHead>
@@ -80,7 +94,7 @@ const Products = () => {
                 <TableBody>
                   {!products.data.length ? (
                     <TableRow>
-                      <TableDataCell colSpan={6} style={{ height: '40vh' }}>
+                      <TableDataCell colSpan={6} style={{ height: "40vh" }}>
                         <EmptyState />
                       </TableDataCell>
                     </TableRow>
@@ -90,17 +104,18 @@ const Products = () => {
                         <TableDataCell>{product.name}</TableDataCell>
                         <TableDataCell>{product.price}</TableDataCell>
                         <TableDataCell>{product.quantity}</TableDataCell>
-                        <TableDataCell>{product.available ? 'Yes' : 'No'}</TableDataCell>
+                        <TableDataCell>{product.available ? "Yes" : "No"}</TableDataCell>
                         <TableDataCell>{product.category?.name}</TableDataCell>
                         <TableDataCell>
                           <button
                             style={{
-                              textAlign: 'center',
-                              border: 'none',
-                              cursor: 'pointer',
-                              padding: '6px',
+                              textAlign: "center",
+                              border: "none",
+                              cursor: "pointer",
+                              padding: "6px",
                             }}
-                            onClick={() => openMenu(product)}>
+                            onClick={() => openMenu(product)}
+                          >
                             <Menu size="16" color="#FF8A65" />
                           </button>
                         </TableDataCell>
@@ -111,9 +126,13 @@ const Products = () => {
               </Table>
             </TableWrapper>
           </div>
-          <div style={{ float: 'right', margin: '10px' }}>
+          <div style={{ float: "right", margin: "10px" }}>
             {products.data.length ? (
-              <Pagination onChange={handlePageClick} current={current} total={products?.resultTotal} />
+              <Pagination
+                onChange={handlePageClick}
+                current={current}
+                total={products?.resultTotal}
+              />
             ) : null}
           </div>
         </>
@@ -121,9 +140,10 @@ const Products = () => {
       <Modal
         width="100%"
         title="Edit Product"
-        style={{ maxWidth: '700px', margin: 'auto' }}
+        style={{ maxWidth: "700px", margin: "auto" }}
         show={isOpen}
-        onClose={() => setIsOpen(false)}>
+        onClose={() => setIsOpen(false)}
+      >
         <>
           <EditForm product={selected} setIsOpen={setIsOpen} />
         </>
