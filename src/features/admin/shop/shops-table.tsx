@@ -1,5 +1,4 @@
 import { useNavigate } from "react-router-dom";
-import { Shop } from "../../../redux/shops/typings";
 import {
   Table,
   TableHead,
@@ -11,10 +10,11 @@ import {
   TableRow,
   ShopStatus,
 } from "./shops.style";
-import { appPaths } from "../../../components/layout/app-paths";
 import { Menu, MenuItem } from "@mui/material";
 import React, { useState } from "react";
 import { Menu as MenuIcon } from "iconsax-react";
+import { appPaths } from "@/components/layout/app-paths";
+import { Shop } from "@/redux/shops/typings";
 
 interface ShopsTableProps {
   shops: Shop[];

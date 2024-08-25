@@ -1,13 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Button, ListItem } from "@mui/material";
 import { ArrowCircleDown } from "iconsax-react";
-// import { formatCurrency, formatDateTime } from
-import {
-  useCompleteOrderMutation,
-  useIncompleteOrdersQuery,
-} from "../../../redux/orders";
-import AuthModal from "../../../components/auth-modal";
-import EmptyState from "../../../components/empty-state";
 import {
   Table,
   TableHead,
@@ -22,8 +15,11 @@ import {
   ExpandableRow,
   InteractiveIcon,
 } from "./orders.style";
-import ScreenLoader from "../../../components/screen-loader";
-import { formatCurrency, formatDateTime } from "../../../utils/helpers";
+import { useCompleteOrderMutation, useIncompleteOrdersQuery } from "@/redux/orders";
+import EmptyState from "@/components/empty-state";
+import ScreenLoader from "@/components/screen-loader";
+import { formatCurrency, formatDateTime } from "@/utils/helpers";
+import AuthModal from "@/components/auth-modal";
 
 // export const copyToClipboard = (text:string) => {
 //   navigator.clipboard.writeText(text);

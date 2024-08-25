@@ -1,6 +1,6 @@
+import { Order } from "@/redux/orders/typings";
+import { formatCurrency } from "@/utils/helpers";
 import styled from "styled-components";
-import { formatCurrency } from "../../../utils/helpers";
-import { Order } from "../../../redux/transaction/typings";
 
 const TableContainer = styled.div`
   width: 100%;

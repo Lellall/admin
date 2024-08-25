@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
-import { toast } from 'react-toastify';
-import { baseApi } from '../api/baseApi';
+import { toast } from "react-toastify";
+import { baseApi } from "../api/baseApi";
 import {
   Shop,
   ShopRequest,
@@ -9,8 +9,8 @@ import {
   ShopsResponse,
   ShopsProductResponse,
   SingleShopProductRequest,
-} from './typings';
-import { Category, Product } from '../products/typings';
+} from "./typings";
+import { Category, Product } from "../products/typings";
 
 const shops = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -19,48 +19,48 @@ const shops = baseApi.injectEndpoints({
         url: `/shops`,
         params,
       }),
-      providesTags: ['SHOPS'],
+      providesTags: ["SHOPS"],
     }),
     getShop: builder.query<Shop, ShopRequest>({
       query: ({ id }: ShopRequest) => ({
         url: `/shops/${id}`,
       }),
-      providesTags: ['SHOPS'],
+      providesTags: ["SHOPS"],
     }),
     getShopProducts: builder.query<ShopsProductResponse, ShopsProductsRequest>({
       query: (params: ShopsProductsRequest) => ({
         url: `/shops/${params.id}/products`,
         params,
       }),
-      providesTags: ['SHOPS'],
+      providesTags: ["SHOPS"],
     }),
     getSingleShopProducts: builder.query<Shop, SingleShopProductRequest>({
       query: (params: SingleShopProductRequest) => ({
         url: `/shops/${params.shopId}/products/${params.productId}`,
       }),
-      providesTags: ['SHOPS'],
+      providesTags: ["SHOPS"],
     }),
     getShopCategories: builder.query<Category[], { shopId: string }>({
       query: ({ shopId }) => ({
         url: `/shops/${shopId}/products/categories`,
       }),
-      providesTags: ['SHOPS'],
+      providesTags: ["SHOPS"],
     }),
     updateShop: builder.mutation<Shop, any>({
       query: ({ id, ...data }: any) => ({
         url: `/shops/${id}`,
         body: data,
-        method: 'PUT',
+        method: "PUT",
       }),
-      invalidatesTags: ['SHOPS'],
+      invalidatesTags: ["SHOPS"],
       onQueryStarted(_args, { queryFulfilled: qf }) {
         qf.then(() => {
           toast.success(`Vendor Updated Successfully `, {
-            position: 'top-right',
+            position: "top-right",
           });
         }).catch((err) => {
           toast.error(`${err.error.data.title}`, {
-            position: 'top-right',
+            position: "top-right",
           });
         });
       },
@@ -69,37 +69,37 @@ const shops = baseApi.injectEndpoints({
       query: ({ shopId, data }: any) => ({
         url: `/shops/${shopId}/products`,
         body: data,
-        method: 'POST',
+        method: "POST",
       }),
-      invalidatesTags: ['SHOPS'],
+      invalidatesTags: ["SHOPS"],
       onQueryStarted(_args, { queryFulfilled: qf }) {
         qf.then(() => {
           toast.success(`Product Added Successfully `, {
-            position: 'top-right',
+            position: "top-right",
           });
         }).catch((err) => {
           toast.error(`${err.message}`, {
-            position: 'top-right',
+            position: "top-right",
           });
         });
       },
     }),
     updateShopProduct: builder.mutation<Product, any>({
-      query: ({ productId, data }: any) => ({
-        // url: `/shops/${shopId}/products/${productId}`,
-        url: `/products/${productId}`,
+      query: ({ productId, shopId, data }: any) => ({
+        url: `/shops/${shopId}/products/${productId}`,
+        // url: `/products/${productId}`,
         body: data,
-        method: 'PUT',
+        method: "PUT",
       }),
-      invalidatesTags: ['SHOPS'],
+      invalidatesTags: ["SHOPS"],
       onQueryStarted(_args, { queryFulfilled: qf }) {
         qf.then(() => {
           toast.success(`Product Updated Successfully `, {
-            position: 'top-right',
+            position: "top-right",
           });
         }).catch((err) => {
           toast.error(`${err.error.data.title}`, {
-            position: 'top-right',
+            position: "top-right",
           });
         });
       },

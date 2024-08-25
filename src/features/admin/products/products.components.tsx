@@ -5,11 +5,7 @@ import EditForm from "./product-edit-form";
 import { TableBody } from "@mui/material";
 import { Menu } from "iconsax-react";
 // import { SearchInp } from '../../components/ui/base/navbar/navbar.styles';
-import Modal from "../../../components/modal";
 import { useDebounce } from "react-use";
-import MiniLoader from "../../../components/mini-loader";
-import ScreenLoader from "../../../components/screen-loader";
-import { useGetProductsQuery } from "../../../redux/products";
 import {
   Table,
   TableHead,
@@ -19,8 +15,12 @@ import {
   TableRow,
   TableHeadRow,
 } from "./product.style";
-import SearchInput from "../../../components/Inputs/searchInput";
-import EmptyState from "../../../components/empty-state";
+import { useGetProductsQuery } from "@/redux/products";
+import SearchInput from "@/components/Inputs/searchInput";
+import MiniLoader from "@/components/mini-loader";
+import ScreenLoader from "@/components/screen-loader";
+import EmptyState from "@/components/empty-state";
+import Modal from "@/components/modal";
 const Products = () => {
   const [current, setCurrent] = useState(1);
   const [isOpen, setIsOpen] = useState(false);

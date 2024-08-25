@@ -1,13 +1,15 @@
+import { User } from "../auth/typings";
+
 export interface OrderRequest {
   page: number;
   size: number;
-  sort?: 'DESC' | 'ASC';
+  sort?: "DESC" | "ASC";
 }
 
 export interface ConsumerHistoryRequest {
   page: number;
   size: number;
-  status: 'PENDING' | 'ACCEPTED' | 'ON_GOING' | 'COMPLETED' | 'CANCELED';
+  status: "PENDING" | "ACCEPTED" | "ON_GOING" | "COMPLETED" | "CANCELED";
 }
 
 export interface OrderResponse {
@@ -21,14 +23,15 @@ export interface Order {
   reference: string;
   status: string;
   amount: number;
-  userId: string;
-  orderId: string;
+  userId?: string;
+  orderId?: string;
   items: {
     productId: string;
     count: number;
     productName: string;
     price: number;
   }[];
+  user: User;
   createdAt: string;
   updatedAt: string;
   address: Address;
@@ -63,7 +66,7 @@ export interface ConsumerOrderHistory {
   orderId: string;
   orderCode: string;
   paymentItems: PaymentItem[];
-  status: 'PENDING' | 'ACCEPTED' | 'ON_GOING' | 'COMPLETED' | 'CANCELED'; // Adjust status values as needed
+  status: "PENDING" | "ACCEPTED" | "ON_GOING" | "COMPLETED" | "CANCELED"; // Adjust status values as needed
   address: Address;
   deliveryPoint: DeliveryPoint;
   distance: number;

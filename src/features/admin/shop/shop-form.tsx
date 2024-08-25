@@ -1,14 +1,15 @@
 import { useEffect } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { Shop } from "../../../redux/shops/typings";
 import { yupResolver } from "@hookform/resolvers/yup";
-import InputComponent from "../../../components/Inputs/input-component";
 import * as yup from "yup";
 import styled from "styled-components";
-import { useGetShopQuery, useUpdateShopMutation } from "../../../redux/shops/shops.api";
-import MiniLoader from "../../../components/mini-loader";
 import { useParams } from "react-router-dom";
-import ScreenLoader from "../../../components/screen-loader";
+import MiniLoader from "@/components/mini-loader";
+import ScreenLoader from "@/components/screen-loader";
+import InputComponent from "@/components/Inputs/input-component";
+import { useGetShopQuery } from "@/redux/shops";
+import { useUpdateShopMutation } from "@/redux/shops/shops.api";
+import { Shop } from "@/redux/shops/typings";
 
 const ShopForm = () => {
   const { id } = useParams();
@@ -22,8 +23,7 @@ const ShopForm = () => {
     formState: { errors },
   } = useForm<Shop>({
     defaultValues: shopData,
-    // @ts-expect-error
-    resolver: yupResolver(schema),
+    resolver: yupResolver(schema) as any,
   });
 
   useEffect(() => {

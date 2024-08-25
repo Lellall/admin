@@ -3,7 +3,7 @@ interface Category {
   name: string;
   imageUrl: string;
   description: string;
-  type: 'SHOP'; // Enum value based on the provided example
+  type: "SHOP"; // Enum value based on the provided example
 }
 
 interface Time {
@@ -27,34 +27,58 @@ interface Coordinate {
   latitude: number | string;
   longitude: number | string;
 }
-
 export interface Shop {
-  id: string;
-  description: string;
-  logoUrl: string;
+  id?: string;
   name: string;
   address: string;
-  status: 'OPEN';
-  inventory: number;
+  status: "OPEN" | "CLOSE";
   active: boolean;
-  createdAt: string;
-  updatedAt: string;
+  description: string;
+  logoUrl: string;
   timeZone: string;
-  category: Category;
+  inventory: number;
+  categoryId?: string;
   openingTime?: Time;
   closingTime?: Time;
-  metadata?: Metadata;
-  subAccountId: string;
+  marketId?: string;
+  coordinate: {
+    latitude: number;
+    longitude: number;
+  };
+  category?: Category;
+  paystackAccountId?: string;
   vatCharge: number;
   market: Market;
-  coordinate?: Coordinate;
+  subAccountId: string;
+  metadata?: Metadata;
 }
+// export interface Shop {
+//   id: string;
+//   description: string;
+//   logoUrl: string;
+//   name: string;
+//   address: string;
+//   status: 'OPEN';
+//   inventory: number;
+//   active: boolean;
+//   createdAt: string;
+//   updatedAt: string;
+//   timeZone: string;
+//   category: Category;
+//   openingTime?: Time;
+//   closingTime?: Time;
+//   metadata?: Metadata;
+//   subAccountId: string;
+//   vatCharge: number;
+//   market: Market;
+//   coordinate?: Coordinate;
+// }
 
 export interface UpdateShopsRequest {
   id: string;
   name: string;
   address: string;
-  status: 'OPEN';
+  status: "OPEN";
   active: boolean;
   description: string;
   logoUrl: string;

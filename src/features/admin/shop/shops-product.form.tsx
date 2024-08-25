@@ -1,15 +1,15 @@
 import { useEffect } from "react";
 import styled from "styled-components";
-import { Product, productSchema } from "../../../redux/products/typings";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import InputComponent from "../../../components/Inputs/input-component";
-import ScreenLoader from "../../../components/screen-loader";
+import ScreenLoader from "@/components/screen-loader";
+import { Product, productSchema } from "@/redux/products/typings";
+import InputComponent from "@/components/Inputs/input-component";
 
 interface EditFormProps {
   data?: any;
-  loading?: boolean; //loading can either be updating or adding
-  fetching?: boolean; // fetching is the default is the default loadingState of initial render
+  loading?: boolean;
+  fetching?: boolean;
   onSubmit: SubmitHandler<Product>;
 }
 
@@ -18,12 +18,10 @@ const ShopsProductForm = ({ data, onSubmit, loading, fetching }: EditFormProps) 
     handleSubmit,
     control,
     reset,
-    // getValues,
     formState: { errors },
   } = useForm<Product>({
     defaultValues: data,
-    //@ts-expect-error
-    resolver: yupResolver(productSchema),
+    resolver: yupResolver(productSchema) as any,
   });
 
   const handleFormSubmit: SubmitHandler<Product> = (data) => {
@@ -57,6 +55,7 @@ const ShopsProductForm = ({ data, onSubmit, loading, fetching }: EditFormProps) 
             control={control}
             label={"Name"}
           />
+
           <InputComponent
             errorMessage={errors?.price?.message}
             name={"price"}

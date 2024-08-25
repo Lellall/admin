@@ -5,26 +5,26 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 //components
-import AdminLayout from "./components/layout/admin.layout";
-import AuthLayout from "./components/layout/auth.layout";
-import PrivateRoute from "./components/routes-helpers/private-route";
-import ScreenLoader from "./components/screen-loader";
-import { appPaths } from "./components/layout/app-paths";
-import ErrorComponent from "./components/error-404-component";
-import Restaurant from "./features/restaurant";
+import AuthLayout from "@/components/layout/auth.layout";
+import PrivateRoute from "@/components/routes-helpers/private-route";
+import ScreenLoader from "@/components/screen-loader";
+import { appPaths } from "@/components/layout/app-paths";
+import ErrorComponent from "@/components/error-404-component";
+import Restaurant from "@/features/restaurant";
+import AdminLayout from "@/components/layout/admin.layout";
 
 //pages-routes
-const OrderForRider = lazy(() => import("./features/admin/order/orders.component"));
-const Products = lazy(() => import("./features/admin/products/products.components"));
+const OrderForRider = lazy(() => import("@/features/admin/order/orders.component"));
+const Products = lazy(() => import("@/features/admin/products/products.components"));
 const Transaction = lazy(
-  () => import("./features/admin/transaction/transaction-history.components")
+  () => import("@/features/admin/transaction/transaction-history.components")
 );
-const OrderHistory = lazy(() => import("./features/admin/order/order-history.component"));
-const Vendors = lazy(() => import("./features/admin/shop/shops.component"));
-const Vendor = lazy(() => import("./features/admin/shop/shop.component"));
-const Login = lazy(() => import("./features/auth/login.component"));
-const ForgotPassword = lazy(() => import("./features/auth/forgot-password"));
-const VendorsProduct = lazy(() => import("./features/admin/shop/shops.product"));
+const OrderHistory = lazy(() => import("@/features/admin/order/order-history.component"));
+const Vendors = lazy(() => import("@/features/admin/shop/shops.component"));
+const Vendor = lazy(() => import("@/features/admin/shop/shop.component"));
+const Login = lazy(() => import("@/features/auth/login.component"));
+const ForgotPassword = lazy(() => import("@/features/auth/forgot-password"));
+const VendorsProduct = lazy(() => import("@/features/admin/shop/shops.product"));
 
 const App: React.FC = () => {
   return (

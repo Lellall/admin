@@ -9,9 +9,9 @@ import {
 import Pagination from "rc-pagination";
 import styled from "styled-components";
 import Select from "react-select";
-import { useGetTransactionQuery } from "../../../redux/transaction";
 import TransactionTable from "./tansaction-table";
-import ScreenLoader from "../../../components/screen-loader";
+import { useGetTransactionQuery } from "@/redux/transaction";
+import ScreenLoader from "@/components/screen-loader";
 
 type Option = {
   value: "PENDING" | "FAILED" | "COMPLETED";

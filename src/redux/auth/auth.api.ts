@@ -1,7 +1,7 @@
 // @ts-nocheck
-import { setAuthState, logout } from "../../features/auth/auth.slice";
 import { toast } from "react-toastify";
 import { baseApi } from "../api/baseApi";
+import { logout, setAuthState } from "@/features/auth/auth.slice";
 
 const authApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
