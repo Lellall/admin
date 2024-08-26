@@ -1,14 +1,15 @@
 import { useParams } from "react-router-dom";
+
+import { useEffect, useState } from "react";
+import { Product } from "../../../redux/products/typings";
+import { useDebounce } from "react-use";
 import {
   useAddShopProductMutation,
   useGetShopCategoriesQuery,
   useGetShopProductsQuery,
   useLazyGetSingleShopProductsQuery,
   useUpdateShopProductMutation,
-} from "../../../redux/shops/shops.api";
-import { useEffect, useState } from "react";
-import { Product } from "../../../redux/products/typings";
-import { useDebounce } from "react-use";
+} from "@/redux/shops/shops.api";
 
 export function useShop() {
   const { id } = useParams();

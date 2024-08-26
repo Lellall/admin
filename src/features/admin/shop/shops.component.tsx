@@ -1,13 +1,13 @@
 /* eslint-disable no-console */
-import { useGetShopsQuery } from "../../../redux/shops";
+import { useGetShopsQuery } from "@/redux/shops";
 import ShopsTable from "./shops-table";
 import Pagination from "rc-pagination/lib/Pagination";
 import { useState } from "react";
-import ScreenLoader from "../../../components/screen-loader";
-import MiniLoader from "../../../components/mini-loader";
 import { useDebounce } from "react-use";
-import SearchInput from "../../../components/Inputs/searchInput";
-import EmptyState from "../../../components/empty-state";
+import SearchInput from "@/components/Inputs/searchInput";
+import MiniLoader from "@/components/mini-loader";
+import ScreenLoader from "@/components/screen-loader";
+import EmptyState from "@/components/empty-state";
 
 const Shops = () => {
   const [page, setPage] = useState(1);

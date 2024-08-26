@@ -7,10 +7,10 @@ import {
   MainContainer,
 } from "./orders.style";
 import Pagination from "rc-pagination";
-import { useGetConsumerHistoryQuery } from "../../../redux/orders";
-import EmptyState from "../../../components/empty-state";
-import MiniLoader from "../../../components/mini-loader";
 import { OrdersTable } from "./orders.table";
+import { useGetConsumerHistoryQuery } from "@/redux/orders";
+import MiniLoader from "@/components/mini-loader";
+import EmptyState from "@/components/empty-state";
 
 type Option = "PENDING" | "ACCEPTED" | "ON_GOING" | "COMPLETED" | "CANCELED";
 

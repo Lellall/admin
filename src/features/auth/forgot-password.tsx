@@ -1,17 +1,10 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable no-console */
-import React from 'react';
-import { Controller, useForm } from 'react-hook-form';
-import InputWithIcon from '../../components/Inputs/input';
-import { MessageText } from 'iconsax-react';
-// import { useDispatch } from "react-redux";
-// import { useNavigate } from "react-router-dom";
-import { useRequestPasswordResetMutation } from '../../redux/auth';
+import React from "react";
+import { Controller, useForm } from "react-hook-form";
+import InputWithIcon from "../../components/Inputs/input";
+import { MessageText } from "iconsax-react";
+import { useRequestPasswordResetMutation } from "@/redux/auth";
 
 const ForgotPassword: React.FC = () => {
-  // const dispatch = useDispatch();
-  // const navigate = useNavigate();
-
   const [reset, { isLoading }] = useRequestPasswordResetMutation();
   const {
     handleSubmit,
@@ -28,11 +21,12 @@ const ForgotPassword: React.FC = () => {
       <div className="flex text-center mb-5 flex-col m:flex-row mx-4">
         <span
           style={{
-            color: 'rgb(51, 51, 51)',
-            fontSize: '24px',
+            color: "rgb(51, 51, 51)",
+            fontSize: "24px",
             fontWeight: 300,
-            textAlign: 'center',
-          }}>
+            textAlign: "center",
+          }}
+        >
           Forgot Password?
         </span>
       </div>
@@ -42,10 +36,10 @@ const ForgotPassword: React.FC = () => {
             name="email"
             control={control}
             rules={{
-              required: 'Email is required',
+              required: "Email is required",
               pattern: {
                 value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
-                message: 'Invalid email address',
+                message: "Invalid email address",
               },
             }}
             render={({ field }) => (
@@ -66,7 +60,8 @@ const ForgotPassword: React.FC = () => {
         <div className=" w-full mx-4 my-2 sm:my-0">
           <button
             disabled={isLoading}
-            className="bg-green-800 hover:bg-[#0e5737] text-white w-full mt-4 py-2 px-4 rounded-full">
+            className="bg-green-800 hover:bg-[#0e5737] text-white w-full mt-4 py-2 px-4 rounded-full"
+          >
             SEND LINK
           </button>
         </div>

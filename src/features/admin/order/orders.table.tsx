@@ -1,6 +1,6 @@
+import { ConsumerOrderHistory } from "@/redux/orders/typings";
 import React from "react";
 import styled from "styled-components";
-import { ConsumerOrderHistory } from "../../../redux/orders/typings";
 
 const TableContainer = styled.div`
   width: 100%;

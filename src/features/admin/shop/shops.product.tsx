@@ -1,9 +1,6 @@
 import Pagination from "rc-pagination";
 import { TableBody } from "@mui/material";
 import { Menu } from "iconsax-react";
-import Modal from "../../../components/modal";
-import MiniLoader from "../../../components/mini-loader";
-import ScreenLoader from "../../../components/screen-loader";
 import {
   Table,
   TableHead,
@@ -13,10 +10,13 @@ import {
   TableRow,
   TableHeadRow,
 } from "./shops.style";
-import SearchInput from "../../../components/Inputs/searchInput";
-import ShopsProductForm from "./shops-product.form";
-import EmptyState from "../../../components/empty-state";
 import { useShop } from "./shop.controller";
+import ScreenLoader from "@/components/screen-loader";
+import SearchInput from "@/components/Inputs/searchInput";
+import MiniLoader from "@/components/mini-loader";
+import EmptyState from "@/components/empty-state";
+import Modal from "@/components/modal";
+import ShopsProductForm from "./shops-product.form";
 
 const ShopsProducts = () => {
   const { actions, loading, variables } = useShop();

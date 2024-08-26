@@ -17,7 +17,7 @@ import { ViewportWidth } from "../../utils/enums.js";
 import { appPaths } from "./app-paths.js";
 import { Modal } from "../ui/index.js";
 import { NetworkIndicator } from "../ui/network-indicator/network-indicator-component.js";
-import { useLogoutMutation } from "../../redux/auth/auth.api.js";
+import { useLogoutMutation } from "@/redux/auth/auth.api.js";
 
 const AdminLayout = () => {
   const [logout, { isLoading }] = useLogoutMutation();

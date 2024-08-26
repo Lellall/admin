@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import Select from "react-select";
-import { Product } from "../../../redux/products/typings";
-import { useUpdateProductMutation } from "../../../redux/products";
+import { useUpdateProductMutation } from "@/redux/products";
+import { Product } from "@/redux/products/typings";
 
 interface EditFormProps {
   product: Product;
