@@ -1,5 +1,5 @@
-import React, { ReactNode } from 'react';
-import styled, { CSSProperties } from 'styled-components';
+import React, { ReactNode } from "react";
+import styled, { CSSProperties } from "styled-components";
 
 interface ModalProps {
   onClose: () => void;
@@ -10,7 +10,14 @@ interface ModalProps {
   title?: string;
 }
 
-const Modal: React.FC<ModalProps> = ({ onClose, title, show, children, width, style }) => {
+const Modal: React.FC<ModalProps> = ({
+  onClose,
+  title,
+  show,
+  children,
+  width,
+  style,
+}) => {
   return (
     <>
       {show && (
@@ -76,7 +83,7 @@ const ModalContent = styled.div<ModalContentProps>`
   align-items: center;
   flex-direction: column;
   position: relative;
-  width: ${({ width }) => (width ? width : '80%')};
+  width: ${({ width }) => (width ? width : "80%")};
 
   .modal_body {
     /* background: red; */
