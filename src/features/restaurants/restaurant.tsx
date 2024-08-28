@@ -2,7 +2,16 @@ import { AddSquare, Calendar2, Clock, More, ShoppingCart } from 'iconsax-react';
 import ReusableCard from './components/card';
 import rose from '../../assets/rose-petals.svg'
 import main from '../../assets/scattered-forcefields.svg'
+import { v4 as uuidv4 } from 'uuid';
+import { useNavigate } from 'react-router-dom';
+
 const Restaurant = () => {
+    const navigate = useNavigate();
+
+    const newTep = () => {
+       const id =  uuidv4();
+       navigate(`/restaurant/${id}`)
+    }
     return (
         <div>
             <div className="flex  h-[250px] rounded-lg bg-gray-50 w-[1100px] mx-auto items-center gap-6 ">
@@ -41,7 +50,7 @@ const Restaurant = () => {
 
             </div>
 
-            <div className="flex cursor-pointer justify-center items-center gap-6 mt-4">
+            <div onClick={newTep} className="flex cursor-pointer justify-center items-center gap-6 mt-4">
                 <ReusableCard
                     className="flex justify-center border items-center rounded-md"
                     noBg={true}

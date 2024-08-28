@@ -12,6 +12,7 @@ import { appPaths } from "@/components/layout/app-paths";
 import ErrorComponent from "@/components/error-404-component";
 import AdminLayout from "@/components/layout/admin.layout";
 import RestaurantLayout from "@/features/restaurants/layout";
+import ProductSearch from "./features/restaurants/template";
 //pages-routes
 const OrderForRider = lazy(() => import("@/features/admin/order/orders.component"));
 const Products = lazy(() => import("@/features/admin/products/products.components"));
@@ -45,6 +46,14 @@ const App: React.FC = () => {
             element={
               <Suspense fallback={false}>
                 <RestaurantLayout />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/restaurant/:id"
+            element={
+              <Suspense fallback={false}>
+                <ProductSearch />
               </Suspense>
             }
           />

@@ -11,7 +11,7 @@ module.exports = {
   plugins: ["react-refresh"],
 
   rules: {
-    "no-console": "error", // Disallow console.log
+    // "no-console": "error", // Disallow console.log
     // "no-duplicate-imports": "error", // Detect double imports
     // "no-unused-vars": ["error", { argsIgnorePattern: "^_" }], // Allows ignoring unused function arguments prefixed with "_"
     // "@typescript-eslint/no-unused-vars": ["error"],
