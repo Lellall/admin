@@ -3,7 +3,9 @@
 @tailwind utilities;
 
 body {
-    font-family: Raleway;
+    font-family: "Nunito", sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
 }
 *{
     box-sizing: border-box;
