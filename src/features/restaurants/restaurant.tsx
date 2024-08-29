@@ -3,6 +3,12 @@ import ReusableCard from "./components/card";
 import rose from "../../assets/rose-petals.svg";
 import main from "../../assets/scattered-forcefields.svg";
 const Restaurant = () => {
+  const navigate = useNavigate();
+
+  const newTep = () => {
+    const id = uuidv4();
+    navigate(`/restaurant/${id}`);
+  };
   return (
     <div>
       <div className="flex  h-[250px] rounded-lg bg-gray-50 w-[1100px] mx-auto items-center gap-6 ">
