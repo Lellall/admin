@@ -15,6 +15,7 @@ const CustomAxios = axios.create({
 
 const endpointsRequiringToken = [
   "/orders",
+  "/template",
   "/transactions",
   "/shops",
   /^\/products\/[a-fA-F0-9-]+$/,

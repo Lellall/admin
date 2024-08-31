@@ -7,8 +7,8 @@ import { baseApi } from "../api/baseApi";
 const template = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     createTemplate: builder.mutation<any, Template>({
-      query: (data) => ({
-        url: `/template`,
+      query: (data: Template) => ({
+        url: `/templates`,
         method: "POST",
         body: data,
       }),

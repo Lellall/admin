@@ -21,12 +21,14 @@ const Login: React.FC = () => {
   } = useForm();
 
   const handleLogin = async ({ email, password }: LoginData) => {
-    login({ email, password, role: "ADMIN" });
+    login({ email, password, role: "RESTAURANT" });
+    // login({ email, password, role: "ADMIN" });
   };
 
   useEffect(() => {
     if (isSuccess) {
-      navigate("/");
+      // navigate("/");
+      navigate("/restaurant");
     }
   }, [isSuccess, navigate]);
 

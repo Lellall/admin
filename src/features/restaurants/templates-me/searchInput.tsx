@@ -4,10 +4,14 @@ import debounce from "lodash.debounce";
 import styled from "styled-components";
 import { BACKEND_URL } from "@/utils/config";
 
-const SearchComponent = ({ setSelectedProducts }) => {
+const SearchComponent = ({
+  setSelectedProducts,
+}: {
+  setSelectedProducts: (p: any) => void;
+}) => {
   const [isLoading, setIsLoading] = useState(false);
 
-  const fetchOptions = async (inputValue, callback) => {
+  const fetchOptions = async (inputValue: string, callback: (item: any) => void) => {
     setIsLoading(true);
 
     try {
@@ -23,8 +27,8 @@ const SearchComponent = ({ setSelectedProducts }) => {
       if (data.data.length === 0) {
         callback([]);
       } else {
-        const options = data.data.map((option) => ({
-          value: option.id,
+        const options = data.data.map((option: any) => ({
+          id: option.id,
           label: option.name,
           price: option.price,
         }));
@@ -40,9 +44,9 @@ const SearchComponent = ({ setSelectedProducts }) => {
 
   const debouncedFetchOptions = debounce(fetchOptions, 250);
 
-  const handleSelectChange = (selectedOption) => {
+  const handleSelectChange = (selectedOption: any) => {
     if (selectedOption) {
-      setSelectedProducts((prevProducts) => [
+      setSelectedProducts((prevProducts: any) => [
         ...prevProducts,
         { ...selectedOption, quantity: 1 },
       ]);

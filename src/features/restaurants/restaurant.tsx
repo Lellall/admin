@@ -2,6 +2,8 @@ import { AddSquare, Calendar2, Clock, More, ShoppingCart } from "iconsax-react";
 import ReusableCard from "./components/card";
 import rose from "../../assets/rose-petals.svg";
 import main from "../../assets/scattered-forcefields.svg";
+import { useNavigate } from "react-router-dom";
+import { v4 as uuidv4 } from "uuid";
 const Restaurant = () => {
   const navigate = useNavigate();
 
@@ -26,7 +28,10 @@ const Restaurant = () => {
               Experience the convenience you deserve with Lellall.
             </h1>
             <p className="text-lg text-gray-600 mb-6">Get all you want in one store!</p>
-            <button className="bg-[#0E5D37] text-white py-2 px-4 rounded hover:bg-green-700">
+            <button
+              onClick={newTep}
+              className="bg-[#0E5D37] text-white py-2 px-4 rounded hover:bg-green-700"
+            >
               Get Started
             </button>
           </div>
@@ -50,7 +55,7 @@ const Restaurant = () => {
           noBg={true}
           bgColor="#F3FAF5"
         >
-          <AddSquare size="50" color="#0E5D37" variant="Bold" />
+          <AddSquare onClick={newTep} size="50" color="#0E5D37" variant="Bold" />
         </ReusableCard>
 
         <ReusableCard>

@@ -1,9 +1,10 @@
 interface TemplateItem {
-  productId: number;
+  productId: string;
   quantity: number;
 }
 
 export interface Template {
   name: string;
   existingTemplateItemsDto: TemplateItem[];
+  nonExistingTemplateItems: TemplateItem[];
 }
