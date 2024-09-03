@@ -150,7 +150,7 @@ function Products() {
                         </TableWrapper>
                     </div>
                     <div style={{ float: "right", margin: "10px" }}>
-                        {products.data.length ? (
+                        {products?.data?.length ? (
                             <Pagination
                                 onChange={handlePageClick}
                                 current={current}

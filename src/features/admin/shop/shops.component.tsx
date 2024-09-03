@@ -54,10 +54,10 @@ function Shops() {
             ) : (
                 <>
                     <div style={{ width: "100%" }}>
-                        {!data.data.length ? (
+                        {!data?.data?.length ? (
                             <EmptyState />
                         ) : (
-                            <ShopsTable shops={data.data} />
+                            <ShopsTable shops={data?.data} />
                         )}
                     </div>
                     <div style={{ float: "right", margin: "10px" }}>
