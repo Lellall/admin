@@ -1,27 +1,33 @@
+/* eslint-disable react/require-default-props */
 import { CSSProperties } from "react"
 import { ColorRing } from "react-loader-spinner"
 
-interface Props {
+type Props = {
     style?: CSSProperties
 }
 
-function MiniLoader({ style }: Props) {
+function ScreenLoader({ style }: Props) {
     return (
-        <span
+        <div
             style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                height: "80vh",
+                width: "100%",
                 ...style,
             }}
         >
             <ColorRing
-                height="25"
-                width="25"
+                height="80"
+                width="80"
                 ariaLabel="color-ring-loading"
                 wrapperStyle={{ float: "center" }}
                 wrapperClass="color-ring-wrapper"
                 colors={["#e15b64", "#f47e60", "#f8b26a", "#abbd81", "#849b87"]}
             />
-        </span>
+        </div>
     )
 }
 
-export default MiniLoader
+export default ScreenLoader
