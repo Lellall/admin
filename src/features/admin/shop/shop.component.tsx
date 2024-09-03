@@ -1,24 +1,26 @@
-import ShopFrom from './shop-form';
-import { ArrowBack } from '@mui/icons-material';
-import { useNavigate } from 'react-router-dom';
+import { ArrowBack } from "@mui/icons-material"
+import { useNavigate } from "react-router-dom"
+import ShopFrom from "./shop-form"
 
-const Shop = () => {
-  const navigate = useNavigate();
+function Shop() {
+    const navigate = useNavigate()
 
-  return (
-    <>
-      <div className="flex items-start flex-col justify-around min-h-[50vh] w-[95%]">
-        <div className="flex justify-between w-full">
-          <button className="px-5 py-2" onClick={() => navigate(-1)}>
-            <ArrowBack />
-          </button>
+    return (
+        <div className="flex items-start flex-col justify-around min-h-[50vh] w-[95%]">
+            <div className="flex justify-between w-full">
+                <button
+                    type="button"
+                    className="px-5 py-2"
+                    onClick={() => navigate(-1)}
+                >
+                    <ArrowBack />
+                </button>
+            </div>
+
+            <ShopFrom />
         </div>
+    )
+}
 
-        <ShopFrom />
-      </div>
-    </>
-  );
-};
-
-export default Shop;
+export default Shop
 // walin ganye founders  2nd week august engagrment later

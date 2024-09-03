@@ -1,8 +1,15 @@
-import { DocumentText, ShoppingCart, Box, Chart, Setting, Logout } from 'iconsax-react';
-import Restaurant from './restaurant';
-import Logo from '../../assets/react.svg'
+import {
+    DocumentText,
+    ShoppingCart,
+    Box,
+    Chart,
+    Setting,
+    Logout,
+} from "iconsax-react"
+import Restaurant from "./restaurant"
+import Logo from "../../assets/react.svg"
 
-const RestaurantLayout = () => {
+function RestaurantLayout() {
     return (
         <div className="flex h-screen">
             {/* Left Side Menu */}
@@ -12,32 +19,35 @@ const RestaurantLayout = () => {
                     <img src={Logo} alt="Logo" className="h-10 w-auto mb-4" />
                 </div>
 
-                <nav className='flex-1'>
+                <nav className="flex-1">
                     <ul className="space-y-4 mt-3">
                         <li className="hover:bg-green-100 p-2 rounded flex items-center">
                             <DocumentText size="24" className="mr-3" />
-                            <a href="#">Templates</a>
+                            <a href="/">Templates</a>
                         </li>
                         <li className="hover:bg-green-100 p-2 rounded flex items-center">
                             <ShoppingCart size="24" className="mr-3" />
-                            <a href="#">Orders</a>
+                            <a href="/">Orders</a>
                         </li>
                         <li className="hover:bg-green-100 p-2 rounded flex items-center">
                             <Box size="24" className="mr-3" />
-                            <a href="#">Inventory</a>
+                            <a href="/">Inventory</a>
                         </li>
                         <li className="hover:bg-green-100 p-2 rounded flex items-center">
                             <Chart size="24" className="mr-3" />
-                            <a href="#">Reports</a>
+                            <a href="/">Reports</a>
                         </li>
                         <li className="hover:bg-green-100 p-2 rounded flex items-center">
                             <Setting size="24" className="mr-3" />
-                            <a href="#">Settings</a>
+                            <a href="/">Settings</a>
                         </li>
                     </ul>
                 </nav>
                 <div className="mt-auto">
-                    <button className="w-full bg-[#0E5D37] hover:bg-green-900 text-white p-2 rounded text-center flex items-center justify-center">
+                    <button
+                        type="button"
+                        className="w-full bg-[#0E5D37] hover:bg-green-900 text-white p-2 rounded text-center flex items-center justify-center"
+                    >
                         <Logout size="24" className="mr-2" />
                         Logout
                     </button>
@@ -71,7 +81,7 @@ const RestaurantLayout = () => {
                 </nav>
             </aside> */}
         </div>
-    );
-};
+    )
+}
 
-export default RestaurantLayout;
+export default RestaurantLayout
