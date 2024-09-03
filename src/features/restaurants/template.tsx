@@ -1,7 +1,7 @@
 import { Trash } from "iconsax-react"
 import React, { useState, useEffect } from "react"
 import empty from "../../assets/empty.svg"
-import SearchComponent from "./templates-me/searchInput"
+import SearchComponent from "./components/searchInput"
 import { useCreateTemplateMutation } from "@/redux/templates/template.api"
 
 type Product = {

@@ -29,7 +29,7 @@ function SearchComponent({
                 )
             }
 
-            if (data.data.length === 0) {
+            if (data?.data?.length === 0) {
                 callback([])
             } else {
                 const options = data.data.map((option: any) => ({
