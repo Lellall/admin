@@ -12,8 +12,8 @@ import ScreenLoader from "@/components/screen.loader"
 import { ErrorComponent } from "./components/error-404-component"
 import AdminLayout from "@/components/layout/admin.layout"
 import RestaurantLayout from "./features/restaurants/layout"
-import ProductSearch from "./features/restaurants/template"
 import { appPaths } from "./components/layout/app-paths"
+import ProductSearch from "./features/restaurants/template"
 // pages-routes
 const OrderForRider = lazy(
     () => import("@/features/admin/order/orders.component")

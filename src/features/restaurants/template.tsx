@@ -1,5 +1,6 @@
 import { Trash } from "iconsax-react"
 import React, { useState, useEffect } from "react"
+import { useNavigate } from "react-router-dom"
 import empty from "../../assets/empty.svg"
 import SearchComponent from "./components/searchInput"
 import { useCreateTemplateMutation } from "@/redux/templates/template.api"
@@ -21,6 +22,8 @@ function ProductSearch() {
     )
     const [subtotal, setSubtotal] = useState<number>(0)
     const [fileName, setFileName] = useState<string>("Untitled")
+    const [errorTitle, setErrorTitle] = useState<boolean>(false)
+    const user = JSON.parse(localStorage.getItem("user"))
     useEffect(() => {
         const newSubtotal = selectedProducts.reduce(
             (acc, product) => acc + product.price * product.quantity,
@@ -40,8 +43,12 @@ function ProductSearch() {
     }
 
     const [createTemplate, { isLoading }] = useCreateTemplateMutation()
-
+    const navigate = useNavigate()
     const handleFormSubmit = () => {
+        if (fileName === "Untitled") {
+            setErrorTitle(true)
+            return
+        }
         const existingTemplateDTO = selectedProducts.map((product) => ({
             productId: product.id.toString(),
             quantity: product.quantity,
@@ -49,23 +56,38 @@ function ProductSearch() {
 
         const dataToSubmit = {
             name: fileName,
-            existingTemplateItemsDto: existingTemplateDTO,
-            nonExistingTemplateItems: existingTemplateDTO,
+            templateItemsDto: existingTemplateDTO,
         }
-        createTemplate(dataToSubmit)
+        createTemplate({
+            data: dataToSubmit,
+            shopId: user?.shopIds[0],
+        })
+            .unwrap()
+            .finally(() => {
+                navigate("/restaurant")
+            })
     }
     const buttonTitle = isLoading ? "Loading..." : "Submit"
     return (
         <div className="p-4 w-full max-w-4xl mx-auto">
-            <div className="flex justify-between items-center mb-4">
+            <div className="flex justify-between  mb-4 flex-col">
                 <input
                     type="text"
                     value={fileName}
                     onChange={(e) => setFileName(e.target.value)}
-                    className="rounded px-1 py-2"
+                    className="rounded px-1 py-2 w-full h-[50px]"
                     placeholder="Untitled"
-                    style={{ border: "none", fontSize: "32px" }}
+                    style={{
+                        border: "none",
+                        fontSize: "32px",
+                        outline: "none",
+                    }}
                 />
+                {errorTitle && (
+                    <span className="text-red-600 ">
+                        Title Name is required
+                    </span>
+                )}
             </div>
 
             <SearchComponent setSelectedProducts={setSelectedProducts} />

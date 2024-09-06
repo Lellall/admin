@@ -6,15 +6,21 @@ import { baseApi } from "../api/baseApi"
 
 const template = baseApi.injectEndpoints({
     endpoints: (builder) => ({
-        createTemplate: builder.mutation<any, Template>({
-            query: (data: Template) => ({
-                url: `/templates`,
+        getTemplate: builder.query<TemplatesResponse, TemplateQuery>({
+            query: (payloads) => ({
+                url: `/template/${payloads.shopId}`,
+                params: payloads,
+            }),
+        }),
+        createTemplate: builder.mutation<TemplateResponse, TemplateRequest>({
+            query: (QueryTemplate) => ({
+                url: `/template/${QueryTemplate.shopId}`,
                 method: "POST",
-                body: data,
+                body: QueryTemplate.data,
             }),
             async onQueryStarted(_args, { queryFulfilled: qf }) {
-                qf.then((res) => {
-                    toast.success(`${res?.data?.message}`, {
+                qf.then(() => {
+                    toast.success(`Template created successfully`, {
                         position: "top-right",
                     })
                 }).catch((err) => {
@@ -29,4 +35,48 @@ const template = baseApi.injectEndpoints({
     }),
 })
 
-export const { useCreateTemplateMutation } = template
+export const { useCreateTemplateMutation, useGetTemplateQuery } = template
+
+interface TemplateQuery {
+    page?: number
+    size?: number
+    name?: string
+    shopId: string
+    // createdAt:
+}
+
+interface TemplateRequest {
+    data: Template
+    shopId: string
+}
+interface TemplateItems {
+    productId: string
+    productName: string
+    quantity: 0
+    available: boolean
+    price: 0
+}
+
+interface TemplateResponse {
+    id: string
+    name: string
+    templateItems: TemplateItems[]
+    shop: string
+    createdBy: string
+    createdAt: string
+    updatedAt: string
+}
+
+interface TemplatesResponse {
+    resultTotal: number
+    pageTotal: number
+    data: [
+        {
+            name: string
+            id: string
+            shop: string
+            createdAt: string
+            templateItems: TemplateItems[]
+        },
+    ]
+}

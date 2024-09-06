@@ -21,12 +21,12 @@ function Login(): React.ReactElement {
     } = useForm()
 
     const handleLogin = async ({ email, password }: LoginData) => {
-        login({ email, password, role: "ADMIN" })
+        login({ email, password, role: "RESTAURANT" })
     }
 
     useEffect(() => {
         if (isSuccess) {
-            navigate("/")
+            navigate("/restaurant/create")
         }
     }, [isSuccess, navigate])
 
