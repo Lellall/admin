@@ -84,7 +84,6 @@ export const productSchema = yup.object().shape({
         .required("Image URL is required"),
     discount: yup
         .number()
-        .required("Discount is required")
         .min(0, "Discount cannot be negative")
         .max(100, "Discount cannot exceed 100"),
     currency: yup.string().nullable(),
@@ -93,21 +92,22 @@ export const productSchema = yup.object().shape({
     manufacturer: yup.string().required("Manufacturer is required"),
     weight: yup
         .number()
-        .required("Weight is required")
+        .nullable()
         .positive("Weight must be a positive number"),
-    height: yup
+    height: yup.number().nullable(),
+    width: yup
         .number()
         .nullable()
-        .positive("Height must be a positive number"),
-    width: yup.number().positive("Width must be a positive number").nullable(),
-    depth: yup.number().positive("Depth must be a positive number").nullable(),
+        .optional()
+        .positive("Width must be a positive number"),
+    depth: yup
+        .number()
+        .nullable()
+        .optional()
+        .positive("Depth must be a positive number"),
     createdAt: yup.string().optional().nullable(),
     updatedAt: yup.string().optional().nullable(),
-    tags: yup
-        .array()
-        .of(yup.string())
-        .required("Tags are required")
-        .min(1, "At least one tag is required"),
+    tags: yup.array().of(yup.string()).min(1, "At least one tag is required"),
     shop: yup
         .object()
         .shape({
@@ -131,5 +131,6 @@ export const productSchema = yup.object().shape({
                     .positive("Price must be a positive number"),
             })
         )
-        .nullable(),
+        .nullable()
+        .required(),
 })
