@@ -19,8 +19,32 @@ const template = baseApi.injectEndpoints({
                 body: QueryTemplate.data,
             }),
             async onQueryStarted(_args, { queryFulfilled: qf }) {
-                qf.then(() => {
+                qf.then((res) => {
+                    console.log("api res", res)
                     toast.success(`Template created successfully`, {
+                        position: "top-right",
+                    })
+                }).catch((err) => {
+                    console.log("ERR", err.error.data)
+                    toast.error(`${err.error?.data?.message}`, {
+                        position: "top-right",
+                    })
+                })
+            },
+            // invalidatesTags: ['ORDERS'],
+        }),
+        updateTemplate: builder.mutation<
+            TemplateResponse,
+            TemplatePatchRequest
+        >({
+            query: (QueryTemplate) => ({
+                url: `/template/${QueryTemplate.shopId}/${QueryTemplate.templateId}`,
+                method: "PATCH",
+                body: QueryTemplate.data,
+            }),
+            async onQueryStarted(_args, { queryFulfilled: qf }) {
+                qf.then(() => {
+                    toast.success(`Template updated successfully`, {
                         position: "top-right",
                     })
                 }).catch((err) => {
@@ -35,7 +59,11 @@ const template = baseApi.injectEndpoints({
     }),
 })
 
-export const { useCreateTemplateMutation, useGetTemplateQuery } = template
+export const {
+    useCreateTemplateMutation,
+    useGetTemplateQuery,
+    useUpdateTemplateMutation,
+} = template
 
 interface TemplateQuery {
     page?: number
@@ -48,6 +76,11 @@ interface TemplateQuery {
 interface TemplateRequest {
     data: Template
     shopId: string
+}
+interface TemplatePatchRequest {
+    data: Template
+    shopId: string
+    templateId: string
 }
 interface TemplateItems {
     productId: string

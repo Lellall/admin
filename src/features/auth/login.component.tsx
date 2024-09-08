@@ -26,7 +26,7 @@ function Login(): React.ReactElement {
 
     useEffect(() => {
         if (isSuccess) {
-            navigate("/restaurant/create")
+            navigate("/restaurant")
         }
     }, [isSuccess, navigate])
 

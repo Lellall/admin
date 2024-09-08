@@ -6,7 +6,7 @@ import {
     Setting,
     Logout,
 } from "iconsax-react"
-import Restaurant from "./restaurant"
+import { Outlet } from "react-router-dom"
 import Logo from "../../assets/react.svg"
 
 function RestaurantLayout() {
@@ -60,7 +60,7 @@ function RestaurantLayout() {
                     <h1 className="text-1xl font-semibold">Templates</h1>
                 </header>
                 <div className="p-4">
-                    <Restaurant />
+                    <Outlet />
                 </div>
             </main>
 
