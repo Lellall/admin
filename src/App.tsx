@@ -14,10 +14,15 @@ import AdminLayout from "@/components/layout/admin.layout"
 import RestaurantLayout from "./features/restaurants/layout"
 import { appPaths } from "./components/layout/app-paths"
 // import ProductSearch from "./features/restaurants/template"
-import Restaurant from "./features/restaurants/restaurant"
-import CreateTemplate from "./features/restaurants/template/create.template"
-import EditTemplate from "./features/restaurants/template/edit.template"
 // pages-routes
+const Restaurant = lazy(() => import("@/features/restaurants/restaurant"))
+
+const CreateTemplate = lazy(
+    () => import("@/features/restaurants/template/create.template")
+)
+const EditTemplate = lazy(
+    () => import("@/features/restaurants/template/edit.template")
+)
 const OrderForRider = lazy(
     () => import("@/features/admin/order/orders.component")
 )
