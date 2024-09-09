@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { toast } from "react-toastify"
 
 import { Template } from "./typings"
@@ -6,11 +5,18 @@ import { baseApi } from "../api/baseApi"
 
 const template = baseApi.injectEndpoints({
     endpoints: (builder) => ({
-        getTemplate: builder.query<TemplatesResponse, TemplateQuery>({
+        getTemplates: builder.query<TemplatesResponse, TemplatesQuery>({
             query: (payloads) => ({
                 url: `/template/${payloads.shopId}`,
                 params: payloads,
             }),
+            providesTags: ["TEMPLATE"],
+        }),
+        getTemplate: builder.query<TemplateResponse, TemplateQuery>({
+            query: ({ shopId, templateId }) => ({
+                url: `/template/${shopId}/${templateId}`,
+            }),
+            providesTags: ["TEMPLATE"],
         }),
         createTemplate: builder.mutation<TemplateResponse, TemplateRequest>({
             query: (QueryTemplate) => ({
@@ -19,19 +25,17 @@ const template = baseApi.injectEndpoints({
                 body: QueryTemplate.data,
             }),
             async onQueryStarted(_args, { queryFulfilled: qf }) {
-                qf.then((res) => {
-                    console.log("api res", res)
+                qf.then(() => {
                     toast.success(`Template created successfully`, {
                         position: "top-right",
                     })
                 }).catch((err) => {
-                    console.log("ERR", err.error.data)
                     toast.error(`${err.error?.data?.message}`, {
                         position: "top-right",
                     })
                 })
             },
-            // invalidatesTags: ['ORDERS'],
+            invalidatesTags: ["TEMPLATE"],
         }),
         updateTemplate: builder.mutation<
             TemplateResponse,
@@ -48,27 +52,32 @@ const template = baseApi.injectEndpoints({
                         position: "top-right",
                     })
                 }).catch((err) => {
-                    console.log("ERR", err.error.data)
                     toast.error(`${err.error?.data?.message}`, {
                         position: "top-right",
                     })
                 })
             },
-            // invalidatesTags: ['ORDERS'],
+            invalidatesTags: ["TEMPLATE"],
         }),
     }),
 })
 
 export const {
     useCreateTemplateMutation,
+    useGetTemplatesQuery,
     useGetTemplateQuery,
     useUpdateTemplateMutation,
 } = template
 
-interface TemplateQuery {
+interface TemplatesQuery {
     page?: number
     size?: number
     name?: string
+    shopId: string
+    // createdAt:
+}
+interface TemplateQuery {
+    templateId: string
     shopId: string
     // createdAt:
 }
@@ -103,13 +112,5 @@ interface TemplateResponse {
 interface TemplatesResponse {
     resultTotal: number
     pageTotal: number
-    data: [
-        {
-            name: string
-            id: string
-            shop: string
-            createdAt: string
-            templateItems: TemplateItems[]
-        },
-    ]
+    data: TemplateResponse[]
 }

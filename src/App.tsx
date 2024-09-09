@@ -15,7 +15,8 @@ import RestaurantLayout from "./features/restaurants/layout"
 import { appPaths } from "./components/layout/app-paths"
 // import ProductSearch from "./features/restaurants/template"
 import Restaurant from "./features/restaurants/restaurant"
-import Template from "./features/restaurants/template/template"
+import CreateTemplate from "./features/restaurants/template/create.template"
+import EditTemplate from "./features/restaurants/template/edit.template"
 // pages-routes
 const OrderForRider = lazy(
     () => import("@/features/admin/order/orders.component")
@@ -63,10 +64,18 @@ function App() {
                             }
                         />
                         <Route
-                            path={`${appPaths.createTemplate}/:id`}
+                            path={`${appPaths.createTemplate}`}
                             element={
                                 <Suspense fallback={false}>
-                                    <Template />
+                                    <CreateTemplate />
+                                </Suspense>
+                            }
+                        />
+                        <Route
+                            path={`${appPaths.template}/:id`}
+                            element={
+                                <Suspense fallback={false}>
+                                    <EditTemplate />
                                 </Suspense>
                             }
                         />

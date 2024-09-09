@@ -57,6 +57,7 @@ function SearchComponent({
                     ...selectedOption,
                     quantity: 1,
                     productId: selectedOption.id,
+                    productName: selectedOption.label,
                 },
             ])
         }

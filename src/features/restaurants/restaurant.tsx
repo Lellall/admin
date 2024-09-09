@@ -3,12 +3,11 @@
 import { useState } from "react"
 import { AddSquare, Calendar2, Clock, More, ShoppingCart } from "iconsax-react"
 import { useNavigate } from "react-router-dom"
-import { v4 as uuidv4 } from "uuid"
 import Pagination from "rc-pagination/lib/Pagination"
 import ReusableCard from "./components/card"
 import rose from "../../assets/rose-petals.svg"
 import main from "../../assets/scattered-forcefields.svg"
-import { useGetTemplateQuery } from "@/redux/templates/template.api"
+import { useGetTemplatesQuery } from "@/redux/templates/template.api"
 import { appPaths } from "@/components/layout/app-paths"
 import ScreenLoader from "@/components/screen.loader"
 import EmptyState from "@/components/empty-state"
@@ -18,16 +17,12 @@ function Restaurant() {
     const [page, setPage] = useState(1)
     const user = JSON.parse(localStorage.getItem("user"))
 
-    const { data, isLoading } = useGetTemplateQuery({
+    const { data, isLoading } = useGetTemplatesQuery({
         shopId: user?.shopIds[0],
         page: page - 1,
         name: "",
         size: 10,
     })
-    const id = uuidv4()
-    const newTep = (ids: string) => {
-        navigate(`${appPaths.createTemplate}/${ids}`)
-    }
 
     const formatDateTime = (dateTimeString: string | number | Date) => {
         const date = new Date(dateTimeString)
@@ -62,7 +57,9 @@ function Restaurant() {
                         </p>
                         <button
                             type="button"
-                            onClick={() => newTep(id)}
+                            onClick={() => {
+                                navigate(`${appPaths.createTemplate}`)
+                            }}
                             className="bg-[#0E5D37] text-white py-2 px-4 rounded hover:bg-green-700"
                         >
                             Get Started
@@ -95,7 +92,9 @@ function Restaurant() {
                             bgColor="#F3FAF5"
                         >
                             <AddSquare
-                                onClick={() => newTep(id)}
+                                onClick={() => {
+                                    navigate(`${appPaths.createTemplate}`)
+                                }}
                                 size="50"
                                 color="#0E5D37"
                                 variant="Bold"
@@ -110,7 +109,11 @@ function Restaurant() {
                                     // eslint-disable-next-line jsx-a11y/no-static-element-interactions
                                     <div
                                         key={item.id}
-                                        onClick={() => newTep(item.shop)}
+                                        onClick={() => {
+                                            navigate(
+                                                `${appPaths.template}/${item.id}`
+                                            )
+                                        }}
                                     >
                                         <ReusableCard key={item?.id}>
                                             <div className="flex p-4 justify-between">
