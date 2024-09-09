@@ -5,7 +5,7 @@ import { render } from "@testing-library/react"
 import { BrowserRouter } from "react-router-dom"
 import { store } from "@/redux/store"
 
-export function renderWithProviders(
+function renderWithProviders(
     ui:
         | string
         | number
@@ -27,3 +27,7 @@ export function renderWithProviders(
         ...render(ui, { wrapper: Wrapper, ...renderOptions }),
     }
 }
+
+// eslint-disable-next-line react-refresh/only-export-components, import/no-extraneous-dependencies
+export * from "@testing-library/react"
+export { renderWithProviders as render }
