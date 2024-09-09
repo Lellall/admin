@@ -5,6 +5,5 @@ interface TemplateItem {
 
 export interface Template {
     name: string
-    existingTemplateItemsDto: TemplateItem[]
-    nonExistingTemplateItems: TemplateItem[]
+    templateItemsDto: TemplateItem[]
 }

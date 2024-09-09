@@ -1,6 +1,7 @@
 import { toast } from "react-toastify"
 import { logout, setAuthState } from "@/features/auth/auth.slice"
 import { baseApi } from "../api/baseApi"
+import { LoginRequest, LoginResponse } from "./typings"
 
 interface EmailRequest {
     email: string
@@ -12,22 +13,12 @@ interface EmailResponse {
 
 const authApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
-        login: builder.mutation({
+        login: builder.mutation<LoginResponse, LoginRequest>({
             query: (credentials) => ({
                 url: "/auth/login",
                 method: "POST",
                 body: credentials,
             }),
-            transformResponse: (response: {
-                access_token: string
-                refresh_token: string
-            }) => {
-                localStorage.setItem("access_token", response.access_token)
-                localStorage.setItem("refresh_token", response.refresh_token)
-                // @ts-expect-error
-                localStorage.setItem("user", JSON.stringify(response.user))
-                return response
-            },
             async onQueryStarted(_args, { dispatch, queryFulfilled: qf }) {
                 qf.then((data) => {
                     dispatch(

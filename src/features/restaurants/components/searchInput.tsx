@@ -53,7 +53,12 @@ function SearchComponent({
         if (selectedOption) {
             setSelectedProducts((prevProducts: any) => [
                 ...prevProducts,
-                { ...selectedOption, quantity: 1 },
+                {
+                    ...selectedOption,
+                    quantity: 1,
+                    productId: selectedOption.id,
+                    productName: selectedOption.label,
+                },
             ])
         }
     }

@@ -31,7 +31,7 @@ export const baseApi = createApi({
     baseQuery,
     reducerPath: "api",
     endpoints: () => ({}),
-    tagTypes: ["PRODUCTS", "ORDERS", "SHOPS", "TRANSACTION"],
+    tagTypes: ["PRODUCTS", "ORDERS", "SHOPS", "TRANSACTION", "TEMPLATE"],
 })
 
 export const { useGetQuery, usePostMutation } = baseApi as any

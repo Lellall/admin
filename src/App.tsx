@@ -12,8 +12,11 @@ import ScreenLoader from "@/components/screen.loader"
 import { ErrorComponent } from "./components/error-404-component"
 import AdminLayout from "@/components/layout/admin.layout"
 import RestaurantLayout from "./features/restaurants/layout"
-import ProductSearch from "./features/restaurants/template"
 import { appPaths } from "./components/layout/app-paths"
+// import ProductSearch from "./features/restaurants/template"
+import Restaurant from "./features/restaurants/restaurant"
+import CreateTemplate from "./features/restaurants/template/create.template"
+import EditTemplate from "./features/restaurants/template/edit.template"
 // pages-routes
 const OrderForRider = lazy(
     () => import("@/features/admin/order/orders.component")
@@ -49,22 +52,34 @@ function App() {
                         }
                     />
                     <Route
-                        path="/restaurant"
-                        element={
-                            <Suspense fallback={false}>
-                                <RestaurantLayout />
-                            </Suspense>
-                        }
-                    />
-                    <Route
-                        path="/restaurant/:id"
-                        element={
-                            <Suspense fallback={false}>
-                                <ProductSearch />
-                            </Suspense>
-                        }
-                    />
-
+                        path={appPaths.restaurant}
+                        element={<RestaurantLayout />}
+                    >
+                        <Route
+                            index
+                            element={
+                                <Suspense fallback={false}>
+                                    <Restaurant />
+                                </Suspense>
+                            }
+                        />
+                        <Route
+                            path={`${appPaths.createTemplate}`}
+                            element={
+                                <Suspense fallback={false}>
+                                    <CreateTemplate />
+                                </Suspense>
+                            }
+                        />
+                        <Route
+                            path={`${appPaths.template}/:id`}
+                            element={
+                                <Suspense fallback={false}>
+                                    <EditTemplate />
+                                </Suspense>
+                            }
+                        />
+                    </Route>
                     <Route
                         path="/forgot-password"
                         element={
@@ -147,7 +162,6 @@ function App() {
                                 </Suspense>
                             }
                         />
-
                         <Route path="*" element={<ErrorComponent />} />
                     </Route>
                 </Routes>

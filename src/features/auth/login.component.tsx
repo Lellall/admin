@@ -21,12 +21,12 @@ function Login(): React.ReactElement {
     } = useForm()
 
     const handleLogin = async ({ email, password }: LoginData) => {
-        login({ email, password, role: "ADMIN" })
+        login({ email, password, role: "RESTAURANT" })
     }
 
     useEffect(() => {
         if (isSuccess) {
-            navigate("/")
+            navigate("/restaurant")
         }
     }, [isSuccess, navigate])
 
@@ -129,7 +129,7 @@ function Login(): React.ReactElement {
                     className="bg-green-800 hover:bg-[#0e5737] text-white w-full mt-4 py-2 px-4 rounded-full"
                     type="submit"
                 >
-                    {isLoading ? "Logging in..." : " LOGIN"}
+                    {isLoading ? "Logging in..." : "LOGIN"}
                 </button>
             </form>
             <hr className="my-6 border-t border-gray-300" />
