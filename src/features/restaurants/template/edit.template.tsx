@@ -118,7 +118,7 @@ function EditTemplate() {
                     <td className="border px-4 py-2 text-center">
                       <button
                         type="button"
-                        onClick={() => handleDeleteProduct(product.id)}
+                        onClick={() => handleDeleteProduct(product.productId)}
                         className="text-red-500 hover:text-red-700"
                         aria-label="Delete product"
                       >
