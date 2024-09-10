@@ -52,6 +52,7 @@ const authApi = baseApi.injectEndpoints({
                             isAuthenticated: true,
                             accessToken: data.access_token,
                             refreshToken: data.refresh_token,
+                            user: data.user,
                         })
                     )
                     return data

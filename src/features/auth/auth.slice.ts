@@ -7,7 +7,7 @@ export interface AuthState {
     isAuthenticated: boolean
     accessToken: string | null
     refreshToken: string | null
-    user: any
+    user: null | object
 }
 
 const initialState: AuthState = {
