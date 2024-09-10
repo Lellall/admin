@@ -70,7 +70,6 @@ function EditTemplate() {
     }, [selectedProducts, setValue])
 
     const handleFormSubmit = (data: TemplateForm) => {
-        console.log("data to submit", data)
         updateTemplate({
             shopId,
             templateId,
@@ -130,7 +129,7 @@ function EditTemplate() {
                                             {product.productName}
                                         </td>
                                         <td className="border px-4 py-2">
-                                            ${product.price}
+                                            ₦{product.price}
                                         </td>
                                         <td className="border px-4 py-2">
                                             <input
@@ -172,10 +171,10 @@ function EditTemplate() {
                         </table>
                         <div className="mt-4 flex justify-between items-center">
                             <div className="text-lg font-bold">
-                                Subtotal: ${subtotal?.toFixed(2)}
+                                Subtotal: ₦{subtotal?.toFixed(2)}
                             </div>
                             <div className="text-lg font-bold">
-                                Total: ${subtotal?.toFixed(2)}
+                                Total: ₦{subtotal?.toFixed(2)}
                             </div>
                         </div>
                         <button

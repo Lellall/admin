@@ -27,6 +27,7 @@ const authApi = baseApi.injectEndpoints({
                             accessToken: data.data.access_token,
                             // user: data.user,
                             refreshToken: data.data.refresh_token,
+                            user: data.data.user,
                         })
                     )
                 }).catch((err) => {

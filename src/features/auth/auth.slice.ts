@@ -7,12 +7,14 @@ export interface AuthState {
     isAuthenticated: boolean
     accessToken: string | null
     refreshToken: string | null
+    user: any
 }
 
 const initialState: AuthState = {
     isAuthenticated: !!localStorage.getItem("access_token"),
     accessToken: localStorage.getItem("access_token"),
     refreshToken: localStorage.getItem("refresh_token"),
+    user: {},
 }
 
 const authSlice = createSlice({
@@ -20,9 +22,25 @@ const authSlice = createSlice({
     initialState,
     reducers: {
         setAuthState: (state, action: PayloadAction<AuthState>) => {
-            state.isAuthenticated = action.payload.isAuthenticated
-            state.accessToken = action.payload.accessToken
-            state.refreshToken = action.payload.refreshToken
+            const { isAuthenticated, accessToken, refreshToken, user } =
+                action.payload
+            state.isAuthenticated = isAuthenticated
+            state.accessToken = accessToken
+            state.refreshToken = refreshToken
+            if (accessToken) {
+                localStorage.setItem("access_token", accessToken)
+            } else {
+                localStorage.removeItem("access_token")
+            }
+
+            if (refreshToken) {
+                localStorage.setItem("refresh_token", refreshToken)
+            } else {
+                localStorage.removeItem("refresh_token")
+            }
+            if (user) {
+                localStorage.setItem("user", JSON.stringify(user))
+            }
         },
         logout: (state) => {
             state.isAuthenticated = false

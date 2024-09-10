@@ -21,8 +21,8 @@ function CreateTemplate() {
     )
     const [subtotal, setSubtotal] = useState<number>(0)
     const navigate = useNavigate()
-    const user = JSON.parse(localStorage.getItem("user"))
-    const shopId = user?.shopIds[0]
+    const userData = JSON.parse(localStorage.getItem("user"))
+    const shopId = userData?.user?.shopIds[0]
     const [createTemplate, { isLoading: isCreating }] =
         useCreateTemplateMutation()
 
@@ -111,7 +111,7 @@ function CreateTemplate() {
                                             {product.label}
                                         </td>
                                         <td className="border px-4 py-2">
-                                            ${product.price}
+                                            ₦{product.price}
                                         </td>
                                         <td className="border px-4 py-2">
                                             <input
@@ -153,10 +153,10 @@ function CreateTemplate() {
                         </table>
                         <div className="mt-4 flex justify-between items-center">
                             <div className="text-lg font-bold">
-                                Subtotal: ${subtotal.toFixed(2)}
+                                Subtotal: ₦{subtotal.toFixed(2)}
                             </div>
                             <div className="text-lg font-bold">
-                                Total: ${subtotal.toFixed(2)}
+                                Total: ₦{subtotal.toFixed(2)}
                             </div>
                         </div>
                         <button
