@@ -4,113 +4,106 @@ import { Template } from "./typings"
 import { baseApi } from "../api/baseApi"
 
 const template = baseApi.injectEndpoints({
-    endpoints: (builder) => ({
-        getTemplates: builder.query<TemplatesResponse, TemplatesQuery>({
-            query: (payloads) => ({
-                url: `/template/${payloads.shopId}`,
-                params: payloads,
-            }),
-            providesTags: ["TEMPLATE"],
-        }),
-        getTemplate: builder.query<TemplateResponse, TemplateQuery>({
-            query: ({ shopId, templateId }) => ({
-                url: `/template/${shopId}/${templateId}`,
-            }),
-            providesTags: ["TEMPLATE"],
-        }),
-        createTemplate: builder.mutation<TemplateResponse, TemplateRequest>({
-            query: (QueryTemplate) => ({
-                url: `/template/${QueryTemplate.shopId}`,
-                method: "POST",
-                body: QueryTemplate.data,
-            }),
-            async onQueryStarted(_args, { queryFulfilled: qf }) {
-                qf.then(() => {
-                    toast.success(`Template created successfully`, {
-                        position: "top-right",
-                    })
-                }).catch((err) => {
-                    toast.error(`${err.error?.data?.message}`, {
-                        position: "top-right",
-                    })
-                })
-            },
-            invalidatesTags: ["TEMPLATE"],
-        }),
-        updateTemplate: builder.mutation<
-            TemplateResponse,
-            TemplatePatchRequest
-        >({
-            query: (QueryTemplate) => ({
-                url: `/template/${QueryTemplate.shopId}/${QueryTemplate.templateId}`,
-                method: "PATCH",
-                body: QueryTemplate.data,
-            }),
-            async onQueryStarted(_args, { queryFulfilled: qf }) {
-                qf.then(() => {
-                    toast.success(`Template updated successfully`, {
-                        position: "top-right",
-                    })
-                }).catch((err) => {
-                    toast.error(`${err.error?.data?.message}`, {
-                        position: "top-right",
-                    })
-                })
-            },
-            invalidatesTags: ["TEMPLATE"],
-        }),
+  endpoints: (builder) => ({
+    getTemplates: builder.query<TemplatesResponse, TemplatesQuery>({
+      query: (payloads) => ({
+        url: `/template/${payloads.shopId}`,
+        params: payloads,
+      }),
+      providesTags: ["TEMPLATE"],
     }),
+    getTemplate: builder.query<TemplateResponse, TemplateQuery>({
+      query: ({ shopId, templateId }) => ({
+        url: `/template/${shopId}/${templateId}`,
+      }),
+      providesTags: ["TEMPLATE"],
+    }),
+    createTemplate: builder.mutation<TemplateResponse, TemplateRequest>({
+      query: (QueryTemplate) => ({
+        url: `/template/${QueryTemplate.shopId}`,
+        method: "POST",
+        body: QueryTemplate.data,
+      }),
+      async onQueryStarted(_args, { queryFulfilled: qf }) {
+        qf.then(() => {
+          toast.success(`Template created successfully`, {
+            position: "top-right",
+          })
+        }).catch((err) => {
+          toast.error(`${err.error?.data?.message}`, {
+            position: "top-right",
+          })
+        })
+      },
+      invalidatesTags: ["TEMPLATE"],
+    }),
+    updateTemplate: builder.mutation<TemplateResponse, TemplatePatchRequest>({
+      query: (QueryTemplate) => ({
+        url: `/template/${QueryTemplate.shopId}/${QueryTemplate.templateId}`,
+        method: "PATCH",
+        body: QueryTemplate.data,
+      }),
+      async onQueryStarted(_args, { queryFulfilled: qf }) {
+        qf.then(() => {
+          toast.success(`Template updated successfully`, {
+            position: "top-right",
+          })
+        }).catch((err) => {
+          toast.error(`${err.error?.data?.message}`, {
+            position: "top-right",
+          })
+        })
+      },
+      invalidatesTags: ["TEMPLATE"],
+    }),
+  }),
 })
 
-export const {
-    useCreateTemplateMutation,
-    useGetTemplatesQuery,
-    useGetTemplateQuery,
-    useUpdateTemplateMutation,
-} = template
+export const { useCreateTemplateMutation, useGetTemplatesQuery, useGetTemplateQuery, useUpdateTemplateMutation } =
+  template
 
 interface TemplatesQuery {
-    page?: number
-    size?: number
-    name?: string
-    shopId: string
-    // createdAt:
+  page?: number
+  size?: number
+  name?: string
+  shopId: string
+  // createdAt:
 }
 interface TemplateQuery {
-    templateId: string
-    shopId: string
-    // createdAt:
+  templateId: string
+  shopId: string
+  // createdAt:
 }
 
 interface TemplateRequest {
-    data: Template
-    shopId: string
+  data: Template
+  shopId: string
 }
 interface TemplatePatchRequest {
-    data: Template
-    shopId: string
-    templateId: string
+  data: Template
+  shopId: string
+  templateId: string
 }
 interface TemplateItems {
-    productId: string
-    productName: string
-    quantity: 0
-    available: boolean
-    price: 0
+  productId: string
+  productName: string
+  quantity: 0
+  available: boolean
+  price: 0
 }
 
 interface TemplateResponse {
-    id: string
-    name: string
-    templateItems: TemplateItems[]
-    shop: string
-    createdBy: string
-    createdAt: string
-    updatedAt: string
+  id: string
+  name: string
+  templateItems: TemplateItems[]
+  shop: string
+  createdBy: string
+  createdAt: string
+  updatedAt: string
 }
 
 interface TemplatesResponse {
-    resultTotal: number
-    pageTotal: number
-    data: TemplateResponse[]
+  resultTotal: number
+  pageTotal: number
+  data: TemplateResponse[]
 }

@@ -4,13 +4,13 @@ import "msw"
 import { server } from "./mock/server"
 
 beforeAll(() => {
-    server.listen()
+  server.listen()
 })
 
 afterEach(() => {
-    server.resetHandlers()
+  server.resetHandlers()
 })
 
 afterAll(() => {
-    server.close()
+  server.close()
 })

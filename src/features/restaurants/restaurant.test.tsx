@@ -4,8 +4,8 @@ import Restaurant from "./restaurant"
 import { render } from "@/utils/test-util"
 
 describe("Testing restaurant landing page", () => {
-    test("renders restaurant component", () => {
-        render(<Restaurant />)
-        expect(screen.getByRole("button", { name: "Get Started" }))
-    })
+  test("renders restaurant component", () => {
+    render(<Restaurant />)
+    expect(screen.getByRole("button", { name: "Get Started" }))
+  })
 })

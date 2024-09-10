@@ -1,9 +1,9 @@
 interface TemplateItem {
-    productId: string
-    quantity: number
+  productId: string
+  quantity: number
 }
 
 export interface Template {
-    name: string
-    templateItemsDto: TemplateItem[]
+  name: string
+  templateItemsDto: TemplateItem[]
 }

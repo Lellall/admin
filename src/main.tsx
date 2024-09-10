@@ -8,11 +8,11 @@ import "rc-pagination/assets/index.css"
 import { ErrorBoundary } from "./components/ui/error-boundary.js"
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
-    <React.StrictMode>
-        <ErrorBoundary>
-            <Provider store={store}>
-                <App />
-            </Provider>
-        </ErrorBoundary>
-    </React.StrictMode>
+  <React.StrictMode>
+    <ErrorBoundary>
+      <Provider store={store}>
+        <App />
+      </Provider>
+    </ErrorBoundary>
+  </React.StrictMode>
 )
