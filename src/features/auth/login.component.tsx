@@ -4,6 +4,7 @@ import { MessageText, Unlock } from "iconsax-react"
 import { useNavigate } from "react-router-dom"
 import InputWithIcon from "@/components/Inputs/input"
 import { useLoginMutation } from "@/redux/auth/auth-api"
+import { USER_ROLE } from "@/utils/constant"
 
 interface LoginData {
   email: string
@@ -21,7 +22,7 @@ function Login(): React.ReactElement {
   } = useForm()
 
   const handleLogin = async ({ email, password }: LoginData) => {
-    login({ email, password, role: "RESTAURANT" })
+    login({ email, password, role: USER_ROLE ?? "RESTAURANT" })
   }
 
   useEffect(() => {

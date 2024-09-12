@@ -1,4 +1,5 @@
-// interface RefreshResponse {}
+import { UserRoleType } from "@/utils/constant"
+
 export interface RefreshRequest {
   refreshToken: string
   role: string
@@ -9,7 +10,7 @@ export interface User {
   username: string
   firstName: string
   lastName: string
-  role: string
+  role: UserRoleType
   isEmailVerified: boolean
   registrationSource: string
   streetName: string

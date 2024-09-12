@@ -6,4 +6,5 @@ interface TemplateItem {
 export interface Template {
   name: string
   templateItemsDto: TemplateItem[]
+  measurement: string
 }

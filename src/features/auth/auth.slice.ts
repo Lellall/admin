@@ -1,20 +1,42 @@
 /* eslint-disable no-param-reassign */
 // src/features/auth/authSlice.ts
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
+import { User } from "@/redux/auth/typings"
 
 export interface AuthState {
   // Ensure AuthState is exported
   isAuthenticated: boolean
   accessToken: string | null
   refreshToken: string | null
-  user: null | object
+  user: null | User
 }
 
 const initialState: AuthState = {
   isAuthenticated: !!localStorage.getItem("access_token"),
   accessToken: localStorage.getItem("access_token"),
   refreshToken: localStorage.getItem("refresh_token"),
-  user: {},
+  user: {
+    id: "",
+    username: "",
+    firstName: "",
+    lastName: "",
+    role: "ADMIN",
+    isEmailVerified: false,
+    registrationSource: "",
+    streetName: "",
+    houseNumber: "",
+    apartmentName: "",
+    estate: "",
+    poBox: "",
+    address: {
+      streetName: "",
+      houseNumber: "",
+      apartmentName: "",
+      estate: "",
+      poBox: "",
+      region: "",
+    },
+  },
 }
 
 const authSlice = createSlice({

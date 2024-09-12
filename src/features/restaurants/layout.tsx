@@ -1,8 +1,11 @@
 import { DocumentText, ShoppingCart, Box, Chart, Setting, Logout } from "iconsax-react"
 import { Outlet } from "react-router-dom"
 import Logo from "../../assets/react.svg"
+import { useLogoutMutation } from "@/redux/auth/auth-api"
 
 function RestaurantLayout() {
+  const [logout, { isLoading }] = useLogoutMutation()
+
   return (
     <div className="flex h-screen">
       {/* Left Side Menu */}
@@ -39,10 +42,12 @@ function RestaurantLayout() {
         <div className="mt-auto">
           <button
             type="button"
+            onClick={logout}
             className="w-full bg-[#0E5D37] hover:bg-green-900 text-white p-2 rounded text-center flex items-center justify-center"
           >
             <Logout size="24" className="mr-2" />
-            Logout
+
+            {isLoading ? "Logging Out" : "Logout"}
           </button>
         </div>
       </aside>
