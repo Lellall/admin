@@ -8,14 +8,10 @@ import SearchComponent from "../components/searchInput"
 import InputComponent from "@/components/Inputs/input-component"
 import { Template as TemplateForm } from "@/redux/templates/typings"
 import { useGetTemplateQuery, useUpdateTemplateMutation } from "@/redux/templates/template.api"
-import { Product } from "@/redux/products/typings"
 import ScreenLoader from "@/components/screen.loader"
-
-type SelectedProduct = Product & {
-  productId: string
-  quantity: number
-  label?: string
-}
+import { SelectedProduct } from "./create.template"
+import { TitledBackButton } from "@/components/ui/base/back-button"
+import { thousandFormatter } from "@/utils/helpers"
 
 function EditTemplate() {
   const { id: templateId } = useParams()
@@ -34,7 +30,9 @@ function EditTemplate() {
   const handleQuantityChange = (id: string, newQuantity: number) => {
     setSelectedProducts((prev: any[]) => prev.map((p) => (p.productId === id ? { ...p, quantity: newQuantity } : p)))
   }
-
+  const handleMeasurementChange = (id: string, measurement: string) => {
+    setSelectedProducts((prev: any[]) => prev.map((p) => (p.productId === id ? { ...p, measurement } : p)))
+  }
   const handleDeleteProduct = (id: string) => {
     setSelectedProducts((prev: any[]) => prev.filter((p) => p.productId !== id))
   }
@@ -73,9 +71,10 @@ function EditTemplate() {
     return <ScreenLoader />
   }
 
-  const buttonTitle = IsUpdating ? "Updating..." : "Update"
+  const ButtonTitle = IsUpdating ? "Updating..." : "Update"
   return (
     <div className="p-4 w-full max-w-4xl mx-auto">
+      <TitledBackButton />
       <form onSubmit={handleSubmit(handleFormSubmit)}>
         <div className="flex justify-between  mb-4 flex-col">
           <InputComponent
@@ -96,8 +95,8 @@ function EditTemplate() {
               <thead>
                 <tr>
                   <th className="py-2 px-4 border">Product Name</th>
-                  <th className="py-2 px-4 border">Price</th>
                   <th className="py-2 px-4 border">Quantity</th>
+                  <th className="py-2 px-4 border">Measurment</th>
                   <th className="py-2 px-4 border">Actions</th>
                 </tr>
               </thead>
@@ -105,14 +104,22 @@ function EditTemplate() {
                 {selectedProducts.map((product: any) => (
                   <tr key={product.productId}>
                     <td className="border px-4 py-2">{product.productName}</td>
-                    <td className="border px-4 py-2">₦{product.price}</td>
                     <td className="border px-4 py-2">
                       <input
                         type="number"
                         value={product.quantity}
                         min="1"
-                        className="border rounded px-2 py-1"
+                        className="w-full h-full px-2 py-1 outline-none"
                         onChange={(e) => handleQuantityChange(product.productId, parseInt(e.target.value, 10))}
+                      />
+                    </td>
+                    <td className="border px-4 py-2">
+                      <input
+                        type="text"
+                        value={product?.measurement}
+                        placeholder="Ex: Basket"
+                        className="w-full h-full px-2 py-1 outline-none"
+                        onChange={(e) => handleMeasurementChange(product.productId, e.target.value)}
                       />
                     </td>
                     <td className="border px-4 py-2 text-center">
@@ -129,17 +136,13 @@ function EditTemplate() {
                 ))}
               </tbody>
             </table>
-            <div className="mt-4 flex justify-between items-center">
-              <div className="text-lg font-bold">Subtotal: ₦{subtotal?.toFixed(2)}</div>
-              <div className="text-lg font-bold">Total: ₦{subtotal?.toFixed(2)}</div>
+            <div className="mt-4 flex justify-end flex-col items-end">
+              {/* <div className="text-lg font-bold">Subtotal: ₦{subtotal?.toFixed(2)}</div> */}
+              <div className="text-lg font-bold">Total: ₦{thousandFormatter(subtotal)}</div>
+              <button type="submit" className="mt-4 bg-[#0F5D38] text-white rounded px-4 py-2 hover:bg-blue-600">
+                {ButtonTitle}
+              </button>
             </div>
-            <button
-              type="submit"
-              // onClick={handleFormSubmit}
-              className="mt-4 bg-blue-500 text-white rounded px-4 py-2 hover:bg-blue-600"
-            >
-              {buttonTitle}
-            </button>
           </div>
         ) : (
           <div className="flex flex-col items-center justify-center mt-10">

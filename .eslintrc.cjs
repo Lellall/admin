@@ -35,7 +35,8 @@ module.exports = {
     "react/button-has-type": "off",
     "func-style": "off",
     "react-refresh/only-export-components": ["warn", { allowConstantExport: true }],
-    // Disable the comma-dangle rule if you prefer not to use trailing commas
+    "jsx-a11y/click-events-have-key-events": "off",
+    "jsx-a11y/no-static-element-interactions": "off",
     "@typescript-eslint/comma-dangle": "off",
     "@typescript-eslint/no-use-before-define": "off",
     "import/no-unresolved": "off",

@@ -3,6 +3,7 @@
 // @ts-nocheck
 import axios from "axios"
 import { configUrl } from "../../utils/config"
+import { USER_ROLE } from "@/utils/constant"
 
 const CustomAxios = axios.create({
   baseURL: `${configUrl?.BACKEND_URL}/`,
@@ -35,7 +36,7 @@ async function refreshToken() {
   if (!refresh) refresh = "null"
   return CustomAxios.post("auth/refresh-token", {
     refreshToken: localStorage.getItem("refresh_token") || "null",
-    role: "ADMIN",
+    role: USER_ROLE,
   }).catch(() => {
     window.location.href = "/login"
   })

@@ -8,11 +8,14 @@ import { Template as TemplateForm } from "@/redux/templates/typings"
 import { useCreateTemplateMutation } from "@/redux/templates/template.api"
 import InputComponent from "@/components/Inputs/input-component"
 import { Product } from "@/redux/products/typings"
+import { thousandFormatter } from "@/utils/helpers"
+import { TitledBackButton } from "@/components/ui/base/back-button"
 
-type SelectedProduct = Product & {
+export type SelectedProduct = Product & {
   productId: string
   quantity: number
   label?: string
+  measurement?: string
 }
 
 function CreateTemplate() {
@@ -20,10 +23,10 @@ function CreateTemplate() {
   const [subtotal, setSubtotal] = useState<number>(0)
   const navigate = useNavigate()
   const userData = JSON.parse(localStorage.getItem("user"))
-  const shopId = userData?.user?.shopIds[0]
+  const shopId = userData?.shopIds[0]
   const [createTemplate, { isLoading: isCreating }] = useCreateTemplateMutation()
 
-  const buttonTitle = isCreating ? "Loading..." : "Submit"
+  const ButtonTitle = isCreating ? "Loading..." : "Submit"
 
   const {
     control,
@@ -34,6 +37,9 @@ function CreateTemplate() {
 
   const handleQuantityChange = (id: string, newQuantity: number) => {
     setSelectedProducts((prev) => prev.map((p) => (p.productId === id ? { ...p, quantity: newQuantity } : p)))
+  }
+  const handleMeasurementChange = (id: string, measurement: string) => {
+    setSelectedProducts((prev) => prev.map((p) => (p.productId === id ? { ...p, measurement } : p)))
   }
 
   const handleDeleteProduct = (id: string) => {
@@ -46,12 +52,8 @@ function CreateTemplate() {
     setValue("templateItemsDto", selectedProducts)
   }, [selectedProducts, setValue])
   const handleFormSubmit = (data: TemplateForm) => {
-    const dataToSubmit = {
-      name: data.name,
-      templateItemsDto: data.templateItemsDto,
-    }
     createTemplate({
-      data: dataToSubmit,
+      data,
       shopId,
     })
       .unwrap()
@@ -62,6 +64,7 @@ function CreateTemplate() {
 
   return (
     <div className="p-4 w-full max-w-4xl mx-auto">
+      <TitledBackButton />
       <form onSubmit={handleSubmit(handleFormSubmit)}>
         <div className="flex justify-between  mb-4 flex-col">
           <InputComponent
@@ -69,7 +72,7 @@ function CreateTemplate() {
             name="name"
             control={control}
             label="Template Name"
-            rules={{ required: "Template name is required" }} // Added validation rule
+            rules={{ required: "Template name is required" }}
           />
         </div>
 
@@ -81,8 +84,8 @@ function CreateTemplate() {
               <thead>
                 <tr>
                   <th className="py-2 px-4 border">Product Name</th>
-                  <th className="py-2 px-4 border">Price</th>
                   <th className="py-2 px-4 border">Quantity</th>
+                  <th className="py-2 px-4 border">Measurement</th>
                   <th className="py-2 px-4 border">Actions</th>
                 </tr>
               </thead>
@@ -90,14 +93,23 @@ function CreateTemplate() {
                 {selectedProducts.map((product) => (
                   <tr key={product.id}>
                     <td className="border px-4 py-2">{product.label}</td>
-                    <td className="border px-4 py-2">₦{product.price}</td>
+
                     <td className="border px-4 py-2">
                       <input
                         type="number"
-                        value={product.quantity}
+                        value={product?.quantity}
                         min="1"
-                        className="border rounded px-2 py-1"
+                        className="w-full h-full px-2 py-1 outline-none"
                         onChange={(e) => handleQuantityChange(product.id, parseInt(e.target.value, 10))}
+                      />
+                    </td>
+                    <td className="border px-4 py-2">
+                      <input
+                        type="text"
+                        value={product?.measurement}
+                        className="w-full h-full px-2 py-1 outline-none"
+                        placeholder="Ex: Basket"
+                        onChange={(e) => handleMeasurementChange(product.id, e.target.value)}
                       />
                     </td>
                     <td className="border px-4 py-2 text-center">
@@ -114,17 +126,13 @@ function CreateTemplate() {
                 ))}
               </tbody>
             </table>
-            <div className="mt-4 flex justify-between items-center">
-              <div className="text-lg font-bold">Subtotal: ₦{subtotal.toFixed(2)}</div>
-              <div className="text-lg font-bold">Total: ₦{subtotal.toFixed(2)}</div>
+            <div className="mt-4 flex justify-end flex-col items-end">
+              {/* <div className="text-lg font-bold">Subtotal: ₦{subtotal?.toFixed(2)}</div> */}
+              <div className="text-lg font-bold">Total: ₦{thousandFormatter(subtotal)}</div>
+              <button type="submit" className="mt-4 bg-[#0F5D38] text-white rounded px-4 py-2 hover:bg-blue-600">
+                {ButtonTitle}
+              </button>
             </div>
-            <button
-              type="submit"
-              // onClick={handleFormSubmit}
-              className="mt-4 bg-blue-500 text-white rounded px-4 py-2 hover:bg-blue-600"
-            >
-              {buttonTitle}
-            </button>
           </div>
         ) : (
           <div className="flex flex-col items-center justify-center mt-10">
