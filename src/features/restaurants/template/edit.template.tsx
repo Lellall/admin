@@ -24,7 +24,6 @@ function EditTemplate() {
     templateId,
   })
 
-  // eslint-disable-next-line no-empty-pattern
   const [updateTemplate, { isLoading: IsUpdating }] = useUpdateTemplateMutation()
 
   const handleQuantityChange = (id: string, newQuantity: number) => {
@@ -32,6 +31,9 @@ function EditTemplate() {
   }
   const handleMeasurementChange = (id: string, measurement: string) => {
     setSelectedProducts((prev: any[]) => prev.map((p) => (p.productId === id ? { ...p, measurement } : p)))
+  }
+  const handleUnitChange = (id: string, unit: string) => {
+    setSelectedProducts((prev: any[]) => prev.map((p) => (p.productId === id ? { ...p, unitPrice: unit } : p)))
   }
   const handleDeleteProduct = (id: string) => {
     setSelectedProducts((prev: any[]) => prev.filter((p) => p.productId !== id))
@@ -95,8 +97,9 @@ function EditTemplate() {
               <thead>
                 <tr>
                   <th className="py-2 px-4 border">Product Name</th>
-                  <th className="py-2 px-4 border">Quantity</th>
+                  <th className="w-[10%] py-2 px-4 border">Quantity</th>
                   <th className="py-2 px-4 border">Measurment</th>
+                  <th className="py-2 px-4 border">Unit</th>
                   <th className="py-2 px-4 border">Actions</th>
                 </tr>
               </thead>
@@ -120,6 +123,15 @@ function EditTemplate() {
                         placeholder="Ex: Basket"
                         className="w-full h-full px-2 py-1 outline-none"
                         onChange={(e) => handleMeasurementChange(product.productId, e.target.value)}
+                      />
+                    </td>
+                    <td className="border px-4 py-2">
+                      <input
+                        type="text"
+                        value={product?.unitPrice}
+                        placeholder="Ex: 4 or 4.4"
+                        className="w-full h-full px-2 py-1 outline-none"
+                        onChange={(e) => handleUnitChange(product.productId, e.target.value)}
                       />
                     </td>
                     <td className="border px-4 py-2 text-center">

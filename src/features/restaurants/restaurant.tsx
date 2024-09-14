@@ -81,7 +81,10 @@ function Restaurant() {
         <ScreenLoader style={{ height: "50vh" }} />
       ) : (
         <>
-          <div className="flex cursor-pointer justify-between items-center gap-6 mt-4 flex-wrap">
+          <div
+            className="grid cursor-pointer gap-2 mt-4 justify-center items-center"
+            style={{ gridTemplateColumns: "repeat(auto-fit, minmax(350px, 1fr))" }}
+          >
             <ReusableCard className="flex justify-center border items-center rounded-md" noBg bgColor="#F3FAF5">
               <AddSquare
                 onClick={() => {

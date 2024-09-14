@@ -16,6 +16,7 @@ export type SelectedProduct = Product & {
   quantity: number
   label?: string
   measurement?: string
+  unitPrice?: number
 }
 
 function CreateTemplate() {
@@ -40,6 +41,9 @@ function CreateTemplate() {
   }
   const handleMeasurementChange = (id: string, measurement: string) => {
     setSelectedProducts((prev) => prev.map((p) => (p.productId === id ? { ...p, measurement } : p)))
+  }
+  const handleUnitChange = (id: string, unit: string) => {
+    setSelectedProducts((prev: any[]) => prev.map((p) => (p.productId === id ? { ...p, unitPrice: unit } : p)))
   }
 
   const handleDeleteProduct = (id: string) => {
@@ -84,8 +88,9 @@ function CreateTemplate() {
               <thead>
                 <tr>
                   <th className="py-2 px-4 border">Product Name</th>
-                  <th className="py-2 px-4 border">Quantity</th>
+                  <th className="w-[10%] py-2 px-4 border">Quantity</th>
                   <th className="py-2 px-4 border">Measurement</th>
+                  <th className="py-2 px-4 border">Unit</th>
                   <th className="py-2 px-4 border">Actions</th>
                 </tr>
               </thead>
@@ -110,6 +115,15 @@ function CreateTemplate() {
                         className="w-full h-full px-2 py-1 outline-none"
                         placeholder="Ex: Basket"
                         onChange={(e) => handleMeasurementChange(product.id, e.target.value)}
+                      />
+                    </td>
+                    <td className="border px-4 py-2">
+                      <input
+                        type="text"
+                        value={product?.unitPrice}
+                        className="w-full h-full px-2 py-1 outline-none"
+                        placeholder="Ex: 4 or 4.4"
+                        onChange={(e) => handleUnitChange(product.id, e.target.value)}
                       />
                     </td>
                     <td className="border px-4 py-2 text-center">
