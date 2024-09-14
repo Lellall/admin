@@ -59,7 +59,7 @@ function Restaurant() {
         <div
           className="bg-greenn-900 h-[230px] rounded-lg w-1/2 flex items-center justify-center"
           style={{
-            backgroundImage: `url(${main})`,
+            backgroundImage: `url(https://lellall-dev.sfo3.cdn.digitaloceanspaces.com/scattered-forcefields.svg)`,
             backgroundSize: "cover",
             backgroundPosition: "center",
             backgroundRepeat: "no-repeat",
@@ -84,7 +84,7 @@ function Restaurant() {
         <div
           className="bg-greenn-900 h-[230px] rounded-lg w-1/2 flex items-center justify-center"
           style={{
-            backgroundImage: `url(${rose})`,
+            backgroundImage: `url(https://lellall-dev.sfo3.cdn.digitaloceanspaces.com/rose-petals.svg)`,
             backgroundSize: "cover",
             backgroundPosition: "center",
             backgroundRepeat: "no-repeat",

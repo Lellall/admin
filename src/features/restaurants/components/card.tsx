@@ -23,7 +23,7 @@ function ReusableCard({
     <div
       className={`p-4 rounded-lg ${className}`}
       style={{
-        backgroundImage: noBg ? `url(${mainBg})` : `url(${bg})`,
+        backgroundImage: noBg ? `url(https://lellall-dev.sfo3.cdn.digitaloceanspaces.com/pattern-randomized.svg)` : `url(https://lellall-dev.sfo3.cdn.digitaloceanspaces.com/rose-petals.svg)`,
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
