@@ -1,24 +1,29 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { AddSquare, Calendar2, Clock, More, ShoppingCart } from "iconsax-react"
 import { useNavigate } from "react-router-dom"
+import styled from "styled-components"
 import Pagination from "rc-pagination/lib/Pagination"
 import ReusableCard from "./components/card"
 import rose from "../../assets/rose-petals.svg"
 import main from "../../assets/scattered-forcefields.svg"
-import { useGetTemplatesQuery } from "@/redux/templates/template.api"
+import { useDeleteTemplateMutation, useGetTemplatesQuery } from "@/redux/templates/template.api"
 import { appPaths } from "@/components/layout/app-paths"
 import ScreenLoader from "@/components/screen.loader"
 import EmptyState from "@/components/empty-state"
+import Modal from "@/components/modal"
 
 function Restaurant() {
   const navigate = useNavigate()
   const [page, setPage] = useState(1)
+  const [currentItem, setCurrentItem] = useState<any>({})
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
   const user = JSON.parse(localStorage.getItem("user"))
-
+  const shopId = user?.shopIds[0]
+  const [deleteTemplate, { isLoading: isDeleting, isSuccess }] = useDeleteTemplateMutation()
   const { data, isLoading } = useGetTemplatesQuery({
-    shopId: user?.shopIds[0],
+    shopId,
     page: page - 1,
     name: "",
     size: 10,
@@ -36,6 +41,18 @@ function Restaurant() {
   const handlePageClick = (pageNumber: number) => {
     setPage(pageNumber)
   }
+
+  const toggleModal = () => {
+    setIsModalOpen(!isModalOpen)
+  }
+
+  useEffect(() => {
+    if (isSuccess) {
+      toggleModal()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isSuccess])
+
   return (
     <div>
       <div className="flex  h-[250px] rounded-lg bg-gray-50 w-max-[1100px] mx-auto items-center gap-6 ">
@@ -101,20 +118,31 @@ function Restaurant() {
             ) : (
               data?.data?.map((item) => {
                 return (
-                  // eslint-disable-next-line jsx-a11y/no-static-element-interactions
-                  <div
-                    key={item.id}
-                    onClick={() => {
-                      navigate(`${appPaths.template}/${item.id}`)
-                    }}
-                  >
-                    <ReusableCard key={item?.id}>
+                  <div key={item.id}>
+                    <Card key={item?.id}>
                       <div className="flex p-4 justify-between">
                         <div>
                           <div className="text-white text-2xl semi-bold ">{item.name}</div>
                         </div>
-                        <div>
+                        <div className="dropdown">
                           <More size="22" className="mt-1 cursor-pointer" color="#fff" />
+                          <div className="dropdown-menu">
+                            <div
+                              className="dropdown-menu-item"
+                              onClick={() => navigate(`${appPaths.template}/${item.id}`)}
+                            >
+                              Edit
+                            </div>
+                            <div
+                              className="dropdown-menu-item"
+                              onClick={() => {
+                                toggleModal()
+                                setCurrentItem(item)
+                              }}
+                            >
+                              Delete
+                            </div>
+                          </div>
                         </div>
                       </div>
                       <div className="flex p-4 mt-4">
@@ -145,7 +173,7 @@ function Restaurant() {
                           <div className="text-white ml-2 text-1xl semi-bold ">Order Delivered on Mon 04, 2024</div>
                         </div>
                       </div>
-                    </ReusableCard>
+                    </Card>
                   </div>
                 )
               })
@@ -160,6 +188,28 @@ function Restaurant() {
           >
             <Pagination onChange={handlePageClick} current={page} total={data?.resultTotal} />
           </div>
+          <Modal width="500px" show={isModalOpen} onClose={toggleModal} title="Delete Template">
+            <p>Are you sure you want to permanently delete this template?</p>
+
+            <div className="flex justify-between mt-10">
+              <button
+                type="button"
+                onClick={toggleModal}
+                className="bg-[#0E5D37] text-white min-w-[100px] py-2 px-4 rounded hover:bg-green-700"
+              >
+                No
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  deleteTemplate({ shopId, templateId: currentItem.id })
+                }}
+                className="bg-[#5d1b0e] text-white  min-w-[100px]  py-2 px-4 rounded hover:bg-red-700"
+              >
+                {isDeleting ? "Deleting..." : "Yes"}
+              </button>
+            </div>
+          </Modal>
         </>
       )}
     </div>
@@ -167,3 +217,37 @@ function Restaurant() {
 }
 
 export default Restaurant
+
+const Card = styled(ReusableCard)`
+  .dropdown {
+    position: relative;
+    display: inline-block;
+  }
+
+  .dropdown-menu {
+    display: none;
+    position: absolute;
+    right: 0;
+    background-color: #fff;
+    color: #fff;
+    border-radius: 4px;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+    min-width: 100px;
+    z-index: 1;
+  }
+
+  .dropdown:hover .dropdown-menu {
+    display: block;
+  }
+
+  .dropdown-menu-item {
+    padding: 8px 10px;
+    cursor: pointer;
+    color: #000;
+  }
+
+  .dropdown-menu-item:hover {
+    background-color: #f4f3f3e3;
+    color: green;
+  }
+`

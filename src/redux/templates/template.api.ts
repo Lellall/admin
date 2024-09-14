@@ -37,6 +37,24 @@ const template = baseApi.injectEndpoints({
       },
       invalidatesTags: ["TEMPLATE"],
     }),
+    deleteTemplate: builder.mutation<any, TemplateDeleteRequest>({
+      query: (params) => ({
+        url: `/template/${params.shopId}/${params.templateId}`,
+        method: "DELETE",
+      }),
+      async onQueryStarted(_args, { queryFulfilled: qf }) {
+        qf.then(() => {
+          toast.success(`Template delete successfully`, {
+            position: "top-right",
+          })
+        }).catch((err) => {
+          toast.error(`${err.error?.data?.message}`, {
+            position: "top-right",
+          })
+        })
+      },
+      // invalidatesTags: ["TEMPLATE"],
+    }),
     updateTemplate: builder.mutation<TemplateResponse, TemplatePatchRequest>({
       query: (QueryTemplate) => ({
         url: `/template/${QueryTemplate.shopId}/${QueryTemplate.templateId}`,
@@ -59,8 +77,13 @@ const template = baseApi.injectEndpoints({
   }),
 })
 
-export const { useCreateTemplateMutation, useGetTemplatesQuery, useGetTemplateQuery, useUpdateTemplateMutation } =
-  template
+export const {
+  useCreateTemplateMutation,
+  useDeleteTemplateMutation,
+  useGetTemplatesQuery,
+  useGetTemplateQuery,
+  useUpdateTemplateMutation,
+} = template
 
 interface TemplatesQuery {
   page?: number
@@ -77,6 +100,10 @@ interface TemplateQuery {
 
 interface TemplateRequest {
   data: Template
+  shopId: string
+}
+interface TemplateDeleteRequest {
+  templateId: string
   shopId: string
 }
 interface TemplatePatchRequest {
