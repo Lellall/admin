@@ -19,23 +19,23 @@ function RestaurantLayout() {
           <ul className="space-y-4 mt-3">
             <li className="hover:bg-green-100 p-2 rounded flex items-center">
               <DocumentText size="24" className="mr-3" />
-              <a href="/">Templates</a>
+              <a href="/restaurant">Templates</a>
             </li>
             <li className="hover:bg-green-100 p-2 rounded flex items-center">
               <ShoppingCart size="24" className="mr-3" />
-              <a href="/">Orders</a>
+              <a href="/restaurant/orders">Orders</a>
             </li>
             <li className="hover:bg-green-100 p-2 rounded flex items-center">
               <Box size="24" className="mr-3" />
-              <a href="/">Inventory</a>
+              <a href="/restaurant/inventory">Inventory</a>
             </li>
             <li className="hover:bg-green-100 p-2 rounded flex items-center">
               <Chart size="24" className="mr-3" />
-              <a href="/">Reports</a>
+              <a href="/restaurant/reports">Reports</a>
             </li>
             <li className="hover:bg-green-100 p-2 rounded flex items-center">
               <Setting size="24" className="mr-3" />
-              <a href="/">Settings</a>
+              <a href="/restaurant/invoice">Invoice</a>
             </li>
           </ul>
         </nav>

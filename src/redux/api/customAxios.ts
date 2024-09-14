@@ -14,7 +14,7 @@ const CustomAxios = axios.create({
 
 // let exp = '';
 
-const endpointsRequiringToken = ["/orders", "/template", "/transactions", "/shops", /^\/products\/[a-fA-F0-9-]+$/]
+const endpointsRequiringToken = ["/orders", "/template", "/transactions", "inventory", "/shops", /^\/products\/[a-fA-F0-9-]+$/]
 CustomAxios.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("access_token")

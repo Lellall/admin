@@ -13,6 +13,7 @@ import { ErrorComponent } from "./components/error-404-component"
 import AdminLayout from "@/components/layout/admin.layout"
 import RestaurantLayout from "./features/restaurants/layout"
 import { appPaths } from "./components/layout/app-paths"
+import Inventory from "./features/restaurants/inventory"
 // import ProductSearch from "./features/restaurants/template"
 // pages-routes
 const Restaurant = lazy(() => import("@/features/restaurants/restaurant"))
@@ -50,6 +51,14 @@ function App() {
               element={
                 <Suspense fallback={false}>
                   <Restaurant />
+                </Suspense>
+              }
+            />
+            <Route
+              path={`${appPaths.inventory}`}
+              element={
+                <Suspense fallback={false}>
+                  <Inventory />
                 </Suspense>
               }
             />
