@@ -53,7 +53,7 @@ const template = baseApi.injectEndpoints({
           })
         })
       },
-      // invalidatesTags: ["TEMPLATE"],
+      invalidatesTags: ["TEMPLATE"],
     }),
     updateTemplate: builder.mutation<TemplateResponse, TemplatePatchRequest>({
       query: (QueryTemplate) => ({
