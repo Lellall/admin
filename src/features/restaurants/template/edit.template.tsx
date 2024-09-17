@@ -44,7 +44,6 @@ function EditTemplate() {
     handleSubmit,
     setValue,
     reset,
-    getValues,
     formState: { errors },
   } = useForm<TemplateForm>({ defaultValues: template })
 
@@ -69,7 +68,6 @@ function EditTemplate() {
     reset(template)
     setSelectedProducts(template?.templateItems)
   }, [reset, template])
-  // const pricingDetails = getValues().pricingDetails;
 
   if (isLoading) {
     return <ScreenLoader />
