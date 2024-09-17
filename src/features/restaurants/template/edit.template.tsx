@@ -7,11 +7,7 @@ import SearchComponent from "../components/searchInput"
 
 import InputComponent from "@/components/Inputs/input-component"
 import { Template as TemplateForm } from "@/redux/templates/typings"
-import {
-  useGetTemplateQuery,
-  useUpdateTemplateMutation,
-  useCreateTemplateMutation,
-} from "@/redux/templates/template.api"
+import { useGetTemplateQuery, useUpdateTemplateMutation } from "@/redux/templates/template.api"
 import ScreenLoader from "@/components/screen.loader"
 import { SelectedProduct } from "./create.template"
 import { TitledBackButton } from "@/components/ui/base/back-button"
@@ -30,7 +26,6 @@ function EditTemplate() {
   })
 
   const [updateTemplate, { isLoading: IsUpdating }] = useUpdateTemplateMutation()
-  const [createTemplate, { isLoading: isCreating }] = useCreateTemplateMutation()
 
   const handleQuantityChange = (id: string, newQuantity: number) => {
     setSelectedProducts((prev: any[]) => prev.map((p) => (p.productId === id ? { ...p, quantity: newQuantity } : p)))
@@ -70,17 +65,7 @@ function EditTemplate() {
       data,
     })
   }
-  const handleDuplicateTemplate = () => {
-    const data = {
-      name: "Duplicate " + getValues().name,
-      templateItemsDto: getValues().templateItemsDto,
-    }
-    createTemplate({ data, shopId })
-      .unwrap()
-      .then(() => {
-        navigate(-1)
-      })
-  }
+
   useEffect(() => {
     reset(template)
     setSelectedProducts(template?.templateItems)
@@ -94,16 +79,8 @@ function EditTemplate() {
   const ButtonTitle = IsUpdating ? "Updating..." : "Update"
   return (
     <div className="p-4 w-full max-w-4xl mx-auto">
-      <div className="flex justify-between">
-        <TitledBackButton />
-        <button
-          type="button"
-          onClick={handleDuplicateTemplate}
-          className="mt-4 bg-[#0F5D38] text-white rounded px-4 py-2 hover:bg-green-950"
-        >
-          {isCreating ? "Duplicating..." : "Duplicate"}
-        </button>
-      </div>
+      <TitledBackButton />
+
       <form onSubmit={handleSubmit(handleFormSubmit)}>
         <div className="flex justify-between  mb-4 flex-col">
           <InputComponent
