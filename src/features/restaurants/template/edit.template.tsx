@@ -1,5 +1,5 @@
 import { Trash } from "iconsax-react"
-import { useNavigate, useParams } from "react-router-dom"
+import { useParams } from "react-router-dom"
 import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import empty from "@/assets/empty.svg"
@@ -19,7 +19,6 @@ function EditTemplate() {
   const shopId = user?.shopIds[0]
   const [selectedProducts, setSelectedProducts] = useState<SelectedProduct | any>([])
   const [subtotal, setSubtotal] = useState<number>(0)
-  const navigate = useNavigate()
   const { data: template, isLoading } = useGetTemplateQuery({
     shopId,
     templateId,
