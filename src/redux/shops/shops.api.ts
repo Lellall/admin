@@ -65,6 +65,25 @@ const shops = baseApi.injectEndpoints({
         })
       },
     }),
+    createShop: builder.mutation<Shop, any>({
+      query: (data) => ({
+        url: `/shops`,
+        body: data,
+        method: "POST",
+      }),
+      invalidatesTags: ["SHOPS"],
+      onQueryStarted(_args, { queryFulfilled: qf }) {
+        qf.then(() => {
+          toast.success(`Shop Created Successfully `, {
+            position: "top-right",
+          })
+        }).catch((err) => {
+          toast.error(`${err.error.data.title}`, {
+            position: "top-right",
+          })
+        })
+      },
+    }),
     addShopProduct: builder.mutation<Product, { shopId: string; data: Product }>({
       query: ({ shopId, data }: any) => ({
         url: `/shops/${shopId}/products`,
@@ -111,6 +130,7 @@ export const {
   useGetShopQuery,
   useGetShopsQuery,
   useUpdateShopMutation,
+  useCreateShopMutation,
   useGetShopProductsQuery,
   useUpdateShopProductMutation,
   useGetSingleShopProductsQuery,

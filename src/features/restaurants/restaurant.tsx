@@ -25,7 +25,7 @@ function Restaurant() {
   const [currentItem, setCurrentItem] = useState<any>({})
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
   const user = JSON.parse(localStorage.getItem("user"))
-  const shopId = user?.shopIds[0]
+  const shopId = user?.shopIds?.[0] ?? null
   const [deleteTemplate, { isLoading: isDeleting, isSuccess }] = useDeleteTemplateMutation()
   const [createTemplate, { isLoading: isCreating }] = useCreateTemplateMutation()
 

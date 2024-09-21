@@ -1,9 +1,9 @@
 const config = {
   development: {
-    BACKEND_URL: "https://api.dev.lellall.com",
+    BACKEND_URL: "https://api.lellall.com",
   },
   production: {
-    BACKEND_URL: "https://api.dev.lellall.com",
+    BACKEND_URL: "https://api.lellall.com",
   },
 }
 

@@ -8,18 +8,28 @@ import MiniLoader from "@/components/mini-loader"
 import ScreenLoader from "@/components/screen.loader"
 import InputComponent from "@/components/Inputs/input-component"
 import { useGetShopQuery } from "@/redux/shops"
-import { useUpdateShopMutation } from "@/redux/shops/shops.api"
+import { useCreateShopMutation, useUpdateShopMutation } from "@/redux/shops/shops.api"
 import { Shop } from "@/redux/shops/typings"
+import { useGetMarketsQuery } from "@/redux/markets/market.api"
+import { useGetCategoriesQuery } from "@/redux/categories/categories.api"
 
-function ShopForm() {
+interface ShopFormProps {
+  mode: "create" | "update"
+}
+
+function ShopForm({ mode }: ShopFormProps) {
   const { id } = useParams()
-  const { data: shopData, isLoading } = useGetShopQuery({ id })
-  const [updateVendor, { isLoading: isUpdating }] = useUpdateShopMutation()
+  const { data: shopData, isLoading } = useGetShopQuery({ id }, { skip: mode === "create" })
+  const [updateShop, { isLoading: isUpdating }] = useUpdateShopMutation()
+  const [createShop, { isLoading: isCreating }] = useCreateShopMutation()
+  const { data: markets } = useGetMarketsQuery()
+  const { data: categories } = useGetCategoriesQuery()
   const {
     // register,
     reset,
     handleSubmit,
     control,
+    getValues,
     formState: { errors },
   } = useForm<Shop>({
     defaultValues: shopData,
@@ -27,28 +37,50 @@ function ShopForm() {
   })
 
   useEffect(() => {
-    reset(shopData)
+    if (mode === "update" && shopData) {
+      reset(shopData)
+    }
   }, [reset, shopData])
 
   const handleFormSubmit: SubmitHandler<Shop> = (data) => {
     const { market, category, metadata, ...restData } = data
-    const dataToSubmit = {
-      ...restData,
-      marketId: market?.id,
-      categoryId: category.id,
-      paystackAccountId: metadata.PAYSTACK_ACCOUNT_CODE,
+
+    if (mode === "update") {
+      const dataToSubmit = {
+        ...restData,
+        marketId: market?.id,
+        categoryId: category.id,
+        paystackAccountId: metadata.PAYSTACK_ACCOUNT_CODE,
+      }
+      updateShop({ id: data.id, ...dataToSubmit })
+    } else {
+      createShop(data)
     }
-    updateVendor({ id: data.id, ...dataToSubmit })
+    // updateVendor({ id: data.id, ...dataToSubmit })
   }
-  if (isLoading) {
+  if (mode === "update" && isLoading) {
     return <ScreenLoader />
   }
-
+  const categoriesData = categories?.data?.map((item) => {
+    return {
+      label: item.name,
+      value: item.id,
+    }
+  })
   return (
     <form className="w-[100%] px-4" onSubmit={handleSubmit(handleFormSubmit)}>
       <div className=" w-[100%]">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-5">
-          <InputComponent disabled errorMessage={errors?.id?.message} name="id" control={control} label="ID" />
+          <InputComponent errorMessage={errors?.name?.message} name="name" control={control} label="Name" />
+
+          <InputComponent
+            styledContainer={{ display: "none" }}
+            disabled
+            errorMessage={errors?.id?.message}
+            name="id"
+            control={control}
+            label="ID"
+          />
           <InputComponent
             errorMessage={errors?.description?.message}
             name="description"
@@ -64,11 +96,8 @@ function ShopForm() {
           />
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-5">
-          <InputComponent errorMessage={errors?.name?.message} name="name" control={control} label="Name" />
           <InputComponent errorMessage={errors?.address?.message} name="address" control={control} label="Address" />
           <InputComponent errorMessage={errors?.status?.message} name="status" control={control} label="Status" />
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-5">
           <InputComponent
             errorMessage={errors?.inventory?.message}
             name="inventory"
@@ -76,6 +105,16 @@ function ShopForm() {
             label="Inventory"
             type="number"
           />
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-5">
+          <InputComponent
+            errorMessage={errors?.subAccountId?.message}
+            name="subAccountId"
+            control={control}
+            label="Sub Account Id"
+            type="text"
+          />
+
           <InputComponent
             errorMessage={errors?.active?.message}
             name="active"
@@ -88,7 +127,7 @@ function ShopForm() {
             name="timeZone"
             control={control}
             label="Timezone"
-            disabled
+            // disabled
           />
         </div>
 
@@ -96,10 +135,12 @@ function ShopForm() {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-5">
           <InputComponent
             errorMessage={errors?.category?.id?.message}
-            name="category.id"
+            name="categoryId"
             control={control}
             label="Category ID"
-            disabled
+            type="select"
+            options={categoriesData}
+            // disabled
           />
           <InputComponent
             errorMessage={errors?.vatCharge?.message}
@@ -113,7 +154,9 @@ function ShopForm() {
             name="market.id"
             control={control}
             label="Market ID"
-            disabled
+            // disabled
+            type="select"
+            options={[{ label: "One", value: 1 }]}
           />
         </div>
 
@@ -213,7 +256,7 @@ function ShopForm() {
         </div>
       </div>
       <button className="bg-[#F06D04] rounded-md shadow-lg flex justify-center p-2 w-full mb-4" type="submit">
-        {isUpdating ? <MiniLoader /> : "Submit"}
+        {isUpdating || isCreating ? <MiniLoader /> : "Submit"}
       </button>
     </form>
   )
@@ -231,7 +274,7 @@ const HeaderTitle = styled.h3`
 `
 
 const schema = yup.object().shape({
-  id: yup.string().required("ID is required"),
+  id: yup.string(),
   description: yup.string().required("Description is required"),
   logoUrl: yup.string().url("Logo URL must be a valid URL").required("Logo URL is required"),
   name: yup.string().required("Name is required"),
@@ -239,8 +282,8 @@ const schema = yup.object().shape({
   status: yup.string().required("Status is required"),
   inventory: yup.number().required("Inventory is required"),
   active: yup.boolean().required("Active status is required"),
-  createdAt: yup.string().required("Created at date is required"),
-  updatedAt: yup.string().required("Updated at date is required"),
+  createdAt: yup.string(),
+  updatedAt: yup.string(),
   timeZone: yup.string().required("Timezone is required"),
   categoryId: yup.string(),
   openingTime: yup.object().shape({

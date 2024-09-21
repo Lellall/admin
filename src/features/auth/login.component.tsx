@@ -14,7 +14,7 @@ interface LoginData {
 function Login(): React.ReactElement {
   const navigate = useNavigate()
 
-  const [login, { isLoading, isSuccess }] = useLoginMutation()
+  const [login, { isLoading, isSuccess, data }] = useLoginMutation()
   const {
     handleSubmit,
     control,
@@ -22,12 +22,15 @@ function Login(): React.ReactElement {
   } = useForm()
 
   const handleLogin = async ({ email, password }: LoginData) => {
-    login({ email, password, role: USER_ROLE ?? "RESTAURANT" })
+    login({ email, password, role: "ADMIN" })
   }
 
   useEffect(() => {
     if (isSuccess) {
-      navigate("/restaurant")
+      if (data.user.role === "RESTAURANT") {
+        navigate("/restaurant")
+      }
+      navigate("/")
     }
   }, [isSuccess, navigate])
 

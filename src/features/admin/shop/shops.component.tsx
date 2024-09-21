@@ -8,11 +8,14 @@ import SearchInput from "@/components/Inputs/searchInput"
 import MiniLoader from "@/components/mini-loader"
 import ScreenLoader from "@/components/screen.loader"
 import EmptyState from "@/components/empty-state"
+import Modal from "@/components/modal"
+import ShopForm from "./shop-form"
 
 function Shops() {
   const [page, setPage] = useState(1)
   const [vendorName, setVendorName] = useState<string>("")
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("")
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
   useDebounce(
     () => {
       setDebouncedSearchTerm(vendorName)
@@ -36,11 +39,17 @@ function Shops() {
     setVendorName(event.target.value)
   }
 
+  const toggleModal = () => {
+    setIsModalOpen(!isModalOpen)
+  }
+
   return (
     <>
       <div className="flex justify-between w-full items-center  ">
         <SearchInput placeholder="Who are you looking for?" value={vendorName} onChange={handleSearchChange} />
-        {isFetching && <MiniLoader />}
+        <button className="bg-[#F06D04] p-1 m-3 rounded-sm shadow-lg" onClick={toggleModal}>
+          Add Shop
+        </button>
       </div>
 
       {isLoading ? (
@@ -57,6 +66,22 @@ function Shops() {
           </div>
         </>
       )}
+      <>
+        <Modal
+          width="100%"
+          title="Add Vendor"
+          style={{
+            maxWidth: "700px",
+            width: "90%",
+            margin: "auto",
+            overflowY: "auto",
+          }}
+          show={isModalOpen}
+          onClose={toggleModal}
+        >
+          <ShopForm mode="create" />
+        </Modal>
+      </>
     </>
   )
 }

@@ -5,7 +5,6 @@ import { Table, TableHead, TableWrapper, TableDataCell, TableHeadCell, TableRow,
 import { useShop } from "./shop.controller"
 import ScreenLoader from "@/components/screen.loader"
 import SearchInput from "@/components/Inputs/searchInput"
-import MiniLoader from "@/components/mini-loader"
 import EmptyState from "@/components/empty-state"
 import Modal from "@/components/modal"
 import ShopsProductForm from "./shops-product.form"
@@ -19,7 +18,6 @@ function ShopsProducts() {
     <>
       <div className="flex justify-between w-full items-center  ">
         <SearchInput placeholder="What are you looking for?" value={produtName} onChange={actions.handleSearchChange} />
-        {fetchingProducts && <MiniLoader />}
         <button className="bg-[#F06D04] p-1 m-3 rounded-sm shadow-lg" onClick={() => actions.setIsAdddModalOpen(true)}>
           Add Product
         </button>

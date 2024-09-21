@@ -1,11 +1,11 @@
-import { TextField } from "@mui/material"
+import { MenuItem, Select, TextField } from "@mui/material"
 import { useController } from "react-hook-form"
 import styled from "styled-components"
 import Switch from "@mui/material/Switch"
 
 interface InputComponentProps {
   control: any
-  type?: "text" | "number" | "password" | "email" | "date" | "checkbox" | "time" | "textArea"
+  type?: "text" | "number" | "password" | "email" | "date" | "checkbox" | "time" | "textArea" | "select"
   name: string
   label?: string
   errorMessage?: string
@@ -13,6 +13,17 @@ interface InputComponentProps {
   styledInput?: React.CSSProperties
   disabled?: boolean
   rules?: any
+  options?: { value: string | number; label: string }[]
+}
+const ITEM_HEIGHT = 48
+const ITEM_PADDING_TOP = 8
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      // width: "100%",
+    },
+  },
 }
 
 function InputComponent({
@@ -25,6 +36,7 @@ function InputComponent({
   styledInput,
   disabled = false,
   rules = {},
+  options,
 }: InputComponentProps) {
   const { field } = useController({
     name,
@@ -39,10 +51,29 @@ function InputComponent({
       formattedDate = dateObject.toISOString().slice(0, 10)
     }
   }
-
+  const style = { width: "100%", ...styledInput }
   return (
     <InputContainer style={styledContainer}>
       <StyledLabel>{label}</StyledLabel>
+      {type == "select" && (
+        <>
+          <Select
+            style={style}
+            placeholder={"Select "}
+            onChange={field.onChange}
+            onBlur={field.onBlur}
+            name={field.name}
+            inputRef={field.ref}
+            value={field.value || ""}
+            error={Boolean(errorMessage)}
+            type={type}
+            disabled={disabled}
+            MenuProps={MenuProps}
+          >
+            {options?.map((item) => <MenuItem value={item.value}> {item.label} </MenuItem>)}
+          </Select>
+        </>
+      )}
       {type === "text" && (
         <>
           <StyledInput
