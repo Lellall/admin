@@ -69,7 +69,7 @@ function Shops() {
       <>
         <Modal
           width="100%"
-          title="Add Vendor"
+          title="Add Vendor (WIP)"
           style={{
             maxWidth: "700px",
             width: "90%",

@@ -26,10 +26,10 @@ function Login(): React.ReactElement {
   }
 
   useEffect(() => {
-    if (isSuccess) {
-      if (data.user.role === "RESTAURANT") {
-        navigate("/restaurant")
-      }
+    if (isSuccess && data.user.role === "RESTAURANT") {
+      navigate("/restaurant")
+      return
+    } else {
       navigate("/")
     }
   }, [isSuccess, navigate])
