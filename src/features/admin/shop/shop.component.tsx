@@ -13,10 +13,9 @@ function Shop() {
         </button>
       </div>
 
-      <ShopFrom />
+      <ShopFrom mode="update" />
     </div>
   )
 }
 
 export default Shop
-// walin ganye founders  2nd week august engagrment later

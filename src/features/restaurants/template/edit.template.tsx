@@ -63,11 +63,11 @@ function EditTemplate() {
       data,
     })
   }
+
   useEffect(() => {
     reset(template)
     setSelectedProducts(template?.templateItems)
   }, [reset, template])
-  // const pricingDetails = getValues().pricingDetails;
 
   if (isLoading) {
     return <ScreenLoader />
@@ -77,6 +77,7 @@ function EditTemplate() {
   return (
     <div className="p-4 w-full max-w-4xl mx-auto">
       <TitledBackButton />
+
       <form onSubmit={handleSubmit(handleFormSubmit)}>
         <div className="flex justify-between  mb-4 flex-col">
           <InputComponent

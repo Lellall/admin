@@ -1,18 +1,23 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import { useEffect, useState } from "react"
-import { AddSquare, Calendar2, Clock, More, ShoppingCart } from "iconsax-react"
+import { AddSquare, Calendar2, Clock, More, ShoppingCart, OceanProtocol } from "iconsax-react"
 import { useNavigate } from "react-router-dom"
 import styled from "styled-components"
 import Pagination from "rc-pagination/lib/Pagination"
 import ReusableCard from "./components/card"
 import rose from "../../assets/rose-petals.svg"
 import main from "../../assets/scattered-forcefields.svg"
-import { useDeleteTemplateMutation, useGetTemplatesQuery } from "@/redux/templates/template.api"
+import {
+  useCreateTemplateMutation,
+  useDeleteTemplateMutation,
+  useGetTemplatesQuery,
+} from "@/redux/templates/template.api"
 import { appPaths } from "@/components/layout/app-paths"
 import ScreenLoader from "@/components/screen.loader"
 import EmptyState from "@/components/empty-state"
 import Modal from "@/components/modal"
+import { Template } from "@/redux/templates/typings"
 
 function Restaurant() {
   const navigate = useNavigate()
@@ -20,8 +25,10 @@ function Restaurant() {
   const [currentItem, setCurrentItem] = useState<any>({})
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
   const user = JSON.parse(localStorage.getItem("user"))
-  const shopId = user?.shopIds[0]
+  const shopId = user?.shopIds?.[0] ?? null
   const [deleteTemplate, { isLoading: isDeleting, isSuccess }] = useDeleteTemplateMutation()
+  const [createTemplate, { isLoading: isCreating }] = useCreateTemplateMutation()
+
   const { data, isLoading } = useGetTemplatesQuery({
     shopId,
     page: page - 1,
@@ -44,6 +51,10 @@ function Restaurant() {
 
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen)
+  }
+
+  const handleDuplicateTemplate = (item: Template) => {
+    createTemplate({ data: item, shopId })
   }
 
   useEffect(() => {
@@ -126,12 +137,27 @@ function Restaurant() {
                         </div>
                         <div className="dropdown">
                           <More size="22" className="mt-1 cursor-pointer" color="#fff" />
+
                           <div className="dropdown-menu">
                             <div
                               className="dropdown-menu-item"
                               onClick={() => navigate(`${appPaths.template}/${item.id}`)}
                             >
                               Edit
+                            </div>
+                            <div
+                              className="dropdown-menu-item"
+                              onClick={() => {
+                                setCurrentItem(item)
+                                const data = {
+                                  name: "Duplicate " + item.name,
+                                  templateItemsDto: item.templateItems,
+                                }
+                                if (isCreating) return
+                                handleDuplicateTemplate(data)
+                              }}
+                            >
+                              {isCreating ? "Duplicating..." : "Duplicate"}
                             </div>
                             <div
                               className="dropdown-menu-item"

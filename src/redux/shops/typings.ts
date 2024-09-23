@@ -1,10 +1,4 @@
-interface Category {
-  id: string
-  name: string
-  imageUrl: string
-  description: string
-  type: "SHOP" // Enum value based on the provided example
-}
+import { Category } from "../categories/typings"
 
 interface Time {
   hour: number | null

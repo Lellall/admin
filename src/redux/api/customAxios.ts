@@ -14,7 +14,14 @@ const CustomAxios = axios.create({
 
 // let exp = '';
 
-const endpointsRequiringToken = ["/orders", "/template", "/transactions", "inventory", "/shops", /^\/products\/[a-fA-F0-9-]+$/]
+const endpointsRequiringToken = [
+  "/orders",
+  "/template",
+  "/transactions",
+  "inventory",
+  "/shops",
+  /^\/products\/[a-fA-F0-9-]+$/,
+]
 CustomAxios.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("access_token")
@@ -55,7 +62,7 @@ CustomAxios.interceptors.response.use(
         try {
           const rs = await refreshToken()
 
-          const { access_token } = rs.data
+          const { access_token } = rs?.data
           localStorage.setItem("access_token", access_token)
           // PARSE IT BACKKKK
           CustomAxios.defaults.headers.common.Authorization = `Bearer ${access_token}`

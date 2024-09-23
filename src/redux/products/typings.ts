@@ -1,5 +1,6 @@
 import * as yup from "yup"
 import { Shop } from "../shops/typings"
+import { Category } from "../categories/typings"
 
 export interface ProductRequest {
   page: number
@@ -47,13 +48,6 @@ export interface Product {
     measurement: string
     price: number
   }[]
-}
-export interface Category {
-  id: string
-  name: string
-  imageUrl: string
-  description: string
-  type: "SHOP" | "PRODUCT"
 }
 
 export const productSchema = yup.object().shape({
