@@ -62,7 +62,7 @@ CustomAxios.interceptors.response.use(
         try {
           const rs = await refreshToken()
 
-          const { access_token } = rs?.data
+          const { access_token } = rs?.data ?? ""
           localStorage.setItem("access_token", access_token)
           // PARSE IT BACKKKK
           CustomAxios.defaults.headers.common.Authorization = `Bearer ${access_token}`
