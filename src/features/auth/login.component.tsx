@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useMemo } from "react"
 import { Controller, useForm } from "react-hook-form"
 import { MessageText, Unlock } from "iconsax-react"
 import { useNavigate } from "react-router-dom"
@@ -24,15 +24,20 @@ function Login(): React.ReactElement {
   const handleLogin = async ({ email, password }: LoginData) => {
     login({ email, password, role: "ADMIN" })
   }
+  const userRole = useMemo(() => data?.user?.role, [data?.user?.role])
+
+  const destinationPath = useMemo(() => {
+    if (isSuccess && userRole === "RESTAURANT") {
+      return "/restaurant"
+    }
+    return "/"
+  }, [isSuccess, userRole])
 
   useEffect(() => {
-    if (isSuccess && data.user.role === "RESTAURANT") {
-      navigate("/restaurant")
-      return
-    } else {
-      navigate("/")
+    if (isSuccess) {
+      navigate(destinationPath)
     }
-  }, [isSuccess, navigate])
+  }, [isSuccess, navigate, destinationPath])
 
   return (
     <div className="min-h-fit flex flex-col items-center m-auto w-full ">

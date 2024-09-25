@@ -89,15 +89,10 @@ const authApi = baseApi.injectEndpoints({
       }),
     }),
     logout: builder.mutation({
-      // @ts-ignore
       query: () => ({
         url: "/logout",
         method: "POST",
       }),
-      transformResponse: () => {
-        localStorage.removeItem("access_token")
-        localStorage.removeItem("refresh_token")
-      },
       async onQueryStarted(arg, { dispatch }) {
         dispatch(logout())
       },

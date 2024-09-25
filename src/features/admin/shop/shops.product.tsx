@@ -8,6 +8,7 @@ import SearchInput from "@/components/Inputs/searchInput"
 import EmptyState from "@/components/empty-state"
 import Modal from "@/components/modal"
 import ShopsProductForm from "./shops-product.form"
+import { thousandFormatter } from "@/utils/helpers"
 
 function ShopsProducts() {
   const { actions, loading, variables } = useShop()
@@ -49,7 +50,7 @@ function ShopsProducts() {
                     products?.data?.map((item) => (
                       <TableRow key={item.id}>
                         <TableDataCell>{item?.name}</TableDataCell>
-                        <TableDataCell>{item?.price}</TableDataCell>
+                        <TableDataCell>{thousandFormatter(item?.price)}</TableDataCell>
                         <TableDataCell>{item?.description}</TableDataCell>
                         <TableDataCell>
                           <button
