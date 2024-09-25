@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { Outlet, NavLink } from "react-router-dom"
+import { Outlet, NavLink, useNavigate } from "react-router-dom"
 import { BookSaved, Additem, Heart, TicketDiscount, Clock, MonitorRecorder, MoneyRecive } from "iconsax-react"
 import styled from "styled-components"
 import { Box, Typography } from "@mui/material"
@@ -8,11 +8,19 @@ import { useResponsiveValue } from "../../lib/use-responsive-value.js"
 import { ViewportWidth } from "../../utils/enums.js"
 import { appPaths } from "./app-paths.js"
 import { Modal } from "../ui/index.js"
-import { useLogoutMutation } from "@/redux/auth/auth-api"
+// import { useLogoutMutation } from "@/redux/auth/auth-api"
 import NetworkIndicator from "../ui/network-indicator/network-indicator-component.js"
+import { useDispatch } from "react-redux"
+import { logout } from "@/features/auth/auth.slice.js"
 
 function AdminLayout() {
-  const [logout, { isLoading }] = useLogoutMutation()
+  // const [logout, { isLoading }] = useLogoutMutation()
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+  const handleLogout = () => {
+    dispatch(logout())
+    navigate("/login")
+  }
   const navItems = [
     {
       id: 1,
@@ -85,8 +93,9 @@ function AdminLayout() {
             ))}
           </div>
           <div className="deactivate">
-            <button type="button" onClick={logout}>
-              {isLoading ? "Logging out" : "Logout"}
+            <button type="button" onClick={handleLogout}>
+              {/* {isLoading ? "Logging out" : "Logout"} */}
+              Logout
             </button>
           </div>
         </NavContainer>

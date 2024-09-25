@@ -67,8 +67,8 @@ const authSlice = createSlice({
       state.isAuthenticated = false
       state.accessToken = null
       state.refreshToken = null
-      localStorage.removeItem("access_token")
-      localStorage.removeItem("refresh_token")
+      localStorage.clear()
+      window.location.href = "/login"
     },
   },
 })

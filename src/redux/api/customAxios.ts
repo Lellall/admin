@@ -20,6 +20,7 @@ const endpointsRequiringToken = [
   "/transactions",
   "inventory",
   "/shops",
+  "/markets",
   /^\/products\/[a-fA-F0-9-]+$/,
 ]
 CustomAxios.interceptors.request.use(
@@ -62,7 +63,7 @@ CustomAxios.interceptors.response.use(
         try {
           const rs = await refreshToken()
 
-          const { access_token } = rs?.data ?? ""
+          const { access_token } = rs?.data ?? null
           localStorage.setItem("access_token", access_token)
           // PARSE IT BACKKKK
           CustomAxios.defaults.headers.common.Authorization = `Bearer ${access_token}`

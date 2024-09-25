@@ -13,6 +13,7 @@ import MiniLoader from "@/components/mini-loader"
 import ScreenLoader from "@/components/screen.loader"
 import EmptyState from "@/components/empty-state"
 import Modal from "@/components/modal"
+import { thousandFormatter } from "@/utils/helpers"
 
 function Products() {
   const [current, setCurrent] = useState(1)
@@ -89,7 +90,7 @@ function Products() {
                     products?.data?.map((product) => (
                       <TableRow key={product.id}>
                         <TableDataCell>{product.name}</TableDataCell>
-                        <TableDataCell>{product.price}</TableDataCell>
+                        <TableDataCell>{thousandFormatter(product.price)}</TableDataCell>
                         <TableDataCell>{product.quantity}</TableDataCell>
                         <TableDataCell>{product.available ? "Yes" : "No"}</TableDataCell>
                         <TableDataCell>{product.category?.name}</TableDataCell>
