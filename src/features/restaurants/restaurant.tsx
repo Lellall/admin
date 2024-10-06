@@ -1,13 +1,11 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import { useEffect, useState } from "react"
-import { AddSquare, Calendar2, Clock, More, ShoppingCart, OceanProtocol } from "iconsax-react"
+import { AddSquare, Calendar2, Clock, More, ShoppingCart } from "iconsax-react"
 import { useNavigate } from "react-router-dom"
 import styled from "styled-components"
 import Pagination from "rc-pagination/lib/Pagination"
 import ReusableCard from "./components/card"
-import rose from "../../assets/rose-petals.svg"
-import main from "../../assets/scattered-forcefields.svg"
 import {
   useCreateTemplateMutation,
   useDeleteTemplateMutation,
@@ -18,6 +16,7 @@ import ScreenLoader from "@/components/screen.loader"
 import EmptyState from "@/components/empty-state"
 import Modal from "@/components/modal"
 import { Template } from "@/redux/templates/typings"
+import { useGetShopsQuery } from "@/redux/shops"
 
 function Restaurant() {
   const navigate = useNavigate()
@@ -64,6 +63,8 @@ function Restaurant() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSuccess])
 
+  const { data: shops } = useGetShopsQuery({ page: 0, size: 10, categoryId: "", filter: "" })
+  console.log(shops)
   return (
     <div>
       <div className="flex  h-[250px] rounded-lg bg-gray-50 w-max-[1100px] mx-auto items-center gap-6 ">
@@ -111,7 +112,7 @@ function Restaurant() {
         <>
           <div
             className="grid cursor-pointer gap-2 mt-4 justify-center items-center"
-            style={{ gridTemplateColumns: "repeat(auto-fit, minmax(350px, 1fr))" }}
+            style={{ gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))" }}
           >
             <ReusableCard className="flex justify-center border items-center rounded-md" noBg bgColor="#F3FAF5">
               <AddSquare

@@ -1,3 +1,4 @@
 export type UserRoleType = "CONSUMER" | "VENDOR" | "RIDER" | "RESTAURANT" | "ADMIN"
 
-export const USER_ROLE: UserRoleType = JSON.parse(localStorage.getItem("user"))?.role
+const user = localStorage.getItem("user")
+export const USER_ROLE: UserRoleType | undefined = user ? JSON.parse(user)?.role : undefined

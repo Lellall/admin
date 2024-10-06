@@ -14,7 +14,7 @@ import AdminLayout from "@/components/layout/admin.layout"
 import RestaurantLayout from "./features/restaurants/layout"
 import { appPaths } from "./components/layout/app-paths"
 import Inventory from "./features/restaurants/inventory"
-import TemplateForm from "./features/restaurants/template/template.form"
+// import TemplateForm from "./features/restaurants/template/template.form"
 // import ProductSearch from "./features/restaurants/template"
 // pages-routes
 const Restaurant = lazy(() => import("@/features/restaurants/restaurant"))

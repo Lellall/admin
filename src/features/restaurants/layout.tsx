@@ -52,7 +52,7 @@ function RestaurantLayout() {
             className="w-full bg-[#0E5D37] hover:bg-green-900 text-white p-2 rounded text-center flex items-center justify-center"
           >
             <Logout size="24" className="mr-2" />
-            Logging Out noeee
+            Logout
             {/* {isLoading ? "Logging Out : "Logout"} */}
           </button>
         </div>
