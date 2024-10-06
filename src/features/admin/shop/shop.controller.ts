@@ -23,7 +23,7 @@ export function useShop() {
   const [addProduct, { isLoading: addingProduct, isSuccess: isProdcutSucess }] = useAddShopProductMutation()
   const [updateProduct, { isSuccess, isLoading: updatingProduct }] = useUpdateShopProductMutation()
   const { data: categories, isLoading: loadingCategories } = useGetShopCategoriesQuery({
-    shopId: id,
+    shopId: id ?? "",
   })
   const handleAddProduct = (data: Product) => {
     const dataToSubmit = {
