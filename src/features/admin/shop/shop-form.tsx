@@ -41,7 +41,12 @@ function ShopForm({ mode }: ShopFormProps) {
       reset(shopData)
     }
   }, [reset, shopData])
-
+  const closingTime = {
+    hour: 0,
+    minute: 0,
+    second: 0,
+    nano: 0,
+  }
   const handleFormSubmit: SubmitHandler<Shop> = (data) => {
     const { market, category, metadata, ...restData } = data
 
@@ -50,11 +55,19 @@ function ShopForm({ mode }: ShopFormProps) {
         ...restData,
         marketId: market?.id,
         categoryId: category?.id,
+        closingTime: closingTime,
+        openingTime: closingTime,
         paystackAccountId: metadata?.PAYSTACK_ACCOUNT_CODE,
       }
       updateShop({ id: data.id, ...dataToSubmit })
     } else {
-      const dataF = { ...data, paystackAccountId: "534n45245m624" }
+      const dataF = {
+        ...data,
+        marketId: market?.id,
+        paystackAccountId: "534n45245m624",
+        closingTime: closingTime,
+        openingTime: closingTime,
+      }
       createShop(dataF)
     }
     // updateVendor({ id: data.id, ...dataToSubmit })
@@ -105,7 +118,17 @@ function ShopForm({ mode }: ShopFormProps) {
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-5">
           <InputComponent errorMessage={errors?.address?.message} name="address" control={control} label="Address" />
-          <InputComponent errorMessage={errors?.status?.message} name="status" control={control} label="Status" />
+          <InputComponent
+            errorMessage={errors?.status?.message}
+            name="status"
+            control={control}
+            label="Status"
+            type="select"
+            options={[
+              { label: "OPEN", value: "OPEN" },
+              { label: "CLOSE", value: "CLOSE" },
+            ]}
+          />
           <InputComponent
             errorMessage={errors?.inventory?.message}
             name="inventory"

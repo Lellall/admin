@@ -39,5 +39,5 @@ export interface LoginResponse {
 export interface LoginRequest {
   email: string
   password: string
-  role: string
+  role?: string
 }

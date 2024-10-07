@@ -15,7 +15,7 @@ function Modal({ onClose, title, show, children, width, style }: ModalProps) {
     <div>
       {show && (
         <ModalOverlay>
-          <ModalContent width={width} style={style}>
+          <ModalContent width={width ?? ""} style={style}>
             <div className="modal_body">
               <ModalHeader>
                 <h3>{title}</h3>

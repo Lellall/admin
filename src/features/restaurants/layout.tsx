@@ -1,17 +1,25 @@
-import { DocumentText, ShoppingCart, Box, Chart, Setting, Logout } from "iconsax-react"
+import { DocumentText, ShoppingCart, Box, Chart, Setting, Logout, ShopAdd } from "iconsax-react"
 import { Outlet, useNavigate } from "react-router-dom"
 import Logo from "../../assets/react.svg"
 // import { useLogoutMutation } from "@/redux/auth/auth-api"
 import { useDispatch } from "react-redux"
 import { logout } from "@/features/auth/auth.slice"
+import Modal from "@/components/modal"
+import ShopForm from "../admin/shop/shop-form"
+import { useState } from "react"
 function RestaurantLayout() {
   // const [logout, { isLoading, isSuccess }] = useLogoutMutation()
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const handleLogout = () => {
     dispatch(logout())
     navigate("/login")
   }
+  const toggleModal = () => {
+    setIsModalOpen(!isModalOpen)
+  }
+
   return (
     <div className="flex h-screen">
       {/* Left Side Menu */}
@@ -43,6 +51,10 @@ function RestaurantLayout() {
               <Setting size="24" className="mr-3" />
               <a href="/restaurant/invoice">Invoice</a>
             </li>
+            <li className="hover:bg-green-100 p-2 rounded flex items-center">
+              <ShopAdd size="24" className="mr-3" />
+              <a onClick={toggleModal}>Shop</a>
+            </li>
           </ul>
         </nav>
         <div className="mt-auto">
@@ -68,6 +80,22 @@ function RestaurantLayout() {
         </div>
       </main>
 
+      <>
+        <Modal
+          width="100%"
+          title="Add Vendor (WIP)"
+          style={{
+            maxWidth: "700px",
+            width: "90%",
+            margin: "auto",
+            overflowY: "auto",
+          }}
+          show={isModalOpen}
+          onClose={toggleModal}
+        >
+          <ShopForm mode="create" />
+        </Modal>
+      </>
       {/* Right Menu */}
       {/* <aside className="w-1/6 bg-gray-200 p-4 sticky top-0 h-screen">
                 <nav>
