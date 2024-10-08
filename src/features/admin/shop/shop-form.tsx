@@ -11,19 +11,22 @@ import { useGetShopQuery } from "@/redux/shops"
 import { useCreateShopMutation, useUpdateShopMutation } from "@/redux/shops/shops.api"
 import { Shop } from "@/redux/shops/typings"
 import { useGetMarketsQuery } from "@/redux/markets/market.api"
-import { useGetCategoriesQuery } from "@/redux/categories/categories.api"
+import { useGetCategoriesTypeQuery } from "@/redux/categories/categories.api"
+import { Category } from "@/redux/categories/typings"
 
 interface ShopFormProps {
   mode: "create" | "update"
+  close?: () => void
 }
 
-function ShopForm({ mode }: ShopFormProps) {
+function ShopForm({ mode, close }: ShopFormProps) {
   const { id: shopId } = useParams()
   const { data: shopData, isLoading } = useGetShopQuery({ id: shopId ?? "" }, { skip: mode === "create" })
-  const [updateShop, { isLoading: isUpdating }] = useUpdateShopMutation()
-  const [createShop, { isLoading: isCreating }] = useCreateShopMutation()
+  const [updateShop, { isLoading: isUpdating, isSuccess: isUpdatingSuccess }] = useUpdateShopMutation()
+  const [createShop, { isLoading: isCreating, isSuccess }] = useCreateShopMutation()
   const { data: markets } = useGetMarketsQuery()
-  const { data: categories } = useGetCategoriesQuery()
+  const { data: categories } = useGetCategoriesTypeQuery()
+
   const {
     // register,
     reset,
@@ -41,12 +44,7 @@ function ShopForm({ mode }: ShopFormProps) {
       reset(shopData)
     }
   }, [reset, shopData])
-  const closingTime = {
-    hour: 0,
-    minute: 0,
-    second: 0,
-    nano: 0,
-  }
+
   const handleFormSubmit: SubmitHandler<Shop> = (data) => {
     const { market, category, metadata, ...restData } = data
 
@@ -55,27 +53,22 @@ function ShopForm({ mode }: ShopFormProps) {
         ...restData,
         marketId: market?.id,
         categoryId: category?.id,
-        closingTime: closingTime,
-        openingTime: closingTime,
         paystackAccountId: metadata?.PAYSTACK_ACCOUNT_CODE,
       }
       updateShop({ id: data.id, ...dataToSubmit })
     } else {
-      const dataF = {
+      const createShopData = {
         ...data,
         marketId: market?.id,
-        paystackAccountId: "534n45245m624",
-        closingTime: closingTime,
-        openingTime: closingTime,
       }
-      createShop(dataF)
+      createShop(createShopData)
     }
     // updateVendor({ id: data.id, ...dataToSubmit })
   }
   if (mode === "update" && isLoading) {
     return <ScreenLoader />
   }
-  const categoriesData = categories?.data?.map((item) => {
+  const categoriesData = categories?.map((item: Category) => {
     return {
       label: item.name,
       value: item.id,
@@ -87,7 +80,15 @@ function ShopForm({ mode }: ShopFormProps) {
       value: item.id,
     }
   })
-  console.log(marketsData)
+
+  useEffect(() => {
+    if (isSuccess || isUpdatingSuccess) {
+      if (close) {
+        close()
+      }
+    }
+  }, [isSuccess, isUpdatingSuccess])
+
   return (
     <form className="w-[100%] px-4" onSubmit={handleSubmit(handleFormSubmit)}>
       <div className=" w-[100%]">
@@ -190,88 +191,9 @@ function ShopForm({ mode }: ShopFormProps) {
             options={marketsData}
           />
         </div>
-
-        <section className="hidden">
-          <HeaderTitle>Opening Time</HeaderTitle>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-5">
-            <InputComponent
-              errorMessage={errors?.openingTime?.hour?.message}
-              name="openingTime.hour"
-              control={control}
-              label="Hour"
-              type="number"
-              disabled
-            />
-            <InputComponent
-              errorMessage={errors?.openingTime?.minute?.message}
-              name="openingTime.minute"
-              control={control}
-              label="Minute"
-              type="number"
-              disabled
-            />
-            <InputComponent
-              errorMessage={errors?.openingTime?.second?.message}
-              name="openingTime.second"
-              control={control}
-              label="Second"
-              type="number"
-              disabled
-            />
-          </div>
-
-          <InputComponent
-            errorMessage={errors?.openingTime?.nano?.message}
-            name="openingTime.nano"
-            control={control}
-            label="Nano"
-            type="number"
-            disabled
-          />
-        </section>
-
-        <section className="hidden">
-          <HeaderTitle>Closing Time</HeaderTitle>
-          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-5">
-            <InputComponent
-              errorMessage={errors?.closingTime?.hour?.message}
-              name="closingTime.hour"
-              control={control}
-              label="Hour"
-              type="time"
-            />
-            <InputComponent
-              errorMessage={errors?.closingTime?.minute?.message}
-              name="closingTime.minute"
-              control={control}
-              label="Minute"
-              type="number"
-              disabled
-            />
-            <InputComponent
-              errorMessage={errors?.closingTime?.second?.message}
-              name="closingTime.second"
-              control={control}
-              label="Second"
-              type="number"
-              disabled
-            />
-            {/* </div> */}
-            <InputComponent
-              errorMessage={errors?.closingTime?.nano?.message}
-              name="closingTime.nano"
-              control={control}
-              label="Nano"
-              type="number"
-              disabled
-            />
-          </div>
-        </section>
-
-        {/* <HeaderTitle>Coordinate</HeaderTitle> */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-5">
           <InputComponent
-            errorMessage={errors?.coordinate?.latitude.message}
+            errorMessage={errors?.coordinate?.latitude?.message}
             name="coordinate.latitude"
             control={control}
             label="Latitude"
@@ -283,6 +205,29 @@ function ShopForm({ mode }: ShopFormProps) {
             control={control}
             label="Longitude"
             type="number"
+          />
+          <InputComponent
+            errorMessage={errors?.paystackAccountId?.message}
+            name="paystackAccountId"
+            control={control}
+            label="Paystack Account Id "
+            type="text"
+          />
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-5">
+          <InputComponent
+            errorMessage={errors?.openingTime?.message}
+            name="openingTime"
+            control={control}
+            label="Opening Time"
+            type="time"
+          />
+          <InputComponent
+            errorMessage={errors?.closingTime?.message}
+            name="closingTime"
+            control={control}
+            label="Closing Time"
+            type="time"
           />
         </div>
       </div>
@@ -317,18 +262,8 @@ const schema = yup.object().shape({
   updatedAt: yup.string(),
   timeZone: yup.string().required("Timezone is required"),
   categoryId: yup.string(),
-  openingTime: yup.object().shape({
-    hour: yup.number().nullable(),
-    minute: yup.number().nullable(),
-    second: yup.number().nullable(),
-    nano: yup.number().nullable(),
-  }),
-  closingTime: yup.object().shape({
-    hour: yup.number().nullable(),
-    minute: yup.number().nullable(),
-    second: yup.number().nullable(),
-    nano: yup.number().nullable(),
-  }),
+  openingTime: yup.string().required("Opening time is required."),
+  closingTime: yup.string().required("Closing time is required"),
   subAccountId: yup.string().required("Subaccount ID is required"),
   vatCharge: yup.number().required("VAT charge is required"),
   marketId: yup.string(),
@@ -336,4 +271,5 @@ const schema = yup.object().shape({
     latitude: yup.number().required("Latitude is required"),
     longitude: yup.number().required("Longitude is required"),
   }),
+  paystackAccountId: yup.string().required("Pay stack account Id is required"),
 })

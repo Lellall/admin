@@ -23,7 +23,7 @@ function CreateTemplate() {
   const [selectedProducts, setSelectedProducts] = useState<SelectedProduct[]>([])
   const [subtotal, setSubtotal] = useState<number>(0)
   const navigate = useNavigate()
-  const userData = JSON.parse(localStorage.getItem("user"))
+  const userData = JSON.parse(localStorage.getItem("user") ?? "")
   const shopId = userData?.shopIds[0]
   const [createTemplate, { isLoading: isCreating }] = useCreateTemplateMutation()
 
@@ -75,8 +75,8 @@ function CreateTemplate() {
             errorMessage={errors?.name?.message}
             name="name"
             control={control}
-            label="Template Name"
-            rules={{ required: "Template name is required" }}
+            label="Order Name"
+            rules={{ required: "Order name is required" }}
           />
         </div>
 

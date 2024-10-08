@@ -5,5 +5,5 @@ export function Unauthorized() {
       <p className="block text-7xl">401</p>
       <p className="text-[red] text-5xl">Unauthorized page.</p>
     </div>
-  ) 
+  )
 }
