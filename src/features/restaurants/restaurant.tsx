@@ -17,17 +17,22 @@ import EmptyState from "@/components/empty-state"
 import Modal from "@/components/modal"
 import { Template } from "@/redux/templates/typings"
 import { useGetShopsQuery } from "@/redux/shops"
+import ShopForm from "../admin/shop/shop-form"
 
 function Restaurant() {
   const navigate = useNavigate()
   const [page, setPage] = useState(1)
   const [currentItem, setCurrentItem] = useState<any>({})
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
-  const user = JSON.parse(localStorage.getItem("user"))
+  const [isShopModalOpen, setIsShopModalOpen] = useState<boolean>(false)
+  const userStored = localStorage.getItem("user")
+  const user = userStored ? JSON.parse(userStored) : ""
   const shopId = user?.shopIds?.[0] ?? null
   const [deleteTemplate, { isLoading: isDeleting, isSuccess }] = useDeleteTemplateMutation()
   const [createTemplate, { isLoading: isCreating }] = useCreateTemplateMutation()
-
+  const toggleModalShop = () => {
+    setIsShopModalOpen(!isShopModalOpen)
+  }
   const { data, isLoading } = useGetTemplatesQuery({
     shopId,
     page: page - 1,
@@ -64,7 +69,7 @@ function Restaurant() {
   }, [isSuccess])
 
   const { data: shops } = useGetShopsQuery({ page: 0, size: 10, categoryId: "", filter: "" })
-  console.log(shops)
+
   return (
     <div>
       <div className="flex  h-[250px] rounded-lg bg-gray-50 w-max-[1100px] mx-auto items-center gap-6 ">
@@ -90,6 +95,13 @@ function Restaurant() {
               className="bg-[#0E5D37] text-white py-2 px-4 rounded hover:bg-green-700"
             >
               Get Started
+            </button>
+            <button
+              type="button"
+              onClick={toggleModalShop}
+              className="bg-[#0E5D37] text-white py-2 px-4 ml-2 rounded hover:bg-green-700"
+            >
+              Create Shop
             </button>
           </div>
         </div>
@@ -239,6 +251,23 @@ function Restaurant() {
           </Modal>
         </>
       )}
+
+      <>
+        <Modal
+          width="100%"
+          title="Create Shop"
+          style={{
+            maxWidth: "700px",
+            width: "90%",
+            margin: "auto",
+            overflowY: "auto",
+          }}
+          show={isShopModalOpen}
+          onClose={toggleModalShop}
+        >
+          <ShopForm mode="create" close={toggleModalShop} />
+        </Modal>
+      </>
     </div>
   )
 }

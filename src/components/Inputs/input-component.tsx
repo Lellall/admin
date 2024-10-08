@@ -138,7 +138,7 @@ function InputComponent({
             inputRef={field.ref}
             value={field.value || ""}
             error={Boolean(errorMessage)}
-            type="number"
+            type="time"
             disabled={disabled}
             style={styledInput}
           />

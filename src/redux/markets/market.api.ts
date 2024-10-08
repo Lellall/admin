@@ -3,7 +3,7 @@ import { baseApi } from "../api/baseApi"
 
 const markets = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    getMarkets: builder.query<any, void>({
+    getMarkets: builder.query<Markets[], void>({
       query: () => ({
         url: `/markets`,
       }),
@@ -13,3 +13,9 @@ const markets = baseApi.injectEndpoints({
 })
 
 export const { useGetMarketsQuery } = markets
+
+interface Markets {
+  id: string
+  name: string
+  state: string
+}

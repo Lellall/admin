@@ -8,10 +8,15 @@ const markets = baseApi.injectEndpoints({
         url: `/categories/all-categories`,
       }),
     }),
+    getCategoriesType: builder.query<any, void>({
+      query: () => ({
+        url: `/categories/type`,
+      }),
+    }),
   }),
 })
 
-export const { useGetCategoriesQuery } = markets
+export const { useGetCategoriesQuery, useGetCategoriesTypeQuery } = markets
 
 interface CategoriesResponse {
   data: Category[]

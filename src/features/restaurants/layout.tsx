@@ -1,17 +1,16 @@
 import { DocumentText, ShoppingCart, Box, Chart, Setting, Logout } from "iconsax-react"
 import { Outlet, useNavigate } from "react-router-dom"
 import Logo from "../../assets/react.svg"
-// import { useLogoutMutation } from "@/redux/auth/auth-api"
 import { useDispatch } from "react-redux"
 import { logout } from "@/features/auth/auth.slice"
 function RestaurantLayout() {
-  // const [logout, { isLoading, isSuccess }] = useLogoutMutation()
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const handleLogout = () => {
     dispatch(logout())
     navigate("/login")
   }
+
   return (
     <div className="flex h-screen">
       {/* Left Side Menu */}
@@ -25,12 +24,12 @@ function RestaurantLayout() {
           <ul className="space-y-4 mt-3">
             <li className="hover:bg-green-100 p-2 rounded flex items-center">
               <DocumentText size="24" className="mr-3" />
-              <a href="/restaurant">Templates</a>
+              <a href="/restaurant">Orders</a>
             </li>
-            <li className="hover:bg-green-100 p-2 rounded flex items-center">
+            {/* <li className="hover:bg-green-100 p-2 rounded flex items-center">
               <ShoppingCart size="24" className="mr-3" />
               <a href="/restaurant/orders">Orders</a>
-            </li>
+            </li> */}
             <li className="hover:bg-green-100 p-2 rounded flex items-center">
               <Box size="24" className="mr-3" />
               <a href="/restaurant/inventory">Inventory</a>
@@ -53,15 +52,13 @@ function RestaurantLayout() {
           >
             <Logout size="24" className="mr-2" />
             Logout
-            {/* {isLoading ? "Logging Out : "Logout"} */}
           </button>
         </div>
       </aside>
 
-      {/* Middle Scrollable Content */}
       <main className="flex-1 overflow-y-auto">
         <header className="sticky top-0 bg-white border-b z-10 p-4">
-          <h1 className="text-1xl font-semibold">Templates</h1>
+          <h1 className="text-1xl font-semibold">Orders</h1>
         </header>
         <div className="p-4">
           <Outlet />

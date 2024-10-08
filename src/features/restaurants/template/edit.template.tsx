@@ -15,13 +15,13 @@ import { thousandFormatter } from "@/utils/helpers"
 
 function EditTemplate() {
   const { id: templateId } = useParams()
-  const user = JSON.parse(localStorage.getItem("user"))
+  const user = JSON.parse(localStorage.getItem("user") ?? "")
   const shopId = user?.shopIds[0]
   const [selectedProducts, setSelectedProducts] = useState<SelectedProduct | any>([])
   const [subtotal, setSubtotal] = useState<number>(0)
   const { data: template, isLoading } = useGetTemplateQuery({
     shopId,
-    templateId,
+    templateId: templateId ?? "",
   })
 
   const [updateTemplate, { isLoading: IsUpdating }] = useUpdateTemplateMutation()
@@ -59,7 +59,7 @@ function EditTemplate() {
   const handleFormSubmit = (data: TemplateForm) => {
     updateTemplate({
       shopId,
-      templateId,
+      templateId: templateId ?? "",
       data,
     })
   }
@@ -84,8 +84,8 @@ function EditTemplate() {
             errorMessage={errors?.name?.message}
             name="name"
             control={control}
-            label="Template Name"
-            rules={{ required: "Template name is required" }} // Added validation rule
+            label="Order Name"
+            rules={{ required: "Order name is required" }} // Added validation rule
           />
         </div>
 
