@@ -22,7 +22,7 @@ const template = baseApi.injectEndpoints({
       query: (QueryTemplate) => ({
         url: `/template/${QueryTemplate.shopId}`,
         method: "POST",
-        body: QueryTemplate.data,
+        body: QueryTemplate,
       }),
       async onQueryStarted(_args, { queryFulfilled: qf }) {
         qf.then(() => {

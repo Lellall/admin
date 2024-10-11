@@ -42,7 +42,7 @@ const Inventory = () => {
                 </button>
               </div>
             </div>
-            <Table products={products} onUpdateInv={onUpdateInv} isUpdatingInv={isUpdatingInv} shopId={user?.shopIds[0]}/>
+            <Table products={products} onUpdateInv={onUpdateInv} isUpdatingInv={isUpdatingInv} showAsList={false} shopId={user?.shopIds[0]}/>
           </div>
           {/* <aside className="border-l w-[250px] bg-gray-20 px-4 sticky top-0 h-screen">
             <div className="mt-10 mb-4">Quick Actions</div>

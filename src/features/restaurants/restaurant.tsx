@@ -66,42 +66,42 @@ function Restaurant() {
 
   return (
     <div>
-      <div className="flex  h-[250px] rounded-lg bg-gray-50 w-max-[1100px] mx-auto items-center gap-6 ">
+      <div className="flex flex-col md:flex-row h-auto md:h-[250px] rounded-lg bg-gray-50 w-full  mx-auto items-center gap-6 p-4">
         <div
-          className="bg-greenn-900 h-[230px] rounded-lg w-1/2 flex items-center justify-center"
+          className="bg-greenn-900 h-[200px] md:h-[230px] rounded-lg w-full md:w-1/2 flex items-center justify-center"
           style={{
-            backgroundImage: `url(https://lellall-dev.sfo3.cdn.digitaloceanspaces.com/scattered-forcefields.svg)`,
+            backgroundImage: `url(${rose})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
+          }}
+        >
+          <h1 className="text-xl md:text-2xl font-bold text-white">CAFÉ DIMANCHE</h1>
+        </div>
+        <div
+          className="bg-greenn-900 h-[200px] md:h-[230px] rounded-lg w-full md:w-1/2 flex items-center justify-center"
+          style={{
+            backgroundImage: `url(${main})`,
             backgroundSize: "cover",
             backgroundPosition: "center",
             backgroundRepeat: "no-repeat",
           }}
         >
           <div className="container mx-auto px-4 text-center">
-            <h1 className="text-2xl font-bold text-[#0E5D37] mb-4">
+            <h1 className="text-xl md:text-2xl font-bold text-[#0E5D37] mb-2 md:mb-4">
               Experience the convenience you deserve with Lellall.
             </h1>
-            <p className="text-lg text-gray-600 mb-6">Get all you want in one store!</p>
+            <p className="text-sm md:text-lg text-gray-600 mb-4 md:mb-6">Get all you want in one store!</p>
             <button
               type="button"
               onClick={() => {
                 navigate(`${appPaths.createTemplate}`)
               }}
-              className="bg-[#0E5D37] text-white py-2 px-4 rounded hover:bg-green-700"
+              className="bg-[#0E5D37] text-white py-2 px-3 md:px-4 rounded hover:bg-green-700"
             >
               Get Started
             </button>
           </div>
-        </div>
-        <div
-          className="bg-greenn-900 h-[230px] rounded-lg w-1/2 flex items-center justify-center"
-          style={{
-            backgroundImage: `url(https://lellall-dev.sfo3.cdn.digitaloceanspaces.com/rose-petals.svg)`,
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            backgroundRepeat: "no-repeat",
-          }}
-        >
-          <h1 className="text-2xl font-bold text-white">CAFÉ DIMANCHE</h1>
         </div>
       </div>
 
@@ -113,7 +113,7 @@ function Restaurant() {
             className="grid cursor-pointer gap-2 mt-4 justify-center items-center"
             style={{ gridTemplateColumns: "repeat(auto-fit, minmax(350px, 1fr))" }}
           >
-            <ReusableCard className="flex justify-center border items-center rounded-md" noBg bgColor="#F3FAF5">
+            <ReusableCard className="flex justify-center border items-center rounded-md mx-auto items-center" noBg bgColor="#F3FAF5">
               <AddSquare
                 onClick={() => {
                   navigate(`${appPaths.createTemplate}`)
@@ -129,7 +129,7 @@ function Restaurant() {
             ) : (
               data?.data?.map((item) => {
                 return (
-                  <div key={item.id}>
+                  <div key={item.id} className="mx-auto items-center">
                     <Card key={item?.id}>
                       <div className="flex p-4 justify-between">
                         <div>
