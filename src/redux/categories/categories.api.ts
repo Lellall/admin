@@ -5,7 +5,7 @@ const markets = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getCategories: builder.query<CategoriesResponse, void>({
       query: () => ({
-        url: `/categories/all-categories`,
+        url: `/categories/type?type=PRODUCT`,
       }),
     }),
   }),

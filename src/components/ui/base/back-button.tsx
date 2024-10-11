@@ -1,5 +1,6 @@
+import { BackSquare } from "iconsax-react"
 import { useNavigate } from "react-router-dom"
-import { IoArrowBackOutline } from "react-icons/io5"
+// import { IoArrowBackOutline } from "react-icons/io5"
 
 type TitledBackButtonProps = {
   title?: string
@@ -13,26 +14,10 @@ export function TitledBackButton(props: TitledBackButtonProps) {
 
   return (
     <div
-      style={{
-        display: "flex",
-        alignItems: "center",
-        gap: "12px",
-      }}
+      onClick={onBack}
+      className="mt-10 mb-10 ml-1 cursor-pointer"
     >
-      <button
-        onClick={() => onBack()}
-        style={{
-          cursor: "pointer",
-          background: "#fff",
-          width: "40px",
-          height: "40px",
-          borderRadius: "50px",
-          // border: "1px solid grey",
-        }}
-      >
-        <div>{icon || <IoArrowBackOutline />}</div>
-      </button>
-
+      <div className="flex"><BackSquare size="22" color="#15803db8" /><p className="ml-3" style={{ color: '#15803db8' }}>Back</p> </div>
       <p>{title}</p>
     </div>
   )
