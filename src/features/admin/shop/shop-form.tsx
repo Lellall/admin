@@ -18,8 +18,8 @@ interface ShopFormProps {
 }
 
 function ShopForm({ mode }: ShopFormProps) {
-  const { id: shopId } = useParams()
-  const { data: shopData, isLoading } = useGetShopQuery({ id: shopId ?? "" }, { skip: mode === "create" })
+  const { id } = useParams()
+  const { data: shopData, isLoading } = useGetShopQuery({ id }, { skip: mode === "create" })
   const [updateShop, { isLoading: isUpdating }] = useUpdateShopMutation()
   const [createShop, { isLoading: isCreating }] = useCreateShopMutation()
   const { data: markets } = useGetMarketsQuery()
@@ -49,13 +49,12 @@ function ShopForm({ mode }: ShopFormProps) {
       const dataToSubmit = {
         ...restData,
         marketId: market?.id,
-        categoryId: category?.id,
-        paystackAccountId: metadata?.PAYSTACK_ACCOUNT_CODE,
+        categoryId: category.id,
+        paystackAccountId: metadata.PAYSTACK_ACCOUNT_CODE,
       }
       updateShop({ id: data.id, ...dataToSubmit })
     } else {
-      const dataF = { ...data, paystackAccountId: "534n45245m624" }
-      createShop(dataF)
+      createShop(data)
     }
     // updateVendor({ id: data.id, ...dataToSubmit })
   }
@@ -68,13 +67,6 @@ function ShopForm({ mode }: ShopFormProps) {
       value: item.id,
     }
   })
-  const marketsData = markets?.map((item) => {
-    return {
-      label: item.name,
-      value: item.id,
-    }
-  })
-  console.log(marketsData)
   return (
     <form className="w-[100%] px-4" onSubmit={handleSubmit(handleFormSubmit)}>
       <div className=" w-[100%]">
@@ -161,10 +153,10 @@ function ShopForm({ mode }: ShopFormProps) {
             errorMessage={errors?.market?.id?.message}
             name="market.id"
             control={control}
-            label="Market "
+            label="Market ID"
             // disabled
             type="select"
-            options={marketsData}
+            options={[{ label: "One", value: 1 }]}
           />
         </div>
 

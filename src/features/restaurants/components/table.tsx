@@ -11,7 +11,7 @@ const ModInput = styled.input`
   }
 `;
 
-const Table = ({ products, onUpdateInv, isUpdatingInv, shopId }) => {
+const Table = ({ products, onUpdateInv, isUpdatingInv, shopId, showAsList }) => {
   const [selectedProducts, setSelectedProducts] = useState([]);
   const [editedProducts, setEditedProducts] = useState([]);
   const [deleteAll, setDeleteAll] = useState(false);
@@ -99,7 +99,7 @@ const Table = ({ products, onUpdateInv, isUpdatingInv, shopId }) => {
 
   return (
     <div className="overflow-x-auto">
-      <div className="flex justify-end mb-4">
+      {!showAsList && <div className="flex justify-end mb-4">
         <button
           onClick={() => onDelete(selectedProducts)}
           className={`bg-[red] mx-2 text-white px-4 py-1 rounded shadow hover:bg-red-600 transition
@@ -117,42 +117,49 @@ const Table = ({ products, onUpdateInv, isUpdatingInv, shopId }) => {
         >
           {isUpdatingInv ? "Updating..." : "Update Changes"}
         </button>
-      </div>
+      </div>}
+
       <table className="min-w-full bg-white">
         <thead className="border-b">
           <tr>
-            <th className="px-6 py-3 border-gray-300">
-              <input
-                type="checkbox"
-                checked={selectedProducts.length === products?.data?.length}
-                onChange={handleSelectAll}
-                className="form-checkbox h-4 w-4 text-indigo-600"
-              />
-            </th>
-            <th className="px-6 py-3 border-gray-300 text-left text-xs font-semibold text-gray-700 uppercase">
-              Products
-            </th>
-            <th className="px-6 py-3 border-gray-300 text-left text-xs font-semibold text-gray-700 uppercase">
-              Opening Stock
-            </th>
-            <th className="px-6 py-3 border-gray-300 text-left text-xs font-semibold text-gray-700 uppercase">
-              Added
-            </th>
-            <th className="px-6 py-3 border-gray-300 text-left text-xs font-semibold text-gray-700 uppercase">
-              Total
-            </th>
-            <th className="px-6 py-3 border-gray-300 text-left text-xs font-semibold text-gray-700 uppercase">
-              QTY Used
-            </th>
-            <th className="px-6 py-3 border-gray-300 text-left text-xs font-semibold text-gray-700 uppercase">
-              Closing Stock
-            </th>
-            <th className="px-6 py-3 border-gray-300 text-left text-xs font-semibold text-gray-700 uppercase">
-              Unit Price
-            </th>
-            <th className="px-6 py-3 border-gray-300 text-left text-xs font-semibold text-gray-700 uppercase">
-              Actions
-            </th>
+
+            {
+              !showAsList && <>
+                <th className="px-6 py-3 border-gray-300">
+                  <input
+                    type="checkbox"
+                    checked={selectedProducts.length === products?.data?.length}
+                    onChange={handleSelectAll}
+                    className="form-checkbox h-4 w-4 text-indigo-600"
+                  />
+                </th>
+                <th className="px-6 py-3 border-gray-300 text-left text-xs font-semibold text-gray-700 uppercase">
+                  Products
+                </th>
+                <th className="px-6 py-3 border-gray-300 text-left text-xs font-semibold text-gray-700 uppercase">
+                  Opening Stock
+                </th>
+                <th className="px-6 py-3 border-gray-300 text-left text-xs font-semibold text-gray-700 uppercase">
+                  Added
+                </th>
+                <th className="px-6 py-3 border-gray-300 text-left text-xs font-semibold text-gray-700 uppercase">
+                  Total
+                </th>
+                <th className="px-6 py-3 border-gray-300 text-left text-xs font-semibold text-gray-700 uppercase">
+                  QTY Used
+                </th>
+                <th className="px-6 py-3 border-gray-300 text-left text-xs font-semibold text-gray-700 uppercase">
+                  Closing Stock
+                </th>
+                <th className="px-6 py-3 border-gray-300 text-left text-xs font-semibold text-gray-700 uppercase">
+                  Unit Price
+                </th>
+                <th className="px-6 py-3 border-gray-300 text-left text-xs font-semibold text-gray-700 uppercase">
+                  Actions
+                </th>
+              </>
+            }
+
           </tr>
         </thead>
         <tbody>
@@ -183,60 +190,68 @@ const Table = ({ products, onUpdateInv, isUpdatingInv, shopId }) => {
                     </div>
                   </div>
                 </td>
+
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{product.count}</td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{product.newlyAdded}</td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{total}</td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  <ModInput
+                  {!showAsList ? <ModInput
                     type="number"
                     min={0}
                     max={total}
                     value={editedProduct.used}
                     onChange={(e) => handleEditProduct(product.id, "used", e.target.value)}
                     className="border border-gray-300 rounded p-1"
-                  />
+                  /> : ""}
+
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{closingStock}</td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  <ModInput
+                  {!showAsList ? <ModInput
                     type="number"
                     min={0}
                     value={editedProduct.unitPrice}
                     onChange={(e) => handleEditProduct(product.id, "unitPrice", e.target.value)}
                     className="border border-gray-300 rounded p-1"
                   />
+                    : ""}
                 </td>
                 <td className="px-4 flex py-4 whitespace-nowrap text-sm text-gray-500">
-                  {editedProducts.some((p) => p.id === product.id) && (
+                  {!showAsList ?
                     <>
+                      {editedProducts.some((p) => p.id === product.id) && (
+                        <>
+                          <button
+                            onClick={() => handleUndoEdit(product.id)}
+                            className="text-red-500 mx-3 hover:underline"
+                          >
+                            <BackSquare size="22" color="purple" />
+                          </button>
+                          <button
+                            onClick={() => handleUpdateProduct(product.id)}
+                            className="text-blue-500 hover:underline mr-2"
+                          >
+                            {isUpdatingInv ? (
+                              <span className="animate-spin">🔄</span>
+                            ) : (
+                              <DocumentUpload size="22" color="blue" />
+                            )}
+                          </button>
+                        </>
+                      )}
                       <button
-                        onClick={() => handleUndoEdit(product.id)}
-                        className="text-red-500 mx-3 hover:underline"
-                      >
-                        <BackSquare size="22" color="purple" />
-                      </button>
-                      <button
-                        onClick={() => handleUpdateProduct(product.id)}
+                        onClick={() => onDelete(product.id)}
                         className="text-blue-500 hover:underline mr-2"
                       >
-                        {isUpdatingInv ? (
+                        {deletingInv ? (
                           <span className="animate-spin">🔄</span>
                         ) : (
-                          <DocumentUpload size="22" color="blue" />
+                          <Trash size="22" color="red" />
                         )}
                       </button>
-                    </>
-                  )}
-                  <button
-                    onClick={() => onDelete(product.id)}
-                    className="text-blue-500 hover:underline mr-2"
-                  >
-                    {deletingInv ? (
-                      <span className="animate-spin">🔄</span>
-                    ) : (
-                      <Trash size="22" color="red" />
-                    )}
-                  </button>
+                    </> : ""
+                  }
+
                 </td>
               </tr>
             );
