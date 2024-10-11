@@ -4,7 +4,7 @@ import styled from "styled-components"
 import Switch from "@mui/material/Switch"
 
 interface InputComponentProps {
-  control: any
+  control?: any
   type?: "text" | "number" | "password" | "email" | "date" | "checkbox" | "time" | "textArea" | "select"
   name: string
   label?: string
@@ -40,7 +40,7 @@ function InputComponent({
 }: InputComponentProps) {
   const { field } = useController({
     name,
-    control,
+    control: control ?? {},
     rules,
   })
 
