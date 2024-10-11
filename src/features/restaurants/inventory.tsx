@@ -1,24 +1,25 @@
-import { Additem, AddSquare, ArrangeVertical, ShoppingCart } from "iconsax-react"
-import Table from "./components/table";
-import { useGetInventoryDetailsQuery, useUpdateInventoryMutation } from "@/redux/inventory/inventory.api";
-import ScreenLoader from "@/components/screen.loader";
-import { useState } from "react";
+// import { Additem, AddSquare, ArrangeVertical, ShoppingCart } from "iconsax-react"
+import Table from "./components/table"
+import { useGetInventoryDetailsQuery, useUpdateInventoryMutation } from "@/redux/inventory/inventory.api"
+import ScreenLoader from "@/components/screen.loader"
+import { useState } from "react"
 
 const Inventory = () => {
-  const user = JSON.parse(localStorage.getItem("user"));
-  const [query, setQuery] = useState("");
+  const user = JSON.parse(localStorage.getItem("user"))
+  const [query, setQuery] = useState("")
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setQuery(e.target.value);
-  };
+    setQuery(e.target.value)
+  }
 
   const { data: products, isLoading } = useGetInventoryDetailsQuery({ shopId: user?.shopIds[0], query })
   const [onUpdateInv, { isLoading: isUpdatingInv }] = useUpdateInventoryMutation()
 
   return (
     <>
-      {isLoading ?
-        <ScreenLoader style={{ height: "50vh" }} /> :
+      {isLoading ? (
+        <ScreenLoader style={{ height: "50vh" }} />
+      ) : (
         <div className="flex px-2 h-screen">
           <div className="w-full mr-4">
             <div className="h-[150px] px-2 rounded-lg w-full flex items-center justify-between">
@@ -42,7 +43,13 @@ const Inventory = () => {
                 </button>
               </div>
             </div>
-            <Table products={products} onUpdateInv={onUpdateInv} isUpdatingInv={isUpdatingInv} showAsList={false} shopId={user?.shopIds[0]}/>
+            <Table
+              products={products}
+              onUpdateInv={onUpdateInv}
+              isUpdatingInv={isUpdatingInv}
+              showAsList={false}
+              shopId={user?.shopIds[0]}
+            />
           </div>
           {/* <aside className="border-l w-[250px] bg-gray-20 px-4 sticky top-0 h-screen">
             <div className="mt-10 mb-4">Quick Actions</div>
@@ -67,7 +74,8 @@ const Inventory = () => {
               </ul>
             </nav>
           </aside> */}
-        </div>}
+        </div>
+      )}
     </>
   )
 }

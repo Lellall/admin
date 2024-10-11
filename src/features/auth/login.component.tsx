@@ -22,7 +22,7 @@ function Login(): React.ReactElement {
   } = useForm()
 
   const handleLogin = async ({ email, password }: LoginData) => {
-    login({ email, password, role: "RESTAURANT" })
+    login({ email, password })
   }
   const userRole = useMemo(() => data?.user?.role, [data?.user?.role])
 
