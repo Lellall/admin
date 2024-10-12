@@ -1,9 +1,9 @@
 import CardIcon from "@/assets/3dcube.svg"
-import ShopCard from "./card"
+import ShopCard from "./components/card"
 import styled from "styled-components"
 import { Pie, Bar } from "react-chartjs-2"
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js"
-import CardList from "./cardList"
+import CardList from "./components/cardList"
 import Text from "@/components/text/Text"
 
 ChartJS.register(ArcElement, Tooltip, Legend)

@@ -1,11 +1,11 @@
 // import { Additem, AddSquare, ArrangeVertical, ShoppingCart } from "iconsax-react"
-import Table from "./components/table"
+import Table from "../components/table"
 import { useGetInventoryDetailsQuery, useUpdateInventoryMutation } from "@/redux/inventory/inventory.api"
 import ScreenLoader from "@/components/screen.loader"
 import { useState } from "react"
 
 const Inventory = () => {
-  const user = JSON.parse(localStorage.getItem("user"))
+  const user = JSON.parse(localStorage.getItem("user") ?? "")
   const [query, setQuery] = useState("")
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {

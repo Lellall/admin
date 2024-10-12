@@ -1,5 +1,5 @@
 import { DocumentText, ShoppingCart, Box, Chart, Setting, Logout, HambergerMenu, CloseCircle } from "iconsax-react"
-import { Outlet, useNavigate } from "react-router-dom"
+import { NavLink, Outlet, useNavigate } from "react-router-dom"
 import Logo from "../../assets/react.svg"
 import { useDispatch } from "react-redux"
 import { logout } from "@/features/auth/auth.slice"
@@ -28,26 +28,48 @@ function RestaurantLayout() {
 
         <nav className="flex-1">
           <ul className="space-y-4 mt-3">
-            <li className="hover:bg-green-100 p-2 rounded flex items-center">
+            <NavLink
+              className={({ isActive }) =>
+                `p-2 rounded flex items-center ${
+                  isActive && location.pathname === "/restaurant" ? "bg-green-100 font-bold" : ""
+                }`
+              }
+              to="/restaurant"
+              end
+            >
               <DocumentText size="24" className="mr-3" />
-              <a href="/restaurant">Templates</a>
-            </li>
-            <li className="hover:bg-green-100 p-2 rounded flex items-center">
+              Templates
+            </NavLink>
+            <NavLink
+              className={({ isActive }) => `p-2 rounded flex items-center ${isActive ? "bg-green-100 font-bold" : ""}`}
+              to="/restaurant/orders"
+            >
               <ShoppingCart size="24" className="mr-3" />
-              <a href="/restaurant/orders">Orders</a>
-            </li>
-            <li className="hover:bg-green-100 p-2 rounded flex items-center">
+              Orders
+            </NavLink>
+            <NavLink
+              className={({ isActive }) => `p-2 rounded flex items-center ${isActive ? "bg-green-100 font-bold" : ""}`}
+              to="/restaurant/inventory"
+            >
               <Box size="24" className="mr-3" />
-              <a href="/restaurant/inventory">Inventory</a>
-            </li>
-            <li className="hover:bg-green-100 p-2 rounded flex items-center">
+              Inventory
+            </NavLink>
+
+            <NavLink
+              className={({ isActive }) => `p-2 rounded flex items-center ${isActive ? "bg-green-100 font-bold" : ""}`}
+              to="/restaurant/reports"
+            >
               <Chart size="24" className="mr-3" />
-              <a href="/restaurant/reports">Reports</a>
-            </li>
-            <li className="hover:bg-green-100 p-2 rounded flex items-center">
+              Reports
+            </NavLink>
+
+            <NavLink
+              className={({ isActive }) => `p-2 rounded flex items-center ${isActive ? "bg-green-100 font-bold" : ""}`}
+              to="/restaurant/invoice"
+            >
               <Setting size="24" className="mr-3" />
-              <a href="/restaurant/invoice">Invoice</a>
-            </li>
+              Invoice
+            </NavLink>
           </ul>
         </nav>
         <div className="mt-auto">
@@ -70,36 +92,63 @@ function RestaurantLayout() {
 
       {isMobileMenuOpen && (
         <nav className="absolute top-16 left-0 w-full bg-[#FFF] text-[#0E5D37] p-4 border-b z-50">
-          <ul className="space-y-4">
-            <li className="hover:bg-green-100 p-2 rounded flex items-center">
-              <DocumentText size="24" className="mr-3" />
-              <a href="/restaurant">Templates</a>
-            </li>
-            <li className="hover:bg-green-100 p-2 rounded flex items-center">
-              <ShoppingCart size="24" className="mr-3" />
-              <a href="/restaurant/orders">Orders</a>
-            </li>
-            <li className="hover:bg-green-100 p-2 rounded flex items-center">
-              <Box size="24" className="mr-3" />
-              <a href="/restaurant/inventory">Inventory</a>
-            </li>
-            <li className="hover:bg-green-100 p-2 rounded flex items-center">
-              <Chart size="24" className="mr-3" />
-              <a href="/restaurant/reports">Reports</a>
-            </li>
-            <li className="hover:bg-green-100 p-2 rounded flex items-center">
-              <Setting size="24" className="mr-3" />
-              <a href="/restaurant/invoice">Invoice</a>
-            </li>
-          </ul>
+          {/* <ul className="space-y-4"> */}
+          <NavLink
+            className={({ isActive }) =>
+              `p-2 rounded flex items-center ${
+                isActive && location.pathname === "/restaurant" ? "bg-green-100 font-bold" : ""
+              }`
+            }
+            to="/restaurant"
+            end
+            onClick={toggleMobileMenu}
+          >
+            <DocumentText size="24" className="mr-3" />
+            Templates
+          </NavLink>
+          <NavLink
+            className={({ isActive }) => `p-2 rounded flex items-center ${isActive ? "bg-green-100 font-bold" : ""}`}
+            to="/restaurant/orders"
+            onClick={toggleMobileMenu}
+          >
+            <ShoppingCart size="24" className="mr-3" />
+            Orders
+          </NavLink>
+          <NavLink
+            className={({ isActive }) => `p-2 rounded flex items-center ${isActive ? "bg-green-100 font-bold" : ""}`}
+            to="/restaurant/inventory"
+            onClick={toggleMobileMenu}
+          >
+            <Box size="24" className="mr-3" />
+            Inventory
+          </NavLink>
+
+          <NavLink
+            className={({ isActive }) => `p-2 rounded flex items-center ${isActive ? "bg-green-100 font-bold" : ""}`}
+            to="/restaurant/reports"
+            onClick={toggleMobileMenu}
+          >
+            <Chart size="24" className="mr-3" />
+            Reports
+          </NavLink>
+
+          <NavLink
+            className={({ isActive }) => `p-2 rounded flex items-center ${isActive ? "bg-green-100 font-bold" : ""}`}
+            to="/restaurant/invoice"
+            onClick={toggleMobileMenu}
+          >
+            <Setting size="24" className="mr-3" />
+            Invoice
+          </NavLink>
+          {/* </ul> */}
         </nav>
       )}
 
-      <main className="flex-1 overflow-y-auto">
+      <main className="flex-1 overflow-y-auto ">
         {/* <header className="sticky top-0 bg-white border-b z-10 p-4">
           <h1 className="text-xl font-semibold">Templates</h1>
         </header> */}
-        <div className="p-4">
+        <div className="p-4 ">
           <Outlet />
         </div>
       </main>

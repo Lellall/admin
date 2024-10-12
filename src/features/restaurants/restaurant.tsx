@@ -71,7 +71,6 @@ function Restaurant() {
   }, [isSuccess])
 
   const { data: shops } = useGetShopsQuery({ page: 0, size: 10, categoryId: "", filter: "" })
-  console.log(shops)
   return (
     <div>
       <div className="flex flex-col md:flex-row h-auto md:h-[250px] rounded-lg bg-gray-50 w-full  mx-auto items-center gap-6 p-4">

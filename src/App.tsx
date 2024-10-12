@@ -13,13 +13,14 @@ import { ErrorComponent } from "./components/error-404-component"
 import AdminLayout from "@/components/layout/admin.layout"
 import RestaurantLayout from "./features/restaurants/layout"
 import { appPaths } from "./components/layout/app-paths"
-import Inventory from "./features/restaurants/inventory"
 import withRoleAccess from "./components/routes-helpers/withRole"
 import { Unauthorized } from "./components/unauthorized-page"
 import TemplateForm from "./features/restaurants/template/template.form"
-// import ProductSearch from "./features/restaurants/template"
 // pages-routes
 const RestaurantPage = lazy(() => import("@/features/restaurants/restaurant"))
+const InvoicePage = lazy(() => import("@/features/restaurants/invoice/invoice"))
+const RestaurantBorad = lazy(() => import("@/features/restaurants/dashboard/dashboard"))
+const InventoryPage = lazy(() => import("@/features/restaurants/inventory/inventory"))
 const CreateTemplate = lazy(() => import("@/features/restaurants/template/create.template"))
 const EditTemplate = lazy(() => import("@/features/restaurants/template/edit.template"))
 const OrderForRiderPage = lazy(() => import("@/features/admin/order/orders.component"))
@@ -34,6 +35,10 @@ const VendorsProductPage = lazy(() => import("@/features/admin/shop/shops.produc
 
 // Protected pages with user roles
 const Restaurant = withRoleAccess("RESTAURANT")(RestaurantPage)
+const Invoice = withRoleAccess("RESTAURANT")(InvoicePage)
+const RestaurantDashboard = withRoleAccess("RESTAURANT")(RestaurantBorad)
+const Inventory = withRoleAccess("RESTAURANT")(InventoryPage)
+
 const OrderForRider = withRoleAccess("ADMIN")(OrderForRiderPage)
 const Products = withRoleAccess("ADMIN")(ProductsPage)
 const Transaction = withRoleAccess("ADMIN")(TransactionPage)
@@ -71,6 +76,22 @@ function App() {
               element={
                 <Suspense fallback={false}>
                   <Inventory />
+                </Suspense>
+              }
+            />
+            <Route
+              path={`invoice`}
+              element={
+                <Suspense fallback={false}>
+                  <Invoice />
+                </Suspense>
+              }
+            />
+            <Route
+              path={`reports`}
+              element={
+                <Suspense fallback={false}>
+                  <RestaurantDashboard />
                 </Suspense>
               }
             />

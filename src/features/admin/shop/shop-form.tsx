@@ -52,8 +52,8 @@ function ShopForm({ mode, close }: ShopFormProps) {
       const dataToSubmit = {
         ...restData,
         marketId: market?.id,
-        categoryId: category.id,
-        paystackAccountId: metadata.PAYSTACK_ACCOUNT_CODE,
+        categoryId: category?.id,
+        paystackAccountId: metadata?.PAYSTACK_ACCOUNT_CODE,
       }
       updateShop({ id: data.id, ...dataToSubmit })
     } else {
