@@ -6,6 +6,8 @@ import {
   CompleteOrderRequest,
   ConsumerHistoryRequest,
   ConsumerHistoryResponse,
+  InvoiceRequest,
+  InvoicesResponse,
   OrderRequest,
   OrderResponse,
 } from "./typings"
@@ -16,9 +18,8 @@ const orders = baseApi.injectEndpoints({
     incompleteOrders: builder.query<OrderResponse, OrderRequest>({
       query: () => ({
         url: `/transactions/incomplete-order`,
-        // params: { pageNo: params.page, pageSize: params.size },
       }),
-      // providesTags: ['ORDERS'],
+      providesTags: ["ORDERS"],
     }),
     completeOrder: builder.mutation<any, CompleteOrderRequest>({
       query: (params) => ({
@@ -38,7 +39,7 @@ const orders = baseApi.injectEndpoints({
           })
         })
       },
-      // invalidatesTags: ['ORDERS'],
+      invalidatesTags: ["ORDERS"],
     }),
     getConsumerHistory: builder.query<ConsumerHistoryResponse, ConsumerHistoryRequest>({
       query: (params: ConsumerHistoryRequest) => ({
@@ -49,9 +50,18 @@ const orders = baseApi.injectEndpoints({
           status: params.status,
         },
       }),
-      // providesTags: ['ORDERS'],
+      providesTags: ["ORDERS"],
+    }),
+    getInvoices: builder.query<InvoicesResponse, InvoiceRequest>({
+      query: (params) => ({
+        url: `/orders/${params.restaurantId}/invoices`,
+        params,
+        method: "GET",
+      }),
+      providesTags: ["ORDERS"],
     }),
   }),
 })
 
-export const { useIncompleteOrdersQuery, useCompleteOrderMutation, useGetConsumerHistoryQuery } = orders
+export const { useIncompleteOrdersQuery, useCompleteOrderMutation, useGetInvoicesQuery, useGetConsumerHistoryQuery } =
+  orders

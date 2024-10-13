@@ -79,3 +79,47 @@ export interface ConsumerHistoryResponse {
   pageTotal: number
   data: ConsumerOrderHistory[]
 }
+
+//any below is related invoices only
+export interface InvoiceRequest {
+  restaurantId: string
+  page?: number
+  size?: number
+  sort?: string
+  direction?: string
+}
+
+interface Sort {
+  empty: boolean
+  sorted: boolean
+  unsorted: boolean
+}
+
+interface Pageable {
+  offset: number
+  sort: Sort
+  pageNumber: number
+  pageSize: number
+  paged: boolean
+  unpaged: boolean
+}
+
+interface Invoice {
+  invoiceId: string
+  orderDate: string // could also use Date if needed
+  consumerPhoneNumber: string
+}
+
+export interface InvoicesResponse {
+  totalPages: number
+  totalElements: number
+  size: number
+  content: Invoice[]
+  number: number
+  sort: Sort
+  numberOfElements: number
+  pageable: Pageable
+  first: boolean
+  last: boolean
+  empty: boolean
+}

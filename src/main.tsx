@@ -5,6 +5,7 @@ import { store } from "./redux/store.js"
 import "./index.css"
 import App from "./App.js"
 import "rc-pagination/assets/index.css"
+import "react-loading-skeleton/dist/skeleton.css"
 import { ErrorBoundary } from "./components/ui/error-boundary.js"
 
 ReactDOM.createRoot(document.getElementById("root")!).render(

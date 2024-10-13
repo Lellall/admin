@@ -26,7 +26,7 @@ export const appPaths = {
   // RESTAURANT
   restaurant: "/restaurant",
   invoices: "invoices",
-  invoice: "invoices",
+  // invoice: "invoices",
   reports: "reports",
   // getInvoice: (id = ":id") => `/${id}`,
   inventory: "/restaurant/inventory",
