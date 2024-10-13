@@ -4,6 +4,7 @@ import Logo from "../../assets/react.svg"
 import { useDispatch } from "react-redux"
 import { logout } from "@/features/auth/auth.slice"
 import { useState } from "react"
+import { appPaths } from "@/components/layout/app-paths"
 
 function RestaurantLayout() {
   const dispatch = useDispatch()
@@ -34,7 +35,7 @@ function RestaurantLayout() {
                   isActive && location.pathname === "/restaurant" ? "bg-green-100 font-bold" : ""
                 }`
               }
-              to="/restaurant"
+              to={appPaths.restaurant}
               end
             >
               <DocumentText size="24" className="mr-3" />
@@ -42,14 +43,14 @@ function RestaurantLayout() {
             </NavLink>
             <NavLink
               className={({ isActive }) => `p-2 rounded flex items-center ${isActive ? "bg-green-100 font-bold" : ""}`}
-              to="/restaurant/orders"
+              to={appPaths.reports}
             >
               <ShoppingCart size="24" className="mr-3" />
               Orders
             </NavLink>
             <NavLink
               className={({ isActive }) => `p-2 rounded flex items-center ${isActive ? "bg-green-100 font-bold" : ""}`}
-              to="/restaurant/inventory"
+              to={appPaths.inventory}
             >
               <Box size="24" className="mr-3" />
               Inventory
@@ -57,7 +58,7 @@ function RestaurantLayout() {
 
             <NavLink
               className={({ isActive }) => `p-2 rounded flex items-center ${isActive ? "bg-green-100 font-bold" : ""}`}
-              to="/restaurant/reports"
+              to={appPaths.reports}
             >
               <Chart size="24" className="mr-3" />
               Reports
@@ -65,7 +66,7 @@ function RestaurantLayout() {
 
             <NavLink
               className={({ isActive }) => `p-2 rounded flex items-center ${isActive ? "bg-green-100 font-bold" : ""}`}
-              to="/restaurant/invoice"
+              to={appPaths.invoices}
             >
               <Setting size="24" className="mr-3" />
               Invoice
@@ -79,7 +80,7 @@ function RestaurantLayout() {
             className="w-full bg-[#0E5D37] hover:bg-green-900 text-white p-2 rounded text-center flex items-center justify-center"
           >
             <Logout size="24" className="mr-2" />
-            Logging Out
+            Log Out
           </button>
         </div>
       </aside>
@@ -92,14 +93,13 @@ function RestaurantLayout() {
 
       {isMobileMenuOpen && (
         <nav className="absolute top-16 left-0 w-full bg-[#FFF] text-[#0E5D37] p-4 border-b z-50">
-          {/* <ul className="space-y-4"> */}
           <NavLink
             className={({ isActive }) =>
               `p-2 rounded flex items-center ${
                 isActive && location.pathname === "/restaurant" ? "bg-green-100 font-bold" : ""
               }`
             }
-            to="/restaurant"
+            to={appPaths.restaurant}
             end
             onClick={toggleMobileMenu}
           >
@@ -108,7 +108,7 @@ function RestaurantLayout() {
           </NavLink>
           <NavLink
             className={({ isActive }) => `p-2 rounded flex items-center ${isActive ? "bg-green-100 font-bold" : ""}`}
-            to="/restaurant/orders"
+            to={appPaths.reports}
             onClick={toggleMobileMenu}
           >
             <ShoppingCart size="24" className="mr-3" />
@@ -116,7 +116,7 @@ function RestaurantLayout() {
           </NavLink>
           <NavLink
             className={({ isActive }) => `p-2 rounded flex items-center ${isActive ? "bg-green-100 font-bold" : ""}`}
-            to="/restaurant/inventory"
+            to={appPaths.inventory}
             onClick={toggleMobileMenu}
           >
             <Box size="24" className="mr-3" />
@@ -125,7 +125,7 @@ function RestaurantLayout() {
 
           <NavLink
             className={({ isActive }) => `p-2 rounded flex items-center ${isActive ? "bg-green-100 font-bold" : ""}`}
-            to="/restaurant/reports"
+            to={appPaths.reports}
             onClick={toggleMobileMenu}
           >
             <Chart size="24" className="mr-3" />
@@ -134,13 +134,12 @@ function RestaurantLayout() {
 
           <NavLink
             className={({ isActive }) => `p-2 rounded flex items-center ${isActive ? "bg-green-100 font-bold" : ""}`}
-            to="/restaurant/invoice"
+            to={appPaths.invoices}
             onClick={toggleMobileMenu}
           >
             <Setting size="24" className="mr-3" />
             Invoice
           </NavLink>
-          {/* </ul> */}
         </nav>
       )}
 
@@ -148,7 +147,7 @@ function RestaurantLayout() {
         {/* <header className="sticky top-0 bg-white border-b z-10 p-4">
           <h1 className="text-xl font-semibold">Templates</h1>
         </header> */}
-        <div className="p-4 ">
+        <div className="p-4 bg-[#F8F7F7] ">
           <Outlet />
         </div>
       </main>

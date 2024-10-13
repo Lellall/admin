@@ -127,11 +127,7 @@ function Restaurant() {
             className="grid cursor-pointer gap-2 mt-4 justify-center items-center"
             style={{ gridTemplateColumns: "repeat(auto-fit, minmax(350px, 1fr))" }}
           >
-            <ReusableCard
-              className="flex justify-center border items-center rounded-md mx-auto items-center"
-              noBg
-              bgColor="#F3FAF5"
-            >
+            <ReusableCard className="flex justify-center border rounded-md mx-auto items-center" noBg bgColor="#F3FAF5">
               <AddSquare
                 onClick={() => {
                   navigate(`${appPaths.createTemplate}`)

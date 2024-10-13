@@ -15,9 +15,10 @@ import RestaurantLayout from "./features/restaurants/layout"
 import { appPaths } from "./components/layout/app-paths"
 import withRoleAccess from "./components/routes-helpers/withRole"
 import { Unauthorized } from "./components/unauthorized-page"
-import TemplateForm from "./features/restaurants/template/template.form"
+// import TemplateForm from "./features/restaurants/template/template.form"
 // pages-routes
 const RestaurantPage = lazy(() => import("@/features/restaurants/restaurant"))
+const InvoicesPage = lazy(() => import("@/features/restaurants/invoice/invoices"))
 const InvoicePage = lazy(() => import("@/features/restaurants/invoice/invoice"))
 const RestaurantBorad = lazy(() => import("@/features/restaurants/dashboard/dashboard"))
 const InventoryPage = lazy(() => import("@/features/restaurants/inventory/inventory"))
@@ -35,6 +36,7 @@ const VendorsProductPage = lazy(() => import("@/features/admin/shop/shops.produc
 
 // Protected pages with user roles
 const Restaurant = withRoleAccess("RESTAURANT")(RestaurantPage)
+const Invoices = withRoleAccess("RESTAURANT")(InvoicesPage)
 const Invoice = withRoleAccess("RESTAURANT")(InvoicePage)
 const RestaurantDashboard = withRoleAccess("RESTAURANT")(RestaurantBorad)
 const Inventory = withRoleAccess("RESTAURANT")(InventoryPage)
@@ -62,6 +64,16 @@ function App() {
               </Suspense>
             }
           />
+          <Route
+            path="/forgot-password"
+            element={
+              <Suspense fallback={<ScreenLoader />}>
+                <AuthLayout>
+                  <ForgotPassword />
+                </AuthLayout>
+              </Suspense>
+            }
+          />
           <Route path={appPaths.restaurant} element={<RestaurantLayout />}>
             <Route
               index
@@ -80,15 +92,7 @@ function App() {
               }
             />
             <Route
-              path={`invoice`}
-              element={
-                <Suspense fallback={false}>
-                  <Invoice />
-                </Suspense>
-              }
-            />
-            <Route
-              path={`reports`}
+              path={appPaths.reports}
               element={
                 <Suspense fallback={false}>
                   <RestaurantDashboard />
@@ -111,17 +115,24 @@ function App() {
                 </Suspense>
               }
             />
+            <Route
+              path={appPaths.invoices}
+              element={
+                <Suspense fallback={false}>
+                  <Invoices />
+                </Suspense>
+              }
+            />
+            <Route
+              path={`${appPaths.invoices}/:id`}
+              element={
+                <Suspense fallback={false}>
+                  <Invoice />
+                </Suspense>
+              }
+            />
           </Route>
-          <Route
-            path="/forgot-password"
-            element={
-              <Suspense fallback={<ScreenLoader />}>
-                <AuthLayout>
-                  <ForgotPassword />
-                </AuthLayout>
-              </Suspense>
-            }
-          />
+
           <Route path="/" element={<AdminLayout />}>
             <Route
               index

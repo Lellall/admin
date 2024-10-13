@@ -1,39 +1,124 @@
-import Text from "@/components/text/Text"
 import styled from "styled-components"
-import InvoiceCard from "./components/card"
-import InvoiceCardList from "./components/invoiceCardList copy"
+import InvoiceHeader from "./components/InvoiceHeader"
+import Text from "@/components/text/Text"
 
-const Invoice = () => {
+function Invoice() {
   return (
-    <>
-      <Container>
-        <Text h1>Invoices</Text>
-        <Text block color="#0E5D3796">
-          Invoices are generated every 30 days and are sent to your default payment method.
-        </Text>
+    <div>
+      <InvoiceHeader />
+      <div className=" bg-[#F8F7F7]">
+        <Receipt>
+          <div> </div>
+          <div></div>
+          <main>
+            <p>
+              <Text>Restaurant name: </Text>
+              <Text h3>CAFE DEMANCHI</Text>
+            </p>
+            <p>
+              <Text>Invoice Id: </Text>
+              <Text h3>75800707-AR</Text>
+            </p>
+            <p>
+              <Text>invoice From: </Text>
+              <Text h3>Lellall</Text>
+            </p>
+            <span className="span" />
 
-        <div className="grid grid-cols-2 gap-5 mt-5 mb-5">
-          <InvoiceCard title="Total Invoice" total={200000} type="total" />
-          <InvoiceCard title="Total Invoice" total={200000} type="paid" />
-          <InvoiceCard title="Total Invoice" total={200000} type="pending" />
-          <InvoiceCard title="Cancel" total={200000} type="cancel" />
-        </div>
-
-        <div className="bg-[#fff] p-3 mt-3 rounded-lg">
-          <InvoiceCardList date="12-12-2024" id="Invoice-ID" price={20010} title="75800707-AR" />
-          <InvoiceCardList date="12-12-2024" id="Invoice-ID" price={20010} title="75800707-AR" />
-          <InvoiceCardList date="12-12-2024" id="Invoice-ID" price={20010} title="75800707-AR" />
-          <InvoiceCardList date="12-12-2024" id="Invoice-ID" price={20010} title="75800707-AR" />
-          <InvoiceCardList date="12-12-2024" id="Invoice-ID" price={20010} title="75800707-AR" />
-          <InvoiceCardList date="12-12-2024" id="Invoice-ID" price={20010} title="75800707-AR" />
-          <InvoiceCardList date="12-12-2024" id="Invoice-ID" price={20010} title="75800707-AR" />
-          <InvoiceCardList date="12-12-2024" id="Invoice-ID" price={20010} title="75800707-AR" />
-        </div>
-      </Container>
-    </>
+            <p className="font-bold text-lg">Items</p>
+            <ProductList>
+              <li>
+                <p>50 psc of tissue paper:</p>
+                <p>₦20,010</p>
+              </li>{" "}
+              <li>
+                <p>50 psc of tissue paper:</p>
+                <p>₦20,010</p>
+              </li>
+              <li>
+                <p>50 psc of tissue paper:</p>
+                <p>₦20,010</p>
+              </li>
+              <li>
+                <p>50 psc of tissue paper:</p>
+                <p>₦20,010</p>
+              </li>
+              <li>
+                <p>50 psc of tissue paper:</p>
+                <p>₦20,010</p>
+              </li>
+              <li>
+                <p>50 psc of tissue paper:</p>
+                <p>₦20,010</p>
+              </li>
+              <li>
+                <p>50 psc of tissue paper:</p>
+                <p>₦20,010</p>
+              </li>
+            </ProductList>
+          </main>
+        </Receipt>
+      </div>
+    </div>
   )
 }
 
 export default Invoice
 
-const Container = styled.div``
+const Receipt = styled.div`
+  background: #fff;
+  min-height: 660px;
+  min-width: 380px;
+  position: relative;
+  padding: 40px 20px;
+  border-radius: 8px;
+  box-sizing: border-box;
+  margin-top: 4rem;
+
+  div:nth-child(1) {
+    position: absolute;
+    left: -50px;
+    top: 50%;
+    border-radius: 100px;
+    height: 100px;
+    width: 100px;
+    content: "";
+    padding: 10px;
+    background: #f8f7f7;
+    transform: translateY(-50%);
+  }
+
+  div:nth-child(2) {
+    position: absolute;
+    right: -50px;
+    top: 50%;
+    border-radius: 100px;
+    height: 100px;
+    width: 100px;
+    content: "";
+    padding: 10px;
+    background: #f8f7f7;
+    transform: translateY(-50%);
+  }
+
+  main {
+    max-width: 80%;
+    margin: auto;
+    p {
+      margin: 10px 0px;
+    }
+    .span {
+      content: "";
+      display: flex;
+      border: 1px dashed #454545c9;
+      margin: 30px 0px;
+    }
+  }
+`
+
+const ProductList = styled.ul`
+  li {
+    display: flex;
+    justify-content: space-between;
+  }
+`

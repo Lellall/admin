@@ -1,7 +1,9 @@
 import Text from "@/components/text/Text"
 import { ClipboardText, ClipboardTick, DocumentText } from "iconsax-react"
 import styled from "styled-components"
-import Icon from "@/assets/Vector64.png"
+import PrimaryIcon from "@/assets/Vector64.svg"
+import PendingIcon from "@/assets/VectorPending.svg"
+import SecondaryIcon from "@/assets/Vector-Paid.svg"
 import { thousandFormatter } from "@/utils/helpers"
 
 interface InvoiceCardProps {
@@ -62,7 +64,17 @@ const Card = styled.div<CardProps>`
   flex-direction: column;
   justify-content: space-around;
   padding: 10px 20px;
-  background-image: url(${Icon});
+  background-image: ${({ status }) =>
+    `url(${
+      status === "paid"
+        ? SecondaryIcon
+        : status === "pending"
+          ? PendingIcon
+          : status === "cancel"
+            ? PrimaryIcon
+            : PrimaryIcon
+    })`};
+
   background-position: top right;
   background-repeat: no-repeat;
   border-radius: 8px;
