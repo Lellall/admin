@@ -18,17 +18,23 @@ import ScreenLoader from "@/components/screen.loader"
 import EmptyState from "@/components/empty-state"
 import Modal from "@/components/modal"
 import { Template } from "@/redux/templates/typings"
+import { useGetShopsQuery } from "@/redux/shops"
+import ShopForm from "../admin/shop/shop-form"
 
 function Restaurant() {
   const navigate = useNavigate()
   const [page, setPage] = useState(1)
   const [currentItem, setCurrentItem] = useState<any>({})
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
-  const user = JSON.parse(localStorage.getItem("user"))
+  const [isShopModalOpen, setIsShopModalOpen] = useState<boolean>(false)
+  const userStored = localStorage.getItem("user")
+  const user = userStored ? JSON.parse(userStored) : ""
   const shopId = user?.shopIds?.[0] ?? null
   const [deleteTemplate, { isLoading: isDeleting, isSuccess }] = useDeleteTemplateMutation()
   const [createTemplate, { isLoading: isCreating }] = useCreateTemplateMutation()
-
+  const toggleModalShop = () => {
+    setIsShopModalOpen(!isShopModalOpen)
+  }
   const { data, isLoading } = useGetTemplatesQuery({
     shopId,
     page: page - 1,
@@ -64,6 +70,7 @@ function Restaurant() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSuccess])
 
+  const { data: shops } = useGetShopsQuery({ page: 0, size: 10, categoryId: "", filter: "" })
   return (
     <div>
       <div className="flex flex-col md:flex-row h-auto md:h-[250px] rounded-lg bg-gray-50 w-full  mx-auto items-center gap-6 p-4">
@@ -101,6 +108,13 @@ function Restaurant() {
             >
               Get Started
             </button>
+            <button
+              type="button"
+              onClick={toggleModalShop}
+              className="bg-[#0E5D37] text-white py-2 px-4 ml-2 rounded hover:bg-green-700"
+            >
+              Create Shop
+            </button>
           </div>
         </div>
       </div>
@@ -113,7 +127,7 @@ function Restaurant() {
             className="grid cursor-pointer gap-2 mt-4 justify-center items-center"
             style={{ gridTemplateColumns: "repeat(auto-fit, minmax(350px, 1fr))" }}
           >
-            <ReusableCard className="flex justify-center border items-center rounded-md mx-auto items-center" noBg bgColor="#F3FAF5">
+            <ReusableCard className="flex justify-center border rounded-md mx-auto items-center" noBg bgColor="#F3FAF5">
               <AddSquare
                 onClick={() => {
                   navigate(`${appPaths.createTemplate}`)
@@ -238,6 +252,23 @@ function Restaurant() {
           </Modal>
         </>
       )}
+
+      <>
+        <Modal
+          width="100%"
+          title="Create Shop"
+          style={{
+            maxWidth: "700px",
+            width: "90%",
+            margin: "auto",
+            overflowY: "auto",
+          }}
+          show={isShopModalOpen}
+          onClose={toggleModalShop}
+        >
+          <ShopForm mode="create" close={toggleModalShop} />
+        </Modal>
+      </>
     </div>
   )
 }

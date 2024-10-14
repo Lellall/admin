@@ -13,23 +13,41 @@ import { ErrorComponent } from "./components/error-404-component"
 import AdminLayout from "@/components/layout/admin.layout"
 import RestaurantLayout from "./features/restaurants/layout"
 import { appPaths } from "./components/layout/app-paths"
-import Inventory from "./features/restaurants/inventory"
-import TemplateForm from "./features/restaurants/template/template.form"
-// import ProductSearch from "./features/restaurants/template"
+import withRoleAccess from "./components/routes-helpers/withRole"
+import { Unauthorized } from "./components/unauthorized-page"
+// import TemplateForm from "./features/restaurants/template/template.form"
 // pages-routes
-const Restaurant = lazy(() => import("@/features/restaurants/restaurant"))
-
+const RestaurantPage = lazy(() => import("@/features/restaurants/restaurant"))
+const InvoicesPage = lazy(() => import("@/features/restaurants/invoice/invoices"))
+const InvoicePage = lazy(() => import("@/features/restaurants/invoice/invoice"))
+const RestaurantBorad = lazy(() => import("@/features/restaurants/dashboard/dashboard"))
+const InventoryPage = lazy(() => import("@/features/restaurants/inventory/inventory"))
 const CreateTemplate = lazy(() => import("@/features/restaurants/template/create.template"))
 const EditTemplate = lazy(() => import("@/features/restaurants/template/edit.template"))
-const OrderForRider = lazy(() => import("@/features/admin/order/orders.component"))
-const Products = lazy(() => import("@/features/admin/products/products.components"))
-const Transaction = lazy(() => import("@/features/admin/transaction/transaction-history.components"))
-const OrderHistory = lazy(() => import("@/features/admin/order/order-history.component"))
-const Vendors = lazy(() => import("@/features/admin/shop/shops.component"))
-const Vendor = lazy(() => import("@/features/admin/shop/shop.component"))
+const OrderForRiderPage = lazy(() => import("@/features/admin/order/orders.component"))
+const ProductsPage = lazy(() => import("@/features/admin/products/products.components"))
+const TransactionPage = lazy(() => import("@/features/admin/transaction/transaction-history.components"))
+const OrderHistoryPage = lazy(() => import("@/features/admin/order/order-history.component"))
+const VendorsPage = lazy(() => import("@/features/admin/shop/shops.component"))
+const VendorPage = lazy(() => import("@/features/admin/shop/shop.component"))
 const Login = lazy(() => import("@/features/auth/login.component"))
 const ForgotPassword = lazy(() => import("./features/auth/forgot-password"))
-const VendorsProduct = lazy(() => import("@/features/admin/shop/shops.product"))
+const VendorsProductPage = lazy(() => import("@/features/admin/shop/shops.product"))
+
+// Protected pages with user roles
+const Restaurant = withRoleAccess("RESTAURANT")(RestaurantPage)
+const Invoices = withRoleAccess("RESTAURANT")(InvoicesPage)
+const Invoice = withRoleAccess("RESTAURANT")(InvoicePage)
+const RestaurantDashboard = withRoleAccess("RESTAURANT")(RestaurantBorad)
+const Inventory = withRoleAccess("RESTAURANT")(InventoryPage)
+
+const OrderForRider = withRoleAccess("ADMIN")(OrderForRiderPage)
+const Products = withRoleAccess("ADMIN")(ProductsPage)
+const Transaction = withRoleAccess("ADMIN")(TransactionPage)
+const OrderHistory = withRoleAccess("ADMIN")(OrderHistoryPage)
+const Vendors = withRoleAccess("ADMIN")(VendorsPage)
+const Vendor = withRoleAccess("ADMIN")(VendorPage)
+const VendorsProduct = withRoleAccess("ADMIN")(VendorsProductPage)
 
 function App() {
   return (
@@ -42,6 +60,16 @@ function App() {
               <Suspense fallback={<ScreenLoader />}>
                 <AuthLayout>
                   <Login />
+                </AuthLayout>
+              </Suspense>
+            }
+          />
+          <Route
+            path="/forgot-password"
+            element={
+              <Suspense fallback={<ScreenLoader />}>
+                <AuthLayout>
+                  <ForgotPassword />
                 </AuthLayout>
               </Suspense>
             }
@@ -64,6 +92,14 @@ function App() {
               }
             />
             <Route
+              path={appPaths.reports}
+              element={
+                <Suspense fallback={false}>
+                  <RestaurantDashboard />
+                </Suspense>
+              }
+            />
+            <Route
               path={`${appPaths.createTemplate}`}
               element={
                 <Suspense fallback={false}>
@@ -79,17 +115,24 @@ function App() {
                 </Suspense>
               }
             />
+            <Route
+              path={appPaths.invoices}
+              element={
+                <Suspense fallback={false}>
+                  <Invoices />
+                </Suspense>
+              }
+            />
+            <Route
+              path={`${appPaths.invoices}/:id`}
+              element={
+                <Suspense fallback={false}>
+                  <Invoice />
+                </Suspense>
+              }
+            />
           </Route>
-          <Route
-            path="/forgot-password"
-            element={
-              <Suspense fallback={<ScreenLoader />}>
-                <AuthLayout>
-                  <ForgotPassword />
-                </AuthLayout>
-              </Suspense>
-            }
-          />
+
           <Route path="/" element={<AdminLayout />}>
             <Route
               index
@@ -164,6 +207,7 @@ function App() {
             />
             <Route path="*" element={<ErrorComponent />} />
           </Route>
+          <Route path="unauthorized" element={<Unauthorized />} />
         </Routes>
       </Router>
       <ToastContainer />

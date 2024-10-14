@@ -32,8 +32,8 @@ export interface Shop {
   timeZone: string
   inventory: number
   categoryId?: string
-  openingTime?: Time
-  closingTime?: Time
+  openingTime?: string
+  closingTime?: string
   marketId?: string
   coordinate: {
     latitude: number

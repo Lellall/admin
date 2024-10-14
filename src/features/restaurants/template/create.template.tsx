@@ -10,7 +10,7 @@ import { useCreateTemplateMutation } from "@/redux/templates/template.api"
 import InputComponent from "@/components/Inputs/input-component"
 import { Product } from "@/redux/products/typings"
 import { thousandFormatter } from "@/utils/helpers"
-import { TitledBackButton } from "@/components/ui/base/back-button";
+import { TitledBackButton } from "@/components/ui/base/back-button"
 import CardList from "./product-select"
 import { useDebounce } from "react-use"
 import { useGetProductsQuery } from "@/redux/products"
@@ -30,70 +30,71 @@ export type SelectedProduct = Product & {
 }
 
 function CreateTemplate() {
-  const [selectedProducts, setSelectedProducts] = useState<SelectedProduct[]>([]);
-  const [subtotal, setSubtotal] = useState<number>(0);
-  const navigate = useNavigate();
-  const userData = JSON.parse(localStorage.getItem("user"));
-  const shopId = userData?.shopIds[0];
-  const [createTemplate, { isLoading: isCreating }] = useCreateTemplateMutation();
-  const [current, setCurrent] = useState(1);
-  const [produtName, setProductName] = useState<string>("");
-  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
-  const [showTable, setShowTable] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [showSubmit, setShowSubmit] = useState(false);
+  const [selectedProducts, setSelectedProducts] = useState<SelectedProduct[]>([])
+  const [subtotal, setSubtotal] = useState<number>(0)
+  const navigate = useNavigate()
+  const userData = JSON.parse(localStorage.getItem("user"))
+  const shopId = userData?.shopIds[0]
+  const [createTemplate, { isLoading: isCreating }] = useCreateTemplateMutation()
+  const [current, setCurrent] = useState(1)
+  const [produtName, setProductName] = useState<string>("")
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("")
+  const [showTable, setShowTable] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [showSubmit, setShowSubmit] = useState(false)
 
   const getFormattedDate = () => {
-    const now = new Date();
-    
-    const day = String(now.getDate()).padStart(2, '0');
-    const month = String(now.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
-    const year = now.getFullYear();
-    
-    let hours = now.getHours();
-    const minutes = String(now.getMinutes()).padStart(2, '0');
-    const ampm = hours >= 12 ? 'pm' : 'am';
-    hours = hours % 12 || 12;
-  
-    return `untitled_${hours}:${minutes}${ampm}`;
-  };
-  const [templateName, setTemplateName] = useState(getFormattedDate());
+    const now = new Date()
+
+    const day = String(now.getDate()).padStart(2, "0")
+    const month = String(now.getMonth() + 1).padStart(2, "0") // Months are 0-indexed
+    const year = now.getFullYear()
+
+    let hours = now.getHours()
+    const minutes = String(now.getMinutes()).padStart(2, "0")
+    const ampm = hours >= 12 ? "pm" : "am"
+    hours = hours % 12 || 12
+
+    return `untitled_${hours}:${minutes}${ampm}`
+  }
+  const [templateName, setTemplateName] = useState(getFormattedDate())
 
   const handleCategoryClick = (categoryId) => {
-    setIsModalOpen(true);
-  };
+    setIsModalOpen(true)
+  }
 
   useDebounce(
     () => {
-      setDebouncedSearchTerm(produtName);
+      setDebouncedSearchTerm(produtName)
     },
     500,
     [produtName]
-  );
+  )
 
-  const { data: products, isLoading, isFetching } = useGetProductsQuery({
+  const {
+    data: products,
+    isLoading,
+    isFetching,
+  } = useGetProductsQuery({
     page: current - 1,
     size: 2000,
     filter: debouncedSearchTerm,
     categoryId: "",
-  });
-  const { data: categories } = useGetCategoriesQuery();
+  })
+  const { data: categories } = useGetCategoriesQuery()
 
   const {
     control,
     handleSubmit,
     setValue,
     formState: { errors },
-  } = useForm<TemplateForm>();
+  } = useForm<TemplateForm>()
 
   useEffect(() => {
-    const newSubtotal = selectedProducts.reduce(
-      (acc, product) => acc + product.price * product.quantity,
-      0
-    );
-    setSubtotal(newSubtotal);
-    setValue("templateItemsDto", selectedProducts);
-  }, [selectedProducts, setValue]);
+    const newSubtotal = selectedProducts.reduce((acc, product) => acc + product.price * product.quantity, 0)
+    setSubtotal(newSubtotal)
+    setValue("templateItemsDto", selectedProducts)
+  }, [selectedProducts, setValue])
 
   const handleFormSubmit = (data: TemplateForm) => {
     createTemplate({
@@ -102,31 +103,18 @@ function CreateTemplate() {
     })
       .unwrap()
       .finally(() => {
-        navigate("/restaurant");
-      });
-  };
+        navigate("/restaurant")
+      })
+  }
 
   const handleQuantityChange = (id: string, newQuantity: number) => {
-    setSelectedProducts((prev) =>
-      prev.map((p) =>
-        p.id === id ? { ...p, newQNT: newQuantity } : p
-      )
-    );
-
+    setSelectedProducts((prev) => prev.map((p) => (p.id === id ? { ...p, newQNT: newQuantity } : p)))
   }
   const handleMeasurementChange = (id: string, measurement: string) => {
-    setSelectedProducts((prev) =>
-      prev.map((p) =>
-        p.id === id ? { ...p, measurement } : p
-      )
-    );
+    setSelectedProducts((prev) => prev.map((p) => (p.id === id ? { ...p, measurement } : p)))
   }
   const handleUnitChange = (id: string, unit: string) => {
-    setSelectedProducts((prev) =>
-      prev.map((p) =>
-        p.id === id ? { ...p, unitPrice: unit } : p
-      )
-    );
+    setSelectedProducts((prev) => prev.map((p) => (p.id === id ? { ...p, unitPrice: unit } : p)))
   }
 
   const handleDeleteProduct = (id: string) => {
@@ -135,17 +123,17 @@ function CreateTemplate() {
 
   useEffect(() => {
     if (debouncedSearchTerm) {
-      console.log("Debounced Search Term:", debouncedSearchTerm);
+      console.log("Debounced Search Term:", debouncedSearchTerm)
     }
-  }, [debouncedSearchTerm]);
+  }, [debouncedSearchTerm])
 
   const transformData = (selectedProducts) => {
-    const data = selectedProducts.map(item => ({
+    const data = selectedProducts.map((item) => ({
       productId: item.id,
       quantity: item.newQNT,
       measurement: item.measurement,
       price: item.price,
-      unitPrice: parseFloat(item.unitPrice) || 0
+      unitPrice: parseFloat(item.unitPrice) || 0,
     }))
 
     createTemplate({ name: templateName, templateItemsDto: data, shopId })
@@ -153,7 +141,7 @@ function CreateTemplate() {
       .finally(() => {
         navigate("/restaurant")
       })
-  };
+  }
 
   return (
     <div className="p-4 w-full mx-auto relative">
@@ -173,7 +161,7 @@ function CreateTemplate() {
           value={produtName}
           onChange={(e) => setProductName(e.target.value)}
           placeholder="Search..."
-          className={`flex-grow bg-transparent border-none outline-none text-green-700 placeholder-green-500 pr-10 ${isFetching && 'animate-pulse'}`} // Tailwind pulse animation when fetching
+          className={`flex-grow bg-transparent border-none outline-none text-green-700 placeholder-green-500 pr-10 ${isFetching && "animate-pulse"}`} // Tailwind pulse animation when fetching
         />
         {isFetching && (
           <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
@@ -183,19 +171,8 @@ function CreateTemplate() {
               fill="none"
               viewBox="0 0 24 24"
             >
-              <circle
-                className="opacity-25"
-                cx="12"
-                cy="12"
-                r="10"
-                stroke="currentColor"
-                strokeWidth="4"
-              ></circle>
-              <path
-                className="opacity-75"
-                fill="currentColor"
-                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
-              ></path>
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
             </svg>
           </div>
         )}
@@ -235,16 +212,16 @@ function CreateTemplate() {
       </div>
 
       <div className="">
-        {
-          isLoading || isFetching ?
-            <ScreenLoader style={{ height: "50vh" }
-            } />
-            :
-            <CardList setSelectedProducts={setSelectedProducts} cards={products?.data ?? []} />}
+        {isLoading || isFetching ? (
+          <ScreenLoader style={{ height: "50vh" }} />
+        ) : (
+          <CardList setSelectedProducts={setSelectedProducts} cards={products?.data ?? []} />
+        )}
       </div>
       <button
-        className={`fixed bottom-6 right-6 px-6 py-3 rounded-full text-white transition-all duration-200 ${selectedProducts.length > 0 ? "bg-green-500 hover:bg-green-600" : "bg-gray-400 cursor-not-allowed"
-          }`}
+        className={`fixed bottom-6 right-6 px-6 py-3 rounded-full text-white transition-all duration-200 ${
+          selectedProducts.length > 0 ? "bg-green-500 hover:bg-green-600" : "bg-gray-400 cursor-not-allowed"
+        }`}
         disabled={selectedProducts.length === 0}
         onClick={() => setShowSubmit(true)}
       >
@@ -255,10 +232,7 @@ function CreateTemplate() {
           <div className="relative bg-white w-full max-w-2xl mx-auto rounded-lg shadow-lg">
             <div className="border-b p-4 flex justify-between items-center">
               <h1 className="">Continue shopping</h1>
-              <button
-                className="text-gray-600 hover:text-gray-900"
-                onClick={() => setShowSubmit(false)}
-              >
+              <button className="text-gray-600 hover:text-gray-900" onClick={() => setShowSubmit(false)}>
                 &times;
               </button>
             </div>
@@ -290,9 +264,7 @@ function CreateTemplate() {
                             type="number"
                             min="1"
                             className="border p-2 rounded outline-none"
-                            onChange={(e) =>
-                              handleQuantityChange(product.id, parseInt(e.target.value, 10))
-                            }
+                            onChange={(e) => handleQuantityChange(product.id, parseInt(e.target.value, 10))}
                           />
                         </div>
 
@@ -337,7 +309,8 @@ function CreateTemplate() {
                       <img src={empty} alt="No products" />
                     </div>
                     <div className="text-center text-lg font-semibold text-gray-600">
-                      🛒 <span className="text-green-600">No products added to your cart yet!</span> Start browsing and add items to place your order. 🛒
+                      🛒 <span className="text-green-600">No products added to your cart yet!</span> Start browsing and
+                      add items to place your order. 🛒
                     </div>
                   </div>
                 )}
@@ -346,22 +319,22 @@ function CreateTemplate() {
 
             <div className="border-t p-4 flex justify-between items-center">
               <div className="text-lg font-bold"></div>
-              <Button
-                loading={isCreating}
-                onClick={() => transformData(selectedProducts)}
-                type="submit"
-              >
+              <Button loading={isCreating} onClick={() => transformData(selectedProducts)} type="submit">
                 Submit Order
               </Button>
-
             </div>
           </div>
         </div>
       </Modal>
 
-      <CategoryModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} categories={categories} handleCategoryClickts={() => { }} />
+      <CategoryModal
+        isModalOpen={isModalOpen}
+        setIsModalOpen={setIsModalOpen}
+        categories={categories}
+        handleCategoryClickts={() => {}}
+      />
     </div>
-  );
+  )
 }
 
-export default CreateTemplate;
+export default CreateTemplate

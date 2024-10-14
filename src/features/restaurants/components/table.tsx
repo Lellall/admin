@@ -1,7 +1,7 @@
-import styled from "styled-components";
-import { useState } from "react";
-import { BackSquare, DocumentUpload, Trash } from "iconsax-react";
-import { useDeleteInventoryMutation } from "@/redux/inventory/inventory.api";
+import styled from "styled-components"
+import { useState } from "react"
+import { BackSquare, DocumentUpload, Trash } from "iconsax-react"
+import { useDeleteInventoryMutation } from "@/redux/inventory/inventory.api"
 
 const ModInput = styled.input`
   width: 90px;
@@ -9,29 +9,28 @@ const ModInput = styled.input`
   &:focus {
     border: none;
   }
-`;
+`
 
 const Table = ({ products, onUpdateInv, isUpdatingInv, shopId, showAsList }) => {
-  const [selectedProducts, setSelectedProducts] = useState([]);
-  const [editedProducts, setEditedProducts] = useState([]);
-  const [deleteAll, setDeleteAll] = useState(false);
+  const [selectedProducts, setSelectedProducts] = useState([])
+  const [editedProducts, setEditedProducts] = useState([])
+  const [deleteAll, setDeleteAll] = useState(false)
   const [onDeleteInv, { isLoading: deletingInv }] = useDeleteInventoryMutation()
-
 
   function transformData(data) {
     return {
-      items: data.map(item => ({
+      items: data.map((item) => ({
         itemId: item.id,
         used: parseInt(item.used, 10) || 0,
         total: item.total || 0,
-        unitPrice: parseFloat(item.price) || 0
-      }))
-    };
+        unitPrice: parseFloat(item.price) || 0,
+      })),
+    }
   }
   function transformDataForDelete(data) {
     return {
-      itemIds: data.map(item => item.id)
-    };
+      itemIds: data.map((item) => item.id),
+    }
   }
 
   const handleSelectProduct = (product) => {
@@ -39,92 +38,89 @@ const Table = ({ products, onUpdateInv, isUpdatingInv, shopId, showAsList }) => 
       prevSelected.some((selectedProduct) => selectedProduct.id === product.id)
         ? prevSelected.filter((selectedProduct) => selectedProduct.id !== product.id)
         : [...prevSelected, product]
-    );
-  };
+    )
+  }
 
   const handleSelectAll = () => {
     if (selectedProducts.length === products?.data?.length) {
-      setSelectedProducts([]);
+      setSelectedProducts([])
       setDeleteAll(false)
     } else {
-      setSelectedProducts(products?.data);
+      setSelectedProducts(products?.data)
       setDeleteAll(true)
     }
-  };
+  }
 
   const handleEditProduct = (id, field, value) => {
     setEditedProducts((prevEdited) => {
-      const existingProduct = prevEdited.find((product) => product.id === id);
+      const existingProduct = prevEdited.find((product) => product.id === id)
       if (existingProduct) {
-        return prevEdited.map((product) =>
-          product.id === id ? { ...product, [field]: value } : product
-        );
+        return prevEdited.map((product) => (product.id === id ? { ...product, [field]: value } : product))
       } else {
-        const productToEdit = products.data.find((product) => product.id === id);
-        handleSelectProduct(productToEdit);
-        return [...prevEdited, { ...productToEdit, [field]: value }];
+        const productToEdit = products.data.find((product) => product.id === id)
+        handleSelectProduct(productToEdit)
+        return [...prevEdited, { ...productToEdit, [field]: value }]
       }
-    });
-  };
+    })
+  }
 
   const handleUndoEdit = (id) => {
-    setEditedProducts((prevEdited) => prevEdited.filter((product) => product.id !== id));
-    setSelectedProducts((prevSelected) =>
-      prevSelected.filter((selectedProduct) => selectedProduct.id !== id)
-    );
-  };
+    setEditedProducts((prevEdited) => prevEdited.filter((product) => product.id !== id))
+    setSelectedProducts((prevSelected) => prevSelected.filter((selectedProduct) => selectedProduct.id !== id))
+  }
 
   const handleUpdateProduct = (id) => {
-    const productToUpdate = editedProducts.find((p) => p.id === id);
+    const productToUpdate = editedProducts.find((p) => p.id === id)
     if (productToUpdate) {
       const data = { data: transformData([productToUpdate]), shopId }
       onUpdateInv(data)
-      console.log("Updating product", transformData([productToUpdate]));
+      console.log("Updating product", transformData([productToUpdate]))
     }
-  };
+  }
 
   const onUpdateAll = () => {
-    const res = transformData(editedProducts);
+    const res = transformData(editedProducts)
     const data = { data: res, shopId }
     onUpdateInv(data)
   }
 
   const onDelete = () => {
-    const res = transformDataForDelete(selectedProducts);
+    const res = transformDataForDelete(selectedProducts)
     const data = { data: res, shopId }
-    console.log(data);
+    console.log(data)
 
     onDeleteInv(data)
   }
 
   return (
     <div className="overflow-x-auto">
-      {!showAsList && <div className="flex justify-end mb-4">
-        <button
-          onClick={() => onDelete(selectedProducts)}
-          className={`bg-[red] mx-2 text-white px-4 py-1 rounded shadow hover:bg-red-600 transition
-          ${isUpdatingInv ? 'cursor-wait' : ''} 
-          ${selectedProducts.length < 1 || deletingInv ? 'opacity-50 cursor-not-allowed' : 'hover:bg-green-700'}`}
-        >
-          Delete Selected
-        </button>
-        <button
-          onClick={onUpdateAll}
-          className={`bg-[purple] text-white px-4 py-1 rounded shadow transition 
-        ${isUpdatingInv ? 'cursor-wait' : ''} 
-        ${editedProducts.length === 0 || isUpdatingInv ? 'opacity-50 cursor-not-allowed' : 'hover:bg-green-700'}`}
-          disabled={editedProducts.length === 0 || isUpdatingInv}
-        >
-          {isUpdatingInv ? "Updating..." : "Update Changes"}
-        </button>
-      </div>}
+      {!showAsList && (
+        <div className="flex justify-end mb-4">
+          <button
+            onClick={() => onDelete(selectedProducts)}
+            className={`bg-[red] mx-2 text-white px-4 py-1 rounded shadow hover:bg-red-600 transition
+          ${isUpdatingInv ? "cursor-wait" : ""} 
+          ${selectedProducts.length < 1 || deletingInv ? "opacity-50 cursor-not-allowed" : "hover:bg-green-700"}`}
+          >
+            Delete Selected
+          </button>
+          <button
+            onClick={onUpdateAll}
+            className={`bg-[purple] text-white px-4 py-1 rounded shadow transition 
+        ${isUpdatingInv ? "cursor-wait" : ""} 
+        ${editedProducts.length === 0 || isUpdatingInv ? "opacity-50 cursor-not-allowed" : "hover:bg-green-700"}`}
+            disabled={editedProducts.length === 0 || isUpdatingInv}
+          >
+            {isUpdatingInv ? "Updating..." : "Update Changes"}
+          </button>
+        </div>
+      )}
 
       <table className="min-w-full bg-white">
         <thead className="border-b">
           <tr>
-
-            {
-              !showAsList && <>
+            {!showAsList && (
+              <>
                 <th className="px-6 py-3 border-gray-300">
                   <input
                     type="checkbox"
@@ -158,16 +154,15 @@ const Table = ({ products, onUpdateInv, isUpdatingInv, shopId, showAsList }) => 
                   Actions
                 </th>
               </>
-            }
-
+            )}
           </tr>
         </thead>
         <tbody>
           {products?.data?.map((product) => {
-            const total = product.total;
-            const closingStock = product.count;
-            const isSelected = selectedProducts.some((selectedProduct) => selectedProduct.id === product.id);
-            const editedProduct = editedProducts.find((p) => p.id === product.id) || product;
+            const total = product.total
+            const closingStock = product.count
+            const isSelected = selectedProducts.some((selectedProduct) => selectedProduct.id === product.id)
+            const editedProduct = editedProducts.find((p) => p.id === product.id) || product
 
             return (
               <tr
@@ -195,29 +190,35 @@ const Table = ({ products, onUpdateInv, isUpdatingInv, shopId, showAsList }) => 
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{product.newlyAdded}</td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{total}</td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {!showAsList ? <ModInput
-                    type="number"
-                    min={0}
-                    max={total}
-                    value={editedProduct.used}
-                    onChange={(e) => handleEditProduct(product.id, "used", e.target.value)}
-                    className="border border-gray-300 rounded p-1"
-                  /> : ""}
-
+                  {!showAsList ? (
+                    <ModInput
+                      type="number"
+                      min={0}
+                      max={total}
+                      value={editedProduct.used}
+                      onChange={(e) => handleEditProduct(product.id, "used", e.target.value)}
+                      className="border border-gray-300 rounded p-1"
+                    />
+                  ) : (
+                    ""
+                  )}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{closingStock}</td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {!showAsList ? <ModInput
-                    type="number"
-                    min={0}
-                    value={editedProduct.unitPrice}
-                    onChange={(e) => handleEditProduct(product.id, "unitPrice", e.target.value)}
-                    className="border border-gray-300 rounded p-1"
-                  />
-                    : ""}
+                  {!showAsList ? (
+                    <ModInput
+                      type="number"
+                      min={0}
+                      value={editedProduct.unitPrice}
+                      onChange={(e) => handleEditProduct(product.id, "unitPrice", e.target.value)}
+                      className="border border-gray-300 rounded p-1"
+                    />
+                  ) : (
+                    ""
+                  )}
                 </td>
                 <td className="px-4 flex py-4 whitespace-nowrap text-sm text-gray-500">
-                  {!showAsList ?
+                  {!showAsList ? (
                     <>
                       {editedProducts.some((p) => p.id === product.id) && (
                         <>
@@ -239,27 +240,21 @@ const Table = ({ products, onUpdateInv, isUpdatingInv, shopId, showAsList }) => 
                           </button>
                         </>
                       )}
-                      <button
-                        onClick={() => onDelete(product.id)}
-                        className="text-blue-500 hover:underline mr-2"
-                      >
-                        {deletingInv ? (
-                          <span className="animate-spin">🔄</span>
-                        ) : (
-                          <Trash size="22" color="red" />
-                        )}
+                      <button onClick={() => onDelete(product.id)} className="text-blue-500 hover:underline mr-2">
+                        {deletingInv ? <span className="animate-spin">🔄</span> : <Trash size="22" color="red" />}
                       </button>
-                    </> : ""
-                  }
-
+                    </>
+                  ) : (
+                    ""
+                  )}
                 </td>
               </tr>
-            );
+            )
           })}
         </tbody>
       </table>
     </div>
-  );
-};
+  )
+}
 
-export default Table;
+export default Table

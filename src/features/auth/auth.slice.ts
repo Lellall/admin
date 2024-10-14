@@ -48,6 +48,11 @@ const authSlice = createSlice({
       state.isAuthenticated = isAuthenticated
       state.accessToken = accessToken
       state.refreshToken = refreshToken
+      if (isAuthenticated) {
+        localStorage.setItem("isAuthenticated", "true")
+      } else {
+        localStorage.removeItem("isAuthenticated")
+      }
       if (accessToken) {
         localStorage.setItem("access_token", accessToken)
       } else {

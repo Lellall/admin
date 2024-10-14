@@ -175,7 +175,7 @@ function OrderForRider() {
                           }}
                         >
                           <Button
-                            onClick={() => handleComplete(item.orderId)}
+                            onClick={() => handleComplete(item?.orderId ?? "")}
                             style={{
                               height: "40px",
                               marginLeft: "5px",
