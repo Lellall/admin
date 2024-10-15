@@ -1,14 +1,20 @@
 import { DocumentText, ShoppingCart, Box, Chart, Setting, Logout, HambergerMenu, CloseCircle } from "iconsax-react"
-import { NavLink, Outlet, useNavigate } from "react-router-dom"
+import { NavLink, Outlet, useMatch, useNavigate, useResolvedPath } from "react-router-dom"
 import Logo from "../../assets/react.svg"
 import { useDispatch } from "react-redux"
 import { logout } from "@/features/auth/auth.slice"
 import { useState } from "react"
 import { appPaths } from "@/components/layout/app-paths"
+import { ShopOutlined } from "@mui/icons-material"
 
 function RestaurantLayout() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
+  const resolved = useResolvedPath("/restaurant/templates")
+  const match = useMatch({ path: resolved.pathname + "/*", end: false })
+
+  const exactRestaurantMatch = useMatch({ path: "/restaurant", end: true })
+
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   const handleLogout = () => {
@@ -30,20 +36,16 @@ function RestaurantLayout() {
         <nav className="flex-1">
           <ul className="space-y-4 mt-3">
             <NavLink
-              className={({ isActive }) =>
-                `p-2 rounded flex items-center ${
-                  isActive && location.pathname === "/restaurant" ? "bg-green-100 font-bold" : ""
-                }`
-              }
+              className={`p-2 rounded flex items-center ${match || exactRestaurantMatch ? "bg-green-100 font-bold" : ""}`}
               to={appPaths.restaurant}
               end
             >
-              <DocumentText size="24" className="mr-3" />
-              Templates
+              <ShopOutlined className="mr-3" />
+              Shops
             </NavLink>
             <NavLink
               className={({ isActive }) => `p-2 rounded flex items-center ${isActive ? "bg-green-100 font-bold" : ""}`}
-              to={appPaths.reports}
+              to={appPaths.orders}
             >
               <ShoppingCart size="24" className="mr-3" />
               Orders
@@ -94,22 +96,16 @@ function RestaurantLayout() {
       {isMobileMenuOpen && (
         <nav className="absolute top-16 left-0 w-full bg-[#FFF] text-[#0E5D37] p-4 border-b z-50">
           <NavLink
-            className={({ isActive }) =>
-              `p-2 rounded flex items-center ${
-                isActive && location.pathname === "/restaurant" ? "bg-green-100 font-bold" : ""
-              }`
-            }
+            className={`p-2 rounded flex items-center ${match || exactRestaurantMatch ? "bg-green-100 font-bold" : ""}`}
             to={appPaths.restaurant}
             end
-            onClick={toggleMobileMenu}
           >
-            <DocumentText size="24" className="mr-3" />
-            Templates
+            <ShopOutlined className="mr-3" />
+            Shops
           </NavLink>
           <NavLink
             className={({ isActive }) => `p-2 rounded flex items-center ${isActive ? "bg-green-100 font-bold" : ""}`}
-            to={appPaths.reports}
-            onClick={toggleMobileMenu}
+            to={appPaths.orders}
           >
             <ShoppingCart size="24" className="mr-3" />
             Orders
@@ -117,7 +113,6 @@ function RestaurantLayout() {
           <NavLink
             className={({ isActive }) => `p-2 rounded flex items-center ${isActive ? "bg-green-100 font-bold" : ""}`}
             to={appPaths.inventory}
-            onClick={toggleMobileMenu}
           >
             <Box size="24" className="mr-3" />
             Inventory
@@ -126,7 +121,6 @@ function RestaurantLayout() {
           <NavLink
             className={({ isActive }) => `p-2 rounded flex items-center ${isActive ? "bg-green-100 font-bold" : ""}`}
             to={appPaths.reports}
-            onClick={toggleMobileMenu}
           >
             <Chart size="24" className="mr-3" />
             Reports
@@ -135,7 +129,6 @@ function RestaurantLayout() {
           <NavLink
             className={({ isActive }) => `p-2 rounded flex items-center ${isActive ? "bg-green-100 font-bold" : ""}`}
             to={appPaths.invoices}
-            onClick={toggleMobileMenu}
           >
             <Setting size="24" className="mr-3" />
             Invoice

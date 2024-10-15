@@ -10,7 +10,8 @@ import {
   ShopsProductResponse,
   SingleShopProductRequest,
 } from "./typings"
-import { Category, Product } from "../products/typings"
+import { Product } from "../products/typings"
+import { Category } from "../categories/typings"
 
 const shops = baseApi.injectEndpoints({
   endpoints: (builder) => ({

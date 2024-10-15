@@ -1,6 +1,6 @@
 import { expect, describe } from "vitest"
 import { screen } from "@testing-library/dom"
-import Restaurant from "./restaurant"
+import Restaurant from "./template/templates"
 import { render } from "@/utils/test-util"
 
 describe("Testing restaurant landing page", () => {

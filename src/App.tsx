@@ -16,12 +16,15 @@ import { appPaths } from "./components/layout/app-paths"
 import withRoleAccess from "./components/routes-helpers/withRole"
 import { Unauthorized } from "./components/unauthorized-page"
 // import TemplateForm from "./features/restaurants/template/template.form"
+
 // pages-routes
-const RestaurantPage = lazy(() => import("@/features/restaurants/restaurant"))
+const TemplatesPage = lazy(() => import("@/features/restaurants/template/templates"))
 const InvoicesPage = lazy(() => import("@/features/restaurants/invoice/invoices"))
 const InvoicePage = lazy(() => import("@/features/restaurants/invoice/invoice"))
 const RestaurantBorad = lazy(() => import("@/features/restaurants/dashboard/dashboard"))
 const InventoryPage = lazy(() => import("@/features/restaurants/inventory/inventory"))
+const OrdersPage = lazy(() => import("@/features/restaurants/orders/orders"))
+const ReportsPage = lazy(() => import("@/features/restaurants/reports/reports"))
 const CreateTemplate = lazy(() => import("@/features/restaurants/template/create.template"))
 const EditTemplate = lazy(() => import("@/features/restaurants/template/edit.template"))
 const OrderForRiderPage = lazy(() => import("@/features/admin/order/orders.component"))
@@ -35,11 +38,13 @@ const ForgotPassword = lazy(() => import("./features/auth/forgot-password"))
 const VendorsProductPage = lazy(() => import("@/features/admin/shop/shops.product"))
 
 // Protected pages with user roles
-const Restaurant = withRoleAccess("RESTAURANT")(RestaurantPage)
+const Templates = withRoleAccess("RESTAURANT")(TemplatesPage)
 const Invoices = withRoleAccess("RESTAURANT")(InvoicesPage)
 const Invoice = withRoleAccess("RESTAURANT")(InvoicePage)
 const RestaurantDashboard = withRoleAccess("RESTAURANT")(RestaurantBorad)
 const Inventory = withRoleAccess("RESTAURANT")(InventoryPage)
+const Orders = withRoleAccess("RESTAURANT")(OrdersPage)
+const Reports = withRoleAccess("RESTAURANT")(ReportsPage)
 
 const OrderForRider = withRoleAccess("ADMIN")(OrderForRiderPage)
 const Products = withRoleAccess("ADMIN")(ProductsPage)
@@ -79,7 +84,15 @@ function App() {
               index
               element={
                 <Suspense fallback={false}>
-                  <Restaurant />
+                  <RestaurantDashboard />
+                </Suspense>
+              }
+            />
+            <Route
+              path={`${appPaths.templates}/:shopId`}
+              element={
+                <Suspense fallback={false}>
+                  <Templates />
                 </Suspense>
               }
             />
@@ -91,19 +104,28 @@ function App() {
                 </Suspense>
               }
             />
-            <Route
-              path={appPaths.reports}
-              element={
-                <Suspense fallback={false}>
-                  <RestaurantDashboard />
-                </Suspense>
-              }
-            />
+
             <Route
               path={`${appPaths.createTemplate}`}
               element={
                 <Suspense fallback={false}>
                   <CreateTemplate />
+                </Suspense>
+              }
+            />
+            <Route
+              path={`${appPaths.orders}`}
+              element={
+                <Suspense fallback={false}>
+                  <Orders />
+                </Suspense>
+              }
+            />
+            <Route
+              path={`${appPaths.reports}`}
+              element={
+                <Suspense fallback={false}>
+                  <Reports />
                 </Suspense>
               }
             />

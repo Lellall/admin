@@ -25,11 +25,13 @@ export const appPaths = {
 
   // RESTAURANT
   restaurant: "/restaurant",
+  templates: "/restaurant/templates",
   invoices: "invoices",
   // invoice: "invoices",
-  reports: "reports",
+  reports: "/restaurant/reports",
   // getInvoice: (id = ":id") => `/${id}`,
   inventory: "/restaurant/inventory",
-  createTemplate: "create",
+  createTemplate: "/restaurant/templates/create",
   template: "template",
+  orders: "/restaurant/orders",
 }
