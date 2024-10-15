@@ -9,7 +9,7 @@ interface CardProps {
   amountInPercentage: string
 }
 
-function ShopCard(props: CardProps) {
+function DashboardCard(props: CardProps) {
   const { amount, imgUrl, title, amountInPercentage } = props
   return (
     <Card>
@@ -31,7 +31,7 @@ function ShopCard(props: CardProps) {
   )
 }
 
-export default ShopCard
+export default DashboardCard
 
 const Card = styled.div`
   width: 180px;

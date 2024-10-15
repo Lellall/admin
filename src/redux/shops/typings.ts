@@ -21,6 +21,13 @@ interface Coordinate {
   latitude: number | string
   longitude: number | string
 }
+export interface Shops {
+  category?: Category
+  id?: string
+  logoUrl?: string
+  name?: string
+  status?: string
+}
 export interface Shop {
   id?: string
   name: string
@@ -93,7 +100,7 @@ export interface ShopRequest {
 export interface ShopsResponse {
   resultTotal: number
   pageTotal: number
-  data: Shop[]
+  data: Shops[]
 }
 export interface ShopsRequest {
   page: number

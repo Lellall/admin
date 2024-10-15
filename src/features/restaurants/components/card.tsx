@@ -1,6 +1,6 @@
 import React from "react"
-import bg from "../../../assets/rose-petals.svg"
-import mainBg from "../../../assets/pattern-randomized.svg"
+// import bg from "../../../assets/rose-petals.svg"
+// import mainBg from "../../../assets/pattern-randomized.svg"
 
 type CardProps = {
   children: React.ReactNode
@@ -23,7 +23,9 @@ function ReusableCard({
     <div
       className={`p-4 rounded-lg ${className}`}
       style={{
-        backgroundImage: noBg ? `url(https://lellall-dev.sfo3.cdn.digitaloceanspaces.com/pattern-randomized.svg)` : `url(https://lellall-dev.sfo3.cdn.digitaloceanspaces.com/rose-petals.svg)`,
+        backgroundImage: noBg
+          ? `url(https://lellall-dev.sfo3.cdn.digitaloceanspaces.com/pattern-randomized.svg)`
+          : `url(https://lellall-dev.sfo3.cdn.digitaloceanspaces.com/rose-petals.svg)`,
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",

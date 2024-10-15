@@ -1,13 +1,13 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import { useEffect, useState } from "react"
-import { AddSquare, Calendar2, Clock, More, ShoppingCart, OceanProtocol } from "iconsax-react"
-import { useNavigate } from "react-router-dom"
+import { AddSquare, Calendar2, Clock, More, ShoppingCart } from "iconsax-react"
+import { useNavigate, useParams } from "react-router-dom"
 import styled from "styled-components"
 import Pagination from "rc-pagination/lib/Pagination"
-import ReusableCard from "./components/card"
-import rose from "../../assets/rose-petals.svg"
-import main from "../../assets/scattered-forcefields.svg"
+import ReusableCard from "../components/card"
+import rose from "@/assets/rose-petals.svg"
+import main from "@/assets/scattered-forcefields.svg"
 import {
   useCreateTemplateMutation,
   useDeleteTemplateMutation,
@@ -18,38 +18,36 @@ import ScreenLoader from "@/components/screen.loader"
 import EmptyState from "@/components/empty-state"
 import Modal from "@/components/modal"
 import { Template } from "@/redux/templates/typings"
-import { useGetShopsQuery } from "@/redux/shops"
-import ShopForm from "../admin/shop/shop-form"
+import { useGetShopQuery } from "@/redux/shops"
+import Skeleton from "react-loading-skeleton"
 
-function Restaurant() {
+const formatDateTime = (dateTimeString: string | number | Date) => {
+  const date = new Date(dateTimeString)
+  const year = date.getFullYear()
+  const month = String(date.getMonth() + 1).padStart(2, "0")
+  const day = String(date.getDate()).padStart(2, "0")
+  const formattedDateTime = `${month}-${day}-${year}`
+  return formattedDateTime
+}
+
+function Templates() {
   const navigate = useNavigate()
+  const { shopId } = useParams()
+
   const [page, setPage] = useState(1)
   const [currentItem, setCurrentItem] = useState<any>({})
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
-  const [isShopModalOpen, setIsShopModalOpen] = useState<boolean>(false)
-  const userStored = localStorage.getItem("user")
-  const user = userStored ? JSON.parse(userStored) : ""
-  const shopId = user?.shopIds?.[0] ?? null
+
+  const { data: shopData, isLoading: isLoadingShop } = useGetShopQuery({ id: shopId ?? "" })
   const [deleteTemplate, { isLoading: isDeleting, isSuccess }] = useDeleteTemplateMutation()
   const [createTemplate, { isLoading: isCreating }] = useCreateTemplateMutation()
-  const toggleModalShop = () => {
-    setIsShopModalOpen(!isShopModalOpen)
-  }
+
   const { data, isLoading } = useGetTemplatesQuery({
-    shopId,
+    shopId: shopId ?? "",
     page: page - 1,
     name: "",
     size: 10,
   })
-
-  const formatDateTime = (dateTimeString: string | number | Date) => {
-    const date = new Date(dateTimeString)
-    const year = date.getFullYear()
-    const month = String(date.getMonth() + 1).padStart(2, "0")
-    const day = String(date.getDate()).padStart(2, "0")
-    const formattedDateTime = `${month}-${day}-${year}`
-    return formattedDateTime
-  }
 
   const handlePageClick = (pageNumber: number) => {
     setPage(pageNumber)
@@ -60,7 +58,7 @@ function Restaurant() {
   }
 
   const handleDuplicateTemplate = (item: Template) => {
-    createTemplate({ data: item, shopId })
+    createTemplate({ data: item, shopId: shopId ?? "" })
   }
 
   useEffect(() => {
@@ -69,54 +67,55 @@ function Restaurant() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSuccess])
-
-  const { data: shops } = useGetShopsQuery({ page: 0, size: 10, categoryId: "", filter: "" })
   return (
     <div>
       <div className="flex flex-col md:flex-row h-auto md:h-[250px] rounded-lg bg-gray-50 w-full  mx-auto items-center gap-6 p-4">
-        <div
-          className="bg-greenn-900 h-[200px] md:h-[230px] rounded-lg w-full md:w-1/2 flex items-center justify-center"
-          style={{
-            backgroundImage: `url(${rose})`,
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            backgroundRepeat: "no-repeat",
-          }}
-        >
-          <h1 className="text-xl md:text-2xl font-bold text-white">CAFÉ DIMANCHE</h1>
-        </div>
-        <div
-          className="bg-greenn-900 h-[200px] md:h-[230px] rounded-lg w-full md:w-1/2 flex items-center justify-center"
-          style={{
-            backgroundImage: `url(${main})`,
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            backgroundRepeat: "no-repeat",
-          }}
-        >
-          <div className="container mx-auto px-4 text-center">
-            <h1 className="text-xl md:text-2xl font-bold text-[#0E5D37] mb-2 md:mb-4">
-              Experience the convenience you deserve with Lellall.
-            </h1>
-            <p className="text-sm md:text-lg text-gray-600 mb-4 md:mb-6">Get all you want in one store!</p>
-            <button
-              type="button"
-              onClick={() => {
-                navigate(`${appPaths.createTemplate}`)
+        {isLoadingShop ? (
+          <>
+            {[1, 2].map((el) => (
+              <Skeleton key={el} count={1} width="350px" height="189px" />
+            ))}
+          </>
+        ) : (
+          <>
+            <div
+              className="bg-greenn-900 h-[200px] md:h-[230px] rounded-lg w-full md:w-1/2 flex items-center justify-center"
+              style={{
+                backgroundImage: `url(${rose})`,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+                backgroundRepeat: "no-repeat",
               }}
-              className="bg-[#0E5D37] text-white py-2 px-3 md:px-4 rounded hover:bg-green-700"
             >
-              Get Started
-            </button>
-            <button
-              type="button"
-              onClick={toggleModalShop}
-              className="bg-[#0E5D37] text-white py-2 px-4 ml-2 rounded hover:bg-green-700"
+              <h1 className="text-xl md:text-2xl font-bold text-white">{shopData?.name.toUpperCase()}</h1>
+            </div>
+            <div
+              className="bg-greenn-900 h-[200px] md:h-[230px] rounded-lg w-full md:w-1/2 flex items-center justify-center"
+              style={{
+                backgroundImage: `url(${main})`,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+                backgroundRepeat: "no-repeat",
+              }}
             >
-              Create Shop
-            </button>
-          </div>
-        </div>
+              <div className="container mx-auto px-4 text-center">
+                <h1 className="text-xl md:text-2xl font-bold text-[#0E5D37] mb-2 md:mb-4">
+                  Experience the convenience you deserve with Lellall.
+                </h1>
+                <p className="text-sm md:text-lg text-gray-600 mb-4 md:mb-6">Get all you want in one store!</p>
+                <button
+                  type="button"
+                  onClick={() => {
+                    navigate(`${appPaths.createTemplate}`)
+                  }}
+                  className="bg-[#0E5D37] text-white py-2 px-3 md:px-4 rounded hover:bg-green-700"
+                >
+                  Get Started
+                </button>
+              </div>
+            </div>
+          </>
+        )}
       </div>
 
       {isLoading ? (
@@ -219,6 +218,7 @@ function Restaurant() {
               })
             )}
           </div>
+
           <div
             style={{
               float: "right",
@@ -242,7 +242,7 @@ function Restaurant() {
               <button
                 type="button"
                 onClick={() => {
-                  deleteTemplate({ shopId, templateId: currentItem.id })
+                  deleteTemplate({ shopId: shopId ?? "", templateId: currentItem.id })
                 }}
                 className="bg-[#5d1b0e] text-white  min-w-[100px]  py-2 px-4 rounded hover:bg-red-700"
               >
@@ -252,28 +252,11 @@ function Restaurant() {
           </Modal>
         </>
       )}
-
-      <>
-        <Modal
-          width="100%"
-          title="Create Shop"
-          style={{
-            maxWidth: "700px",
-            width: "90%",
-            margin: "auto",
-            overflowY: "auto",
-          }}
-          show={isShopModalOpen}
-          onClose={toggleModalShop}
-        >
-          <ShopForm mode="create" close={toggleModalShop} />
-        </Modal>
-      </>
     </div>
   )
 }
 
-export default Restaurant
+export default Templates
 
 const Card = styled(ReusableCard)`
   .dropdown {
