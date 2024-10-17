@@ -57,7 +57,7 @@ const RestaurantDashBoard = () => {
   return (
     <>
       <div className="">
-        <TabContainer>
+        <TabContainer style={{ marginBottom: "10px" }}>
           <TabButton active={activeTab === "home"} onClick={() => handleTabSwitch("home")}>
             Home
           </TabButton>
@@ -122,16 +122,13 @@ const RestaurantDashBoard = () => {
 
 export default RestaurantDashBoard
 
-const Button = styled.div`
-  padding: 5px;
-  border-bottom: 1px solid green;
-`
-
 const Container = styled.div`
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(auto-fit, minmax(min-content, 350px));
+  align-items: center;
+  justify-content: space-between;
   gap: 10px;
-  /* background: red; */
+  max-width: 1024px;
 `
 const MainContainer = styled.div`
   border: 1px solid #e4e7ec;
@@ -139,6 +136,12 @@ const MainContainer = styled.div`
   border-radius: 10px;
   margin: 40px 0px;
   max-width: 600px;
+  /* max-width: 1024px; */
+  /* min-height: 400px; */
+
+  .chart {
+    /* background: red; */
+  }
   .top {
     display: flex;
     justify-content: space-between;

@@ -31,10 +31,10 @@ const Invoices = () => {
   }
   return (
     <>
-      <Container>
+      <>
         <InvoiceHeader />
 
-        <div className="grid grid-cols-2 gap-5 mt-5 mb-5">
+        <Grid>
           {isLoading ? (
             <>
               {[1, 2, 3, 4].map((el) => (
@@ -46,10 +46,10 @@ const Invoices = () => {
               <InvoiceCard title="Total Invoice" total={data?.totalElements ?? 0} type="total" />
               <InvoiceCard title="Total Paid Invoice" total={data?.totalElements ?? 0} type="paid" />
               <InvoiceCard title="Total Pending Invoice" total={data?.totalElements ?? 0} type="pending" />
-              <InvoiceCard title="Total Cancel Invoices" total={data?.totalElements ?? 0} type="cancel" />
+              <InvoiceCard title="Total Cancel Invoices" total={data?.totalElements ?? 0} type="failed" />
             </>
           )}
-        </div>
+        </Grid>
 
         <div>
           <TabContainer>
@@ -110,11 +110,16 @@ const Invoices = () => {
             <InvoiceCardList status="cancel" date="12-12-2024" id="Invoice-ID" price={20010} title="75800707-AR" />
           </TabPanel>
         </div>
-      </Container>
+      </>
     </>
   )
 }
 
 export default Invoices
 
-const Container = styled.div``
+const Grid = styled.div`
+  display: grid;
+  gap: 10px;
+  margin: 30px 0px;
+  grid-template-columns: repeat(auto-fit, minmax(min-content, 350px));
+`
