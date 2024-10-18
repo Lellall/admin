@@ -20,7 +20,15 @@ function DashboardCard(props: CardProps) {
       </div>
       <div className="info">
         <Text
-          style={{ background: " #e7f6ec", padding: "4px", fontSize: "12px", marginRight: "4px", borderRadius: "10px" }}
+          style={{
+            background: " #e7f6ec",
+            padding: "4px",
+            fontSize: "12px",
+            marginRight: "4px",
+            width: "40px",
+            textAlign: "center",
+            borderRadius: "10px",
+          }}
           color="#036b26"
         >
           {amountInPercentage}
@@ -34,11 +42,16 @@ function DashboardCard(props: CardProps) {
 export default DashboardCard
 
 const Card = styled.div`
-  width: 180px;
+  min-width: 180px;
+  max-width: 300px;
+  height: 150px;
   border: 1px solid #e4e7ec;
   padding: 10px;
   border-radius: 10px;
   background: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
 
   .subTitle {
     display: flex;
@@ -48,12 +61,13 @@ const Card = styled.div`
   .subTitle img {
     border-radius: 100px;
     border: 1px solid #e4e7ec;
-    height: 25px;
-    width: 25px;
+    height: 2em;
+    width: 2em;
     padding: 2px;
   }
   .info {
     display: flex;
+    align-items: center;
   }
   .info p {
     margin-left: 5px;

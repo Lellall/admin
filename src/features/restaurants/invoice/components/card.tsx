@@ -9,7 +9,7 @@ import { thousandFormatter } from "@/utils/helpers"
 interface InvoiceCardProps {
   title: string
   total: number
-  type: "pending" | "cancel" | "total" | "paid"
+  type: "pending" | "failed" | "total" | "paid"
 }
 function InvoiceCard({ title, total, type }: InvoiceCardProps) {
   return (
@@ -18,7 +18,7 @@ function InvoiceCard({ title, total, type }: InvoiceCardProps) {
         {type === "total" && <ClipboardText color="#125F3A" />}
         {type === "paid" && <ClipboardTick color="#fff" />}
         {type === "pending" && <DocumentText color="#A78705" />}
-        {type === "cancel" && <DocumentText color="#FF3D00" />}
+        {type === "failed" && <DocumentText color="#FF3D00" />}
       </div>
 
       <Text block color={type === "paid" ? "#125f3a" : "#fff"} style={{ fontSize: "17px", marginTop: "15px" }}>
@@ -47,7 +47,8 @@ interface CardProps {
   status: string
 }
 const Card = styled.div<CardProps>`
-  width: 175px;
+  /* width: 175px; */
+  max-width: 302px;
   background: ${({ status }) =>
     status === "total"
       ? "#125f3a"
@@ -55,7 +56,7 @@ const Card = styled.div<CardProps>`
         ? "#DCEDE5"
         : status === "pending"
           ? "#E5B804"
-          : status === "cancel"
+          : status === "failed"
             ? "#FF3D00"
             : "#125f3a"};
   height: 189px;
@@ -70,11 +71,11 @@ const Card = styled.div<CardProps>`
         ? SecondaryIcon
         : status === "pending"
           ? PendingIcon
-          : status === "cancel"
+          : status === "failed"
             ? PrimaryIcon
             : PrimaryIcon
     })`};
-
+  background-size: 158px;
   background-position: top right;
   background-repeat: no-repeat;
   border-radius: 8px;
@@ -86,7 +87,7 @@ const Card = styled.div<CardProps>`
           ? "#125f3a"
           : status === "pending"
             ? "#EFEBDBD4"
-            : status === "cancel"
+            : status === "failed"
               ? "#FFECE5"
               : "#125f3a"};
     height: 50px;
