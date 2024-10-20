@@ -125,7 +125,11 @@ export default RestaurantDashBoard
 const Container = styled.div`
   display: grid;
   /* grid-template-columns: repeat(auto-fit, minmax(min-content, 350px)); */
-  grid-template-columns: 1fr 1fr;
+
+  grid-template-columns: repeat(2, 1fr);
+  @media (min-width: 887px) {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  }
   align-items: center;
   justify-content: space-between;
   gap: 10px;

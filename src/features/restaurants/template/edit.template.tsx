@@ -77,7 +77,7 @@ function EditTemplate() {
   return (
     <div className="p-4 w-full max-w-4xl mx-auto">
       <TitledBackButton />
-
+      <h1>Hello world</h1>
       <form onSubmit={handleSubmit(handleFormSubmit)}>
         <div className="flex justify-between  mb-4 flex-col">
           <InputComponent

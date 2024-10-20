@@ -27,19 +27,21 @@ function RestaurantLayout() {
   return (
     <>
       <div className="flex flex-col md:flex-row h-screen">
-        <aside className="w-full md:w-1/6 border-r bg-[#FFF] text-[#0E5D37] p-4 sticky top-0 h-screen md:flex flex-col hidden md:block">
+        <aside className="w-full md:w-[17%] border-r bg-[#FFF] text-[#0E5D37] p-4 sticky top-0 h-screen md:flex flex-col hidden ">
           <div className="mb-6">
             <img src={Logo} alt="Logo" className="h-10 w-auto mb-4" />
           </div>
 
-          <nav className="flex-1">
-            <ul className="space-y-4 mt-3">
+          <nav className="flex-1 ">
+            <ul className="space-y-4 ">
               <NavLink
                 className={`p-2 rounded flex items-center ${match || exactRestaurantMatch ? "bg-green-100 font-bold" : ""}`}
                 to={appPaths.restaurant}
                 end
               >
-                <ShopOutlined className="mr-3" />
+                <span>
+                  <ShopOutlined className="mr-3" />
+                </span>
                 Shops
               </NavLink>
               <NavLink
@@ -48,7 +50,9 @@ function RestaurantLayout() {
                 }
                 to={appPaths.orders}
               >
-                <ShoppingCart size="24" className="mr-3" />
+                <span>
+                  <ShoppingCart size="24" className="mr-3" />
+                </span>
                 Orders
               </NavLink>
               <NavLink
@@ -57,7 +61,9 @@ function RestaurantLayout() {
                 }
                 to={appPaths.inventory}
               >
-                <Box size="24" className="mr-3" />
+                <span>
+                  <Box size="24" className="mr-3" />
+                </span>
                 Inventory
               </NavLink>
 
@@ -67,7 +73,9 @@ function RestaurantLayout() {
                 }
                 to={appPaths.reports}
               >
-                <Chart size="24" className="mr-3" />
+                <span>
+                  <Chart size="24" className="mr-3" />
+                </span>
                 Reports
               </NavLink>
 
@@ -77,7 +85,9 @@ function RestaurantLayout() {
                 }
                 to={appPaths.invoices}
               >
-                <Setting size="24" className="mr-3" />
+                <span>
+                  <Setting size="24" className="mr-3" />
+                </span>
                 Invoice
               </NavLink>
             </ul>
@@ -101,7 +111,9 @@ function RestaurantLayout() {
             end
             onClick={toggleMobileMenu}
           >
-            <ShopOutlined className="mr-3" />
+            <span>
+              <ShopOutlined className="mr-3" />
+            </span>
             Shops
           </NavLink>
           <NavLink
@@ -109,7 +121,9 @@ function RestaurantLayout() {
             className={({ isActive }) => `p-2 rounded flex items-center ${isActive ? "bg-green-100 font-bold" : ""}`}
             to={appPaths.orders}
           >
-            <ShoppingCart size="24" className="mr-3" />
+            <span>
+              <ShoppingCart size="24" className="mr-3" />
+            </span>
             Orders
           </NavLink>
           <NavLink
@@ -117,7 +131,9 @@ function RestaurantLayout() {
             className={({ isActive }) => `p-2 rounded flex items-center ${isActive ? "bg-green-100 font-bold" : ""}`}
             to={appPaths.inventory}
           >
-            <Box size="24" className="mr-3" />
+            <span>
+              <Box className="mr-3" />
+            </span>
             Inventory
           </NavLink>
 
@@ -126,7 +142,9 @@ function RestaurantLayout() {
             className={({ isActive }) => `p-2 rounded flex items-center ${isActive ? "bg-green-100 font-bold" : ""}`}
             to={appPaths.reports}
           >
-            <Chart size="24" className="mr-3" />
+            <span>
+              <Chart size="24" className="mr-3" />
+            </span>
             Reports
           </NavLink>
 
@@ -135,7 +153,9 @@ function RestaurantLayout() {
             className={({ isActive }) => `p-2 rounded flex items-center ${isActive ? "bg-green-100 font-bold" : ""}`}
             to={appPaths.invoices}
           >
-            <Setting size="24" className="mr-3" />
+            <span>
+              <Setting size="24" className="mr-3" />
+            </span>
             Invoice
           </NavLink>
         </Navbar>
@@ -172,6 +192,8 @@ const Navbar = styled.nav<Props>`
   a {
     margin: 1.56rem 0px;
     padding: 8px;
+    display: flex;
+    flex-direction: row;
   }
   @media screen and (min-width: 768px) {
     display: none;
