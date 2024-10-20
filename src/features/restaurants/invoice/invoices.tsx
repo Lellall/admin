@@ -38,7 +38,7 @@ const Invoices = () => {
           {isLoading ? (
             <>
               {[1, 2, 3, 4].map((el) => (
-                <Skeleton key={el} count={1} width="175px" height="189px" />
+                <Skeleton key={el} count={1} style={{ minWidth: "302px" }} width="175px" height="189px" />
               ))}
             </>
           ) : (
@@ -121,5 +121,9 @@ const Grid = styled.div`
   display: grid;
   gap: 10px;
   margin: 30px 0px;
-  grid-template-columns: repeat(auto-fit, minmax(min-content, 350px));
+  grid-template-columns: repeat(2, 1fr);
+
+  @media (min-width: 887px) {
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  }
 `
