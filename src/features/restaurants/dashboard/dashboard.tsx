@@ -5,7 +5,7 @@ import { Pie, Bar } from "react-chartjs-2"
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js"
 import CardList from "./components/cardList"
 import Text from "@/components/text/Text"
-import { TabButton, TabContainer, TabPanel } from "@/components/tab.component"
+import { TabButton, TabContainer, TabPanel } from "./components/tab"
 import { useState } from "react"
 import Shops from "../shops/shops"
 
@@ -124,7 +124,12 @@ export default RestaurantDashBoard
 
 const Container = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min-content, 350px));
+  /* grid-template-columns: repeat(auto-fit, minmax(min-content, 350px)); */
+
+  grid-template-columns: repeat(2, 1fr);
+  @media (min-width: 887px) {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  }
   align-items: center;
   justify-content: space-between;
   gap: 10px;

@@ -2,20 +2,19 @@ import styled from "styled-components"
 
 export const TabContainer = styled.div`
   display: flex;
-  align-items: center;
-  justify-content: space-around;
   background: #fff;
   padding: 10px;
+  gap: 10px;
+  background: transparent;
   width: 100%;
 `
 
 export const TabButton = styled.div<{ active: boolean }>`
-  width: 33%;
-  max-width: 200px;
+  width: 60px;
   height: 30px;
-  border-radius: 5px;
-  background: ${(props) => (props.active ? "#125f3a" : "#F3FAF5")};
-  color: ${(props) => (props.active ? "#fff" : "#4F5D75")};
+  border-bottom: ${(props) => (props.active ? "1px solid #33A06C" : "none")};
+  /* background: ${(props) => (props.active ? "#125f3a" : "#F3FAF5")}; */
+  color: ${(props) => (props.active ? "#000" : "lightgrey")};
   cursor: pointer;
   font-style: normal;
   font-weight: 400;
@@ -23,9 +22,6 @@ export const TabButton = styled.div<{ active: boolean }>`
   padding: 10px;
   display: flex;
   align-items: center;
-  justify-content: center;
-  text-align: center;
-  gap: 10px;
 `
 
 export const TabPanel = styled.div<{ active: boolean }>`

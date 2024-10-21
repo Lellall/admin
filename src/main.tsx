@@ -7,12 +7,15 @@ import App from "./App.js"
 import "rc-pagination/assets/index.css"
 import "react-loading-skeleton/dist/skeleton.css"
 import { ErrorBoundary } from "./components/ui/error-boundary.js"
+import MyLayoutProvider from "./features/restaurants/LayoutContext.js"
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <ErrorBoundary>
       <Provider store={store}>
-        <App />
+        <MyLayoutProvider>
+          <App />
+        </MyLayoutProvider>
       </Provider>
     </ErrorBoundary>
   </React.StrictMode>

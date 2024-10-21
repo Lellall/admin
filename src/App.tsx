@@ -130,7 +130,7 @@ function App() {
               }
             />
             <Route
-              path={`${appPaths.template}/:id`}
+              path={`${appPaths.editTemplate}`}
               element={
                 <Suspense fallback={false}>
                   <EditTemplate />

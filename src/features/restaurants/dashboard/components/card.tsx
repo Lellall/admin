@@ -42,7 +42,6 @@ function DashboardCard(props: CardProps) {
 export default DashboardCard
 
 const Card = styled.div`
-  min-width: 180px;
   max-width: 300px;
   height: 150px;
   border: 1px solid #e4e7ec;

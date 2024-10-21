@@ -32,6 +32,7 @@ export const appPaths = {
   // getInvoice: (id = ":id") => `/${id}`,
   inventory: "/restaurant/inventory",
   createTemplate: "/restaurant/templates/create",
+  editTemplate: "/restaurant/templates/:id",
   template: "template",
   orders: "/restaurant/orders",
 }
