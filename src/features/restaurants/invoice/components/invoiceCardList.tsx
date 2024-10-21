@@ -1,5 +1,5 @@
 import Text from "@/components/text/Text"
-import { thousandFormatter } from "@/utils/helpers"
+import { capitalizeFirstLetterOFEachWord, thousandFormatter } from "@/utils/helpers"
 import styled from "styled-components"
 
 interface CardProps {
@@ -7,7 +7,7 @@ interface CardProps {
   title: string
   date: string
   price: number
-  status: "pending" | "cancel" | "paid"
+  status: "pending" | "failed" | "paid"
   onClick?: () => void
 }
 
@@ -21,7 +21,7 @@ function InvoiceCardList(props: CardProps) {
       </div>
       <StatusCard status={status}>
         <span></span>
-        status
+        {capitalizeFirstLetterOFEachWord(status)}
       </StatusCard>
       <div>
         <Text h3>₦{thousandFormatter(price)}</Text>
@@ -67,6 +67,5 @@ const StatusCard = styled.div<CardStyleProps>`
     width: 7px;
     padding: 3px;
     border-radius: 100px;
-    /* margin: 0px 5px; */
   }
 `

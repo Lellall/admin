@@ -46,7 +46,7 @@ const Invoices = () => {
               <InvoiceCard title="Total Invoice" total={data?.totalElements ?? 0} type="total" />
               <InvoiceCard title="Total Paid Invoice" total={data?.totalElements ?? 0} type="paid" />
               <InvoiceCard title="Total Pending Invoice" total={data?.totalElements ?? 0} type="pending" />
-              <InvoiceCard title="Total Cancel Invoices" total={data?.totalElements ?? 0} type="failed" />
+              <InvoiceCard title="Total Failed Invoices" total={data?.totalElements ?? 0} type="failed" />
             </>
           )}
         </Grid>
@@ -59,8 +59,8 @@ const Invoices = () => {
             <TabButton onClick={() => handleTabSwitch("pending")} active={activeTab === "pending"}>
               Pending
             </TabButton>
-            <TabButton onClick={() => handleTabSwitch("cancel")} active={activeTab === "cancel"}>
-              Cancel
+            <TabButton onClick={() => handleTabSwitch("failed")} active={activeTab === "failed"}>
+              Failed
             </TabButton>
           </TabContainer>
         </div>
@@ -99,15 +99,15 @@ const Invoices = () => {
             <InvoiceCardList status="pending" date="12-12-2024" id="Invoice-ID" price={20010} title="75800707-AR" />
             <InvoiceCardList status="pending" date="12-12-2024" id="Invoice-ID" price={20010} title="75800707-AR" />
           </TabPanel>
-          <TabPanel active={activeTab === "cancel"}>
-            <InvoiceCardList status="cancel" date="12-12-2024" id="Invoice-ID" price={20010} title="75800707-AR" />
-            <InvoiceCardList status="cancel" date="12-12-2024" id="Invoice-ID" price={20010} title="75800707-AR" />
-            <InvoiceCardList status="cancel" date="12-12-2024" id="Invoice-ID" price={20010} title="75800707-AR" />
-            <InvoiceCardList status="cancel" date="12-12-2024" id="Invoice-ID" price={20010} title="75800707-AR" />
-            <InvoiceCardList status="cancel" date="12-12-2024" id="Invoice-ID" price={20010} title="75800707-AR" />
-            <InvoiceCardList status="cancel" date="12-12-2024" id="Invoice-ID" price={20010} title="75800707-AR" />
-            <InvoiceCardList status="cancel" date="12-12-2024" id="Invoice-ID" price={20010} title="75800707-AR" />
-            <InvoiceCardList status="cancel" date="12-12-2024" id="Invoice-ID" price={20010} title="75800707-AR" />
+          <TabPanel active={activeTab === "failed"}>
+            <InvoiceCardList status="failed" date="12-12-2024" id="Invoice-ID" price={20010} title="75800707-AR" />
+            <InvoiceCardList status="failed" date="12-12-2024" id="Invoice-ID" price={20010} title="75800707-AR" />
+            <InvoiceCardList status="failed" date="12-12-2024" id="Invoice-ID" price={20010} title="75800707-AR" />
+            <InvoiceCardList status="failed" date="12-12-2024" id="Invoice-ID" price={20010} title="75800707-AR" />
+            <InvoiceCardList status="failed" date="12-12-2024" id="Invoice-ID" price={20010} title="75800707-AR" />
+            <InvoiceCardList status="failed" date="12-12-2024" id="Invoice-ID" price={20010} title="75800707-AR" />
+            <InvoiceCardList status="failed" date="12-12-2024" id="Invoice-ID" price={20010} title="75800707-AR" />
+            <InvoiceCardList status="failed" date="12-12-2024" id="Invoice-ID" price={20010} title="75800707-AR" />
           </TabPanel>
         </div>
       </>
