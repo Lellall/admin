@@ -34,11 +34,11 @@ export interface Product {
   currency: string
   featured: boolean
   available: boolean
-  manufacturer: string
-  weight: number
-  height: number
+  manufacturer?: string
+  weight?: number
+  height?: number
   width: number
-  depth: number
+  depth?: number
   createdAt?: string
   updatedAt?: string
   tags: string[]
@@ -59,11 +59,7 @@ export const productSchema = yup.object().shape({
     .required("Minimum purchase price is required")
     .positive("Minimum purchase price must be a positive number"),
   description: yup.string().required("Description is required"),
-  quantity: yup
-    .number()
-    .required("Quantity is required")
-    .integer("Quantity must be an integer")
-    .min(0, "Quantity cannot be negative"),
+  quantity: yup.string(),
   inventory: yup
     .number()
     .required("Inventory is required")
@@ -74,11 +70,11 @@ export const productSchema = yup.object().shape({
   currency: yup.string().nullable(),
   featured: yup.boolean().required("Featured status is required"),
   available: yup.boolean().required("Availability status is required"),
-  manufacturer: yup.string().required("Manufacturer is required"),
-  weight: yup.number().nullable().positive("Weight must be a positive number"),
-  height: yup.number().nullable(),
-  width: yup.number().nullable().optional().positive("Width must be a positive number"),
-  depth: yup.number().nullable().optional().positive("Depth must be a positive number"),
+  manufacturer: yup.string(),
+  weight: yup.string(),
+  height: yup.string().nullable(),
+  width: yup.string(),
+  depth: yup.string(),
   createdAt: yup.string().optional().nullable(),
   updatedAt: yup.string().optional().nullable(),
   tags: yup.array().of(yup.string()).min(1, "At least one tag is required"),

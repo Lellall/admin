@@ -57,8 +57,8 @@ function ShopsTable({ shops }: ShopsTableProps) {
             <TableRow key={shop.id}>
               <TableDataCell>{shop.name}</TableDataCell>
               <ShopStatus status={shop.status}>{shop.status}</ShopStatus>
-              <TableDataCell>{shop.category.name}</TableDataCell>
-              <TableDataCell>{shop.category.type}</TableDataCell>
+              <TableDataCell>{shop?.category?.name}</TableDataCell>
+              <TableDataCell>{shop?.category?.type}</TableDataCell>
               <TableDataCell>
                 <button
                   type="button"
