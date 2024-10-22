@@ -12,6 +12,7 @@ import {
 } from "./typings"
 import { Product } from "../products/typings"
 import { Category } from "../categories/typings"
+import { Errorhandler } from "@/utils/errorHandler"
 
 const shops = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -98,9 +99,10 @@ const shops = baseApi.injectEndpoints({
             position: "top-right",
           })
         }).catch((err) => {
-          toast.error(`${err.message}`, {
-            position: "top-right",
-          })
+          Errorhandler(err)
+          // toast.error(`${err.message}`, {
+          //   position: "top-right",
+          // })
         })
       },
     }),

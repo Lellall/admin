@@ -5,7 +5,30 @@ interface IObj {
   message: string
 }
 
-export const Errorhandler = (err: any, obj?: IObj | IObj[], show = true) => {
+interface ServerError {
+  error?: {
+    status: number
+    data: {
+      message: string
+      status: string
+    }
+  }
+  status?: string | number
+  response?: {
+    data: any
+    status: number
+  }
+  data?: {
+    message: string
+    status: string
+  }
+  body?: any
+  name?: string
+}
+
+export const Errorhandler = (err: ServerError, obj?: IObj | IObj[], show = true) => {
+  // Development logging
+
   window.process = { ...window.process }
   if (process) {
     const NODE_ENV = process.env.NODE_ENV
@@ -13,17 +36,12 @@ export const Errorhandler = (err: any, obj?: IObj | IObj[], show = true) => {
       console.error(err)
     }
   }
-  // eslint-disable-next-line prefer-const
-  let { response, body, status } = err
-  if (body && !response) {
-    response = {
-      data: body,
-      status: body.status || status,
-    }
-  }
-  let msg
+
+  let msg: string | undefined
   let statusCode: number
   const constMessage = "Sorry, an error has occurred, Please try again or if issue persist, contact support."
+
+  // Standard error messages mapping
   const msgObj: { [key: string]: string } = {
     "404": "The resource you're looking for cannot be found.",
     "400": "An unexpected error has occurred. Please try again.",
@@ -39,37 +57,63 @@ export const Errorhandler = (err: any, obj?: IObj | IObj[], show = true) => {
     "504": "Your request is taking too long to complete. Please try again.",
   }
 
-  if (response && response instanceof Object) {
-    statusCode = response?.status
-    const { data } = response
-    msg = data || data.message || data.error || constMessage
+  // Handle different error formats
+  if (err.error?.data?.message) {
+    // Handle nested error object format
+    msg = err.error.data.message
+    statusCode = err.error.status
+  } else if (err.data?.status === "INTERNAL_SERVER_ERROR") {
+    // Handle new error format
+    msg = err.data.message
+    statusCode = 500
+  } else if (err.status === "INTERNAL_SERVER_ERROR") {
+    // Handle direct status format
+    msg = err.data?.message || constMessage
+    statusCode = 500
+  } else if (err.response && err.response instanceof Object) {
+    // Handle existing response format
+    statusCode = err.response.status
+    const { data } = err.response
+    msg = data?.message || data?.error || data || constMessage
   } else if (err?.name === "ApiError") {
-    statusCode = err?.status
-    msg = err?.body?.message || err?.body?.error || constMessage
+    // Handle ApiError format
+    statusCode = typeof err.status === "number" ? err.status : 500
+    msg = err.body?.message || err.body?.error || constMessage
   } else {
+    // Default error handling
     statusCode = 600
+    msg = constMessage
   }
+
+  // Handle custom error messages
   if (statusCode === 409) {
-    msgObj[`${statusCode}`] = msg
+    msgObj[`${statusCode}`] = msg || msgObj[`${statusCode}`] || constMessage
   }
+
+  // Set default message if not in msgObj
   if (!msgObj[`${statusCode}`]) {
     msgObj[`${statusCode}`] = constMessage
   }
-  if (obj instanceof Object) {
-    const objAsIObj = obj as IObj
-    msgObj[`${objAsIObj.code}`] = objAsIObj.message
-  }
-  if (obj instanceof Array) {
-    obj.forEach((x) => {
-      msgObj[`${x.code}`] = x.message
-    })
+
+  // Handle custom error objects
+  if (obj) {
+    if (!Array.isArray(obj)) {
+      const objAsIObj = obj as IObj
+      msgObj[`${objAsIObj.code}`] = objAsIObj.message
+    } else {
+      obj.forEach((x) => {
+        msgObj[`${x.code}`] = x.message
+      })
+    }
   }
 
+  // Show toast notification if required
   if (show && statusCode !== 401) {
-    const showMsg = msg ? msg : msgObj[statusCode]
+    const showMsg = msg || msgObj[statusCode]
     toast.error(showMsg, {
       position: "top-right",
     })
   }
+
   return { success: false, statusCode, message: msg }
 }

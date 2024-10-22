@@ -14,6 +14,8 @@ interface InputComponentProps {
   disabled?: boolean
   rules?: any
   options?: { value: string | number; label: string }[]
+  props?: any
+  onChange?: any
 }
 const ITEM_HEIGHT = 48
 const ITEM_PADDING_TOP = 8
@@ -37,6 +39,8 @@ function InputComponent({
   disabled = false,
   rules = {},
   options,
+  onChange,
+  props,
 }: InputComponentProps) {
   const { field } = useController({
     name,
@@ -60,7 +64,7 @@ function InputComponent({
           <Select
             style={style}
             placeholder={"Select "}
-            onChange={field.onChange}
+            onChange={onChange || field.onChange}
             onBlur={field.onBlur}
             name={field.name}
             inputRef={field.ref}
@@ -69,6 +73,7 @@ function InputComponent({
             type={type}
             disabled={disabled}
             MenuProps={MenuProps}
+            {...props}
           >
             {options?.map((item) => <MenuItem value={item.value}> {item.label} </MenuItem>)}
           </Select>

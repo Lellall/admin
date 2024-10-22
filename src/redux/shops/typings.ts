@@ -109,20 +109,22 @@ export interface ShopsRequest {
   filter?: string
 }
 
+export interface ProductShop {
+  name: string
+  id: string
+  description: string
+  shop: {
+    name: string
+    id: string
+  }
+  imageUrl: string
+  price: number
+}
+
 export interface ShopsProductResponse {
   resultTotal: number
   pageTotal: number
-  data: {
-    name: string
-    id: string
-    description: string
-    shop: {
-      name: string
-      id: string
-    }
-    imageUrl: string
-    price: number
-  }[]
+  data: ProductShop[]
 }
 export interface ShopsProductsRequest extends ShopsRequest {
   id: string

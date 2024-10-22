@@ -32,9 +32,7 @@ const authApi = baseApi.injectEndpoints({
             })
           )
         }).catch((err) => {
-          toast.error(err.error.data?.message, {
-            position: "top-right",
-          })
+          Errorhandler(err)
         })
       },
     }),

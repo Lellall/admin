@@ -9,17 +9,27 @@ import EmptyState from "@/components/empty-state"
 import Modal from "@/components/modal"
 import ShopsProductForm from "./shops-product.form"
 import { thousandFormatter } from "@/utils/helpers"
+import { ProductShop } from "@/redux/shops/typings"
+import { useState } from "react"
 
 function ShopsProducts() {
   const { actions, loading, variables } = useShop()
-  const { fetchingProducts, loadingProduct, loadingProducts, updatingProduct, addingProduct } = loading
-  const { produtName, product, page, products, isAddModalOpen, isEditModalOpen } = variables
+  const { loadingProducts } = loading
+  const { produtName, page, products } = variables
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false)
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false)
+
+  const [selected, setSelected] = useState<ProductShop | null>(null)
+
+  const handleCloseModal = () => {
+    setIsEditModalOpen(!isEditModalOpen)
+  }
 
   return (
     <>
       <div className="flex justify-between w-full items-center  ">
         <SearchInput placeholder="What are you looking for?" value={produtName} onChange={actions.handleSearchChange} />
-        <button className="bg-[#F06D04] p-1 m-3 rounded-sm shadow-lg" onClick={() => actions.setIsAdddModalOpen(true)}>
+        <button className="bg-[#F06D04] p-1 m-3 rounded-sm shadow-lg" onClick={() => setIsAddModalOpen(true)}>
           Add Product
         </button>
       </div>
@@ -60,7 +70,10 @@ function ShopsProducts() {
                               cursor: "pointer",
                               padding: "8px",
                             }}
-                            onClick={() => actions.openProductModal(item)}
+                            onClick={() => {
+                              setSelected(item)
+                              setIsEditModalOpen(true)
+                            }}
                           >
                             <Menu size="16" color="#FF8A65" />
                           </button>
@@ -87,14 +100,9 @@ function ShopsProducts() {
           overflowY: "auto",
         }}
         show={isEditModalOpen}
-        onClose={actions.closeProductModal}
+        onClose={handleCloseModal}
       >
-        <ShopsProductForm
-          loading={updatingProduct}
-          fetching={loadingProduct}
-          data={product}
-          onSubmit={actions.handleProductUpdate}
-        />
+        <ShopsProductForm close={handleCloseModal} productId={selected?.id} mode="update" />
       </Modal>
       <Modal
         width="100%"
@@ -106,9 +114,9 @@ function ShopsProducts() {
           overflowY: "auto",
         }}
         show={isAddModalOpen}
-        onClose={actions.closeProductModal}
+        onClose={() => setIsAddModalOpen(false)}
       >
-        <ShopsProductForm loading={addingProduct} data={null} onSubmit={actions.handleAddProduct} />
+        <ShopsProductForm mode="create" close={() => setIsAddModalOpen(false)} />
       </Modal>
     </>
   )

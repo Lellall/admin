@@ -3,23 +3,18 @@ import { Category } from "./typings"
 
 const markets = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    getCategories: builder.query<CategoriesResponse, void>({
-      query: () => ({
-        url: `/categories/type?type=PRODUCT`,
-      }),
-    }),
-    getCategoriesType: builder.query<any, void>({
-      query: () => ({
-        url: `/categories/type`,
+    getCategories: builder.query<CategoriesResponse, CategoryRequest>({
+      query: ({ type }) => ({
+        url: `/categories/type?type=${type}`,
       }),
     }),
   }),
 })
 
-export const { useGetCategoriesQuery, useGetCategoriesTypeQuery } = markets
+export const { useGetCategoriesQuery } = markets
 
-interface CategoriesResponse {
-  data: Category[]
-  pageTotal: number
-  resultTotal: number
+type CategoriesResponse = Category[]
+
+interface CategoryRequest {
+  type: "SHOP" | "PRODUCT"
 }

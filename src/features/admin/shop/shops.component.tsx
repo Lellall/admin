@@ -28,7 +28,7 @@ function Shops() {
     page: page - 1,
     size: 10,
     categoryId: "",
-    filter: debouncedSearchTerm,
+    filter: debouncedSearchTerm.toLocaleLowerCase(),
   })
 
   const handlePageClick = (pageNumber: number) => {
@@ -69,7 +69,7 @@ function Shops() {
       <>
         <Modal
           width="100%"
-          title="Add Vendor (WIP)"
+          title="Add Vendor"
           style={{
             maxWidth: "700px",
             width: "90%",

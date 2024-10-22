@@ -1,8 +1,8 @@
 import * as yup from "yup"
 import { Shop } from "../shops/typings"
-import { Category } from "../categories/typings"
+// import { Category } from "../categories/typings"
 
-export interface ProductRequest {
+export interface ProductsRequest {
   page: number
   size: number
   categoryId?: string
@@ -14,8 +14,10 @@ export interface UpdateProductRequest {
   description: string
   id: string
 }
-
-export interface ProductResponse {
+export interface ProductRequest {
+  id: string
+}
+export interface ProductsResponse {
   resultTotal: number
   pageTotal: number
   data: Product[]
@@ -43,7 +45,9 @@ export interface Product {
   updatedAt?: string
   tags: string[]
   shop?: Shop
-  category?: Category
+  // category?: Category
+  category?: any
+  categoryId?: string
   pricingDetails?: {
     measurement: string
     price: number
@@ -84,12 +88,7 @@ export const productSchema = yup.object().shape({
       // Define the schema for Shop if needed
     })
     .nullable(),
-  category: yup
-    .object()
-    .shape({
-      // Define the schema for Category if needed
-    })
-    .nullable(),
+  categoryId: yup.string(),
   pricingDetails: yup
     .array()
     .of(
