@@ -40,10 +40,18 @@ function ShopForm({ mode, close }: ShopFormProps) {
   })
 
   useEffect(() => {
+    // Reset form when shop data is loaded in update mode
     if (mode === "update" && shopData) {
       reset(shopData)
     }
-  }, [reset, shopData])
+
+    // Handle success cases
+    if (isSuccess || isUpdatingSuccess) {
+      if (close) {
+        close()
+      }
+    }
+  }, [mode, shopData, reset, isSuccess, isUpdatingSuccess, close])
 
   const handleFormSubmit: SubmitHandler<Shop> = (data) => {
     const { market, category, metadata, ...restData } = data
@@ -80,14 +88,6 @@ function ShopForm({ mode, close }: ShopFormProps) {
       value: item.id,
     }
   })
-
-  useEffect(() => {
-    if (isSuccess || isUpdatingSuccess) {
-      if (close) {
-        close()
-      }
-    }
-  }, [isSuccess, isUpdatingSuccess])
 
   return (
     <form className="w-[100%] px-4" onSubmit={handleSubmit(handleFormSubmit)}>

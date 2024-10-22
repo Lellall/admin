@@ -21,7 +21,7 @@ function ShopsProductForm({ data, onSubmit, loading, fetching }: EditFormProps) 
     formState: { errors },
   } = useForm<Product>({
     defaultValues: data,
-    resolver: yupResolver(productSchema) as any,
+    resolver: yupResolver(productSchema) as unknown as any,
   })
 
   const handleFormSubmit: SubmitHandler<Product> = (product) => {

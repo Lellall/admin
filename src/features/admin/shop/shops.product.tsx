@@ -40,7 +40,7 @@ function ShopsProducts() {
                   </TableHeadRow>
                 </TableHead>
                 <TableBody>
-                  {!products.data.length ? (
+                  {!products?.data?.length ? (
                     <TableRow>
                       <TableDataCell colSpan={6} style={{ height: "40vh" }}>
                         <EmptyState />

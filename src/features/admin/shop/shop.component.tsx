@@ -13,7 +13,7 @@ function Shop() {
         </button>
       </div>
 
-      <ShopFrom mode="update" />
+      <ShopFrom mode="update" close={() => navigate(-1)} />
     </div>
   )
 }
