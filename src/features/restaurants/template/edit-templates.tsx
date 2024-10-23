@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import { Grid1, Trash, TableDocument, ShoppingCart, Category } from "iconsax-react"
 import empty from "@/assets/empty.svg"
 import { Template as TemplateForm } from "@/redux/templates/typings"
-import { useCreateTemplateMutation } from "@/redux/templates/template.api"
+import { useUpdateTemplateMutation, useGetTemplateQuery } from "@/redux/templates/template.api"
 import { Product } from "@/redux/products/typings"
 import { TitledBackButton } from "@/components/ui/base/back-button"
 import CardList from "./product-select"
@@ -24,39 +24,49 @@ export type SelectedProduct = Product & {
   unitPrice?: number
 }
 
-function CreateTemplate() {
-  const [selectedProducts, setSelectedProducts] = useState<SelectedProduct[]>([])
+const getFormattedDate = () => {
+  const now = new Date()
+
+  const day = String(now.getDate()).padStart(2, "0")
+  const month = String(now.getMonth() + 1).padStart(2, "0") // Months are 0-indexed
+  const year = now.getFullYear()
+
+  let hours = now.getHours()
+  const minutes = String(now.getMinutes()).padStart(2, "0")
+  const ampm = hours >= 12 ? "pm" : "am"
+  hours = hours % 12 || 12
+
+  return `untitled_${hours}:${minutes}${ampm}`
+}
+
+function EditTemplates() {
   const [subtotal, setSubtotal] = useState<number>(0)
   const navigate = useNavigate()
-  const userData = JSON.parse(localStorage.getItem("user") ?? "")
-  const shopId = userData?.shopIds[0]
-  const [createTemplate, { isLoading: isCreating }] = useCreateTemplateMutation()
+
+  // const [createTemplate, { isLoading: isCreating }] = useCreateTemplateMutation()
+  const { shopId, templateId } = useParams()
+  // console.log("data", data)
+
+  const [updateTemplate, { isLoading: isUpdating }] = useUpdateTemplateMutation()
   const [current, setCurrent] = useState(1)
   const [produtName, setProductName] = useState<string>("")
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("")
   const [showTable, setShowTable] = useState(false)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [showSubmit, setShowSubmit] = useState(false)
+  const { data } = useGetTemplateQuery({ shopId: shopId ?? "", templateId: templateId ?? "" })
 
-  const getFormattedDate = () => {
-    const now = new Date()
-
-    const day = String(now.getDate()).padStart(2, "0")
-    const month = String(now.getMonth() + 1).padStart(2, "0") // Months are 0-indexed
-    const year = now.getFullYear()
-
-    let hours = now.getHours()
-    const minutes = String(now.getMinutes()).padStart(2, "0")
-    const ampm = hours >= 12 ? "pm" : "am"
-    hours = hours % 12 || 12
-
-    return `untitled_${hours}:${minutes}${ampm}`
-  }
+  const [selectedProducts, setSelectedProducts] = useState<any[]>(data?.templateItems ?? [])
   const [templateName, setTemplateName] = useState(getFormattedDate())
 
   const handleCategoryClick = () => {
     setIsModalOpen(!isModalOpen)
   }
+  useEffect(() => {
+    if (data?.templateItems) {
+      setSelectedProducts(data.templateItems)
+    }
+  }, [data])
 
   useDebounce(
     () => {
@@ -79,28 +89,15 @@ function CreateTemplate() {
   const { data: categories } = useGetCategoriesQuery({ type: "PRODUCT" })
 
   const {
-    control,
-    handleSubmit,
     setValue,
-    formState: { errors },
+    // formState: { errors },
   } = useForm<TemplateForm>()
 
   useEffect(() => {
-    const newSubtotal = selectedProducts.reduce((acc, product) => acc + product.price * product.quantity, 0)
+    const newSubtotal = selectedProducts?.reduce((acc, product) => acc + product.price * product.quantity, 0)
     setSubtotal(newSubtotal)
     setValue("templateItemsDto", selectedProducts)
   }, [selectedProducts, setValue])
-
-  const handleFormSubmit = (data: TemplateForm) => {
-    createTemplate({
-      data,
-      shopId,
-    })
-      .unwrap()
-      .finally(() => {
-        navigate("/restaurant")
-      })
-  }
 
   const handleQuantityChange = (id: string, newQuantity: number) => {
     setSelectedProducts((prev) => prev.map((p) => (p.id === id ? { ...p, newQNT: newQuantity } : p)))
@@ -123,7 +120,7 @@ function CreateTemplate() {
   }, [debouncedSearchTerm])
 
   const transformData = (selectedProducts) => {
-    const data = selectedProducts.map((item) => ({
+    const data = selectedProducts?.map((item) => ({
       productId: item.id,
       quantity: item.newQNT,
       measurement: item.measurement,
@@ -131,7 +128,7 @@ function CreateTemplate() {
       unitPrice: parseFloat(item.unitPrice) || 0,
     }))
 
-    createTemplate({ name: templateName, templateItemsDto: data, shopId })
+    updateTemplate({ templateId: templateId ?? "", data: data, shopId: shopId ?? "" })
       .unwrap()
       .finally(() => {
         navigate("/restaurant")
@@ -187,7 +184,7 @@ function CreateTemplate() {
               size="24"
               className="text-green-700 hover:text-green-500 cursor-pointer transition-all duration-200 ease-in-out"
             />
-            <span className="mt-1 text-xs text-gray-600">Selected: {selectedProducts.length}</span>
+            <span className="mt-1 text-xs text-gray-600">Selected: {selectedProducts?.length}</span>
           </div>
           <div className="flex flex-col items-center" onClick={() => setShowTable(false)}>
             <Grid1
@@ -215,9 +212,9 @@ function CreateTemplate() {
       </div>
       <button
         className={`fixed bottom-6 right-6 px-6 py-3 rounded-full text-white transition-all duration-200 ${
-          selectedProducts.length > 0 ? "bg-green-500 hover:bg-green-600" : "bg-gray-400 cursor-not-allowed"
+          selectedProducts?.length > 0 ? "bg-green-500 hover:bg-green-600" : "bg-gray-400 cursor-not-allowed"
         }`}
-        disabled={selectedProducts.length === 0}
+        disabled={selectedProducts?.length === 0}
         onClick={() => setShowSubmit(true)}
       >
         Shop Now
@@ -234,11 +231,11 @@ function CreateTemplate() {
 
             <div className="overflow-y-auto max-h-[70vh] p-4">
               <form>
-                {selectedProducts.length > 0 ? (
+                {selectedProducts?.length > 0 ? (
                   <div className="space-y-4">
                     <h2 className="text-xl font-bold mb-4">Selected Products</h2>
 
-                    {selectedProducts.map((product) => (
+                    {selectedProducts?.map((product) => (
                       <div
                         key={product.id}
                         className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 bg-gray-50 border rounded-lg"
@@ -314,8 +311,8 @@ function CreateTemplate() {
 
             <div className="border-t p-4 flex justify-between items-center">
               <div className="text-lg font-bold"></div>
-              <Button className={""} loading={isCreating} onClick={() => transformData(selectedProducts)} type="submit">
-                Submit Order
+              <Button className={""} loading={isLoading} onClick={() => transformData(selectedProducts)} type="submit">
+                Update Order
               </Button>
             </div>
           </div>
@@ -327,4 +324,4 @@ function CreateTemplate() {
   )
 }
 
-export default CreateTemplate
+export default EditTemplates

@@ -7,6 +7,7 @@ import styled from "styled-components"
 import { useNavigate } from "react-router-dom"
 import Modal from "@/components/modal"
 import ShopForm from "@/features/admin/shop/shop-form"
+import ShopList from "./new-shop"
 
 function Shops() {
   const [page, setPage] = useState(1)
@@ -27,27 +28,19 @@ function Shops() {
   }
 
   return (
-    <div>
-      <div className="flex justify-end my-4">
-        <button
-          type="button"
-          onClick={toggleModalShop}
-          className="bg-[#0E5D37] text-white py-2 px-3 md:px-4 rounded hover:bg-green-700"
-        >
-          Create Shop
-        </button>
-      </div>
+    <div className="">
       <>
         {isLoading ? (
           <ScreenLoader />
         ) : (
-          <Grid>
-            {data?.data.map((shop) => (
-              <div className="cursor-pointer" onClick={() => navigateToTemplate(shop.id ?? "")}>
-                <ShopCard key={shop.id} {...shop} />
-              </div>
-            ))}
-          </Grid>
+          // <Grid>
+          //   {data?.data.map((shop) => (
+          //     <div className="cursor-pointer" onClick={() => navigateToTemplate(shop.id ?? "")}>
+          //       <ShopCard key={shop.id} {...shop} />
+          //     </div>
+          //   ))}
+          // </Grid>
+          <ShopList shops={data?.data} />
         )}
         <Pagination
           style={{ float: "right", margin: "40px 0px" }}

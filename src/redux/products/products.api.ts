@@ -1,15 +1,22 @@
 /* eslint-disable no-console */
 import { toast } from "react-toastify"
-import { Product, ProductResponse, UpdateProductRequest, ProductRequest } from "./typings"
+import { Product, ProductsRequest, UpdateProductRequest, ProductRequest, ProductsResponse } from "./typings"
 // import apiSlice from '../api/api.slice';
 import { baseApi } from "../api/baseApi"
 
 const products = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    getProducts: builder.query<ProductResponse, ProductRequest>({
+    getProducts: builder.query<ProductsResponse, ProductsRequest>({
       query: (params) => ({
         url: `/products`,
         params,
+        method: "GET",
+      }),
+      providesTags: ["PRODUCTS"],
+    }),
+    getProduct: builder.query<Product, ProductRequest>({
+      query: (id) => ({
+        url: `/products/${id}`,
         method: "GET",
       }),
       providesTags: ["PRODUCTS"],
@@ -40,4 +47,4 @@ const products = baseApi.injectEndpoints({
   }),
 })
 
-export const { useGetProductsQuery, useUpdateProductMutation } = products
+export const { useGetProductsQuery, useGetProductQuery, useUpdateProductMutation } = products

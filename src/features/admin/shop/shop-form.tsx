@@ -11,7 +11,7 @@ import { useGetShopQuery } from "@/redux/shops"
 import { useCreateShopMutation, useUpdateShopMutation } from "@/redux/shops/shops.api"
 import { Shop } from "@/redux/shops/typings"
 import { useGetMarketsQuery } from "@/redux/markets/market.api"
-import { useGetCategoriesTypeQuery } from "@/redux/categories/categories.api"
+import { useGetCategoriesQuery } from "@/redux/categories/categories.api"
 import { Category } from "@/redux/categories/typings"
 
 interface ShopFormProps {
@@ -25,7 +25,7 @@ function ShopForm({ mode, close }: ShopFormProps) {
   const [updateShop, { isLoading: isUpdating, isSuccess: isUpdatingSuccess }] = useUpdateShopMutation()
   const [createShop, { isLoading: isCreating, isSuccess }] = useCreateShopMutation()
   const { data: markets } = useGetMarketsQuery()
-  const { data: categories } = useGetCategoriesTypeQuery()
+  const { data: categories } = useGetCategoriesQuery({ type: "SHOP" })
 
   const {
     // register,
@@ -40,12 +40,10 @@ function ShopForm({ mode, close }: ShopFormProps) {
   })
 
   useEffect(() => {
-    // Reset form when shop data is loaded in update mode
     if (mode === "update" && shopData) {
       reset(shopData)
     }
 
-    // Handle success cases
     if (isSuccess || isUpdatingSuccess) {
       if (close) {
         close()
@@ -167,9 +165,9 @@ function ShopForm({ mode, close }: ShopFormProps) {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-5">
           <InputComponent
             errorMessage={errors?.category?.id?.message}
-            name="categoryId"
+            name="category.id"
             control={control}
-            label="Category ID"
+            label="Category "
             type="select"
             options={categoriesData}
             // disabled
@@ -185,7 +183,7 @@ function ShopForm({ mode, close }: ShopFormProps) {
             errorMessage={errors?.market?.id?.message}
             name="market.id"
             control={control}
-            label="Market ID"
+            label="Market "
             // disabled
             type="select"
             options={marketsData}

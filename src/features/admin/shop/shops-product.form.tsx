@@ -5,35 +5,74 @@ import { yupResolver } from "@hookform/resolvers/yup"
 import ScreenLoader from "@/components/screen.loader"
 import { Product, productSchema } from "@/redux/products/typings"
 import InputComponent from "@/components/Inputs/input-component"
+import { useGetCategoriesQuery } from "@/redux/categories/categories.api"
+import { Category } from "@/redux/categories/typings"
+import { useShop } from "./shop.controller"
+import { useGetSingleShopProductsQuery } from "@/redux/shops/shops.api"
+import { useParams } from "react-router-dom"
+// import Select from "react-select"
 
 interface EditFormProps {
-  data?: any
-  loading?: boolean
-  fetching?: boolean
-  onSubmit: SubmitHandler<Product>
+  mode: "create" | "update"
+  close?: () => void
+  productId?: string
 }
 
-function ShopsProductForm({ data, onSubmit, loading, fetching }: EditFormProps) {
+function ShopsProductForm({ mode, close, productId }: EditFormProps) {
+  const { actions, loading } = useShop()
+  const { id: shopId } = useParams()
+
+  const { data: product, isLoading } = useGetSingleShopProductsQuery(
+    {
+      productId: productId ?? "",
+      shopId: shopId ?? "",
+    },
+    { skip: mode === "create" }
+  )
   const {
     handleSubmit,
     control,
     reset,
     formState: { errors },
   } = useForm<Product>({
-    defaultValues: data,
-    resolver: yupResolver(productSchema) as unknown as any,
+    defaultValues: product,
+    resolver: yupResolver(productSchema) as any,
   })
 
+  const { data: categories } = useGetCategoriesQuery({ type: "PRODUCT" })
+
   const handleFormSubmit: SubmitHandler<Product> = (product) => {
-    onSubmit(product)
+    if (mode === "create") {
+      const { category, ...rest } = product
+      const categoryId = category.id
+      const data = { categoryId: categoryId, ...rest }
+      actions.handleAddProduct(data)
+      return
+    }
+    actions.handleProductUpdate(product)
   }
 
   useEffect(() => {
-    reset(data)
-  }, [reset, data])
+    if (mode === "update" && product) {
+      reset({ category: { label: "MUSA", value: "MUSA" }, ...product })
+    }
+
+    if (loading.isUpdateSuccess || loading.isAddProductSucess) {
+      if (close) {
+        close()
+      }
+    }
+  }, [reset, product, close, loading.isUpdateSuccess, loading.isAddProductSucess])
   // const pricingDetails = getValues().pricingDetails;
 
-  if (fetching) {
+  const categoriesData = categories?.map((item: Category) => {
+    return {
+      label: item.name,
+      value: item.id,
+    }
+  })
+
+  if (isLoading) {
     return <ScreenLoader />
   }
 
@@ -77,7 +116,6 @@ function ShopsProductForm({ data, onSubmit, loading, fetching }: EditFormProps) 
             label="Inventory"
           />
           <InputComponent errorMessage={errors?.quantity?.message} name="quantity" control={control} label="Quantity" />
-
           <InputComponent errorMessage={errors?.discount?.message} name="discount" control={control} label="Discount" />
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-5">
@@ -111,9 +149,16 @@ function ShopsProductForm({ data, onSubmit, loading, fetching }: EditFormProps) 
           />
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-5">
-          <InputComponent errorMessage={errors?.weight?.message} name="weight" control={control} label="Weight" />
           <InputComponent errorMessage={errors?.height?.message} name="height" control={control} label="Height" />
           <InputComponent errorMessage={errors?.width?.message} name="width" control={control} label="Width" />
+
+          <InputComponent
+            type="select"
+            label="Category"
+            name="category.id"
+            control={control}
+            options={categoriesData}
+          />
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-5">
           <InputComponent errorMessage={errors?.depth?.message} name="depth" control={control} label="Depth" />
@@ -134,9 +179,12 @@ function ShopsProductForm({ data, onSubmit, loading, fetching }: EditFormProps) 
             name="pricingDetails.0.price"
             errorMessage={errors?.pricingDetails?.message}
           />
+          <InputComponent errorMessage={errors?.weight?.message} name="weight" control={control} label="Weight" />
         </div>
 
-        <SubmitButton type="submit">{loading ? "Loading..." : "Submit"}</SubmitButton>
+        <SubmitButton type="submit">
+          {loading.updatingProduct || loading.addingProduct ? "Loading..." : "Submit"}
+        </SubmitButton>
       </form>
     </Container>
   )

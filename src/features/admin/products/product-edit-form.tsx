@@ -5,7 +5,7 @@ import { useUpdateProductMutation } from "@/redux/products"
 import { Product } from "@/redux/products/typings"
 
 interface EditFormProps {
-  product: Product
+  product: Product | null
 
   setIsOpen?: any
 }
