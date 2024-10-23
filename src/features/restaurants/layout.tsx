@@ -164,7 +164,7 @@ function RestaurantLayout() {
           <header className="sticky top-0 bg-white border-b z-10 p-4">
             <Header />
           </header>
-          <div className="p-4 bg-[#F8F7F7] ">
+          <div className="p-4  ">
             <Outlet />
           </div>
         </main>

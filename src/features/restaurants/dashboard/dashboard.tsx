@@ -57,14 +57,14 @@ const RestaurantDashBoard = () => {
   return (
     <>
       <div className="">
-        <TabContainer style={{ marginBottom: "10px" }}>
+        {/* <TabContainer style={{ marginBottom: "10px" }}>
           <TabButton active={activeTab === "home"} onClick={() => handleTabSwitch("home")}>
             Home
           </TabButton>
           <TabButton active={activeTab === "activity"} onClick={() => handleTabSwitch("activity")}>
             Activity
           </TabButton>
-        </TabContainer>
+        </TabContainer> */}
 
         <TabPanel active={activeTab === "home"}>
           <Shops />
