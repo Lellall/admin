@@ -14,6 +14,7 @@ import ScreenLoader from "@/components/screen.loader"
 import EmptyState from "@/components/empty-state"
 import Modal from "@/components/modal"
 import { thousandFormatter } from "@/utils/helpers"
+import { Product } from "@/redux/products/typings"
 
 function Products() {
   const [current, setCurrent] = useState(1)
@@ -35,11 +36,11 @@ function Products() {
   } = useGetProductsQuery({
     page: current - 1,
     size: 10,
-    filter: debouncedSearchTerm,
+    filter: debouncedSearchTerm.toLocaleLowerCase(),
     categoryId: "",
   })
 
-  const [selected, setSelected] = useState(null)
+  const [selected, setSelected] = useState<Product | null>(null)
 
   const handlePageClick = (page: number) => {
     setCurrent(page)

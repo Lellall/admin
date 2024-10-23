@@ -27,12 +27,17 @@ export const appPaths = {
   restaurant: "/restaurant",
   templates: "/restaurant/templates",
   invoices: "invoices",
+  users: "/restaurant/users",
+  analytics: "/restaurant/analytics",
+  settings: "/restaurant/setting",
+
   // invoice: "invoices",
   reports: "/restaurant/reports",
   // getInvoice: (id = ":id") => `/${id}`,
   inventory: "/restaurant/inventory",
   createTemplate: "/restaurant/templates/create",
-  editTemplate: "/restaurant/templates/:id",
+  // templates/:shopId/id/:templateId
+  editTemplate: "templates/:shopId/id/:templateId",
   template: "template",
   orders: "/restaurant/orders",
 }

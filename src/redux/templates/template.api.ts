@@ -2,6 +2,7 @@ import { toast } from "react-toastify"
 
 import { Template } from "./typings"
 import { baseApi } from "../api/baseApi"
+import { Errorhandler } from "@/utils/errorHandler"
 
 const template = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -30,9 +31,7 @@ const template = baseApi.injectEndpoints({
             position: "top-right",
           })
         }).catch((err) => {
-          toast.error(`${err.error?.data?.message}`, {
-            position: "top-right",
-          })
+          Errorhandler(err)
         })
       },
       invalidatesTags: ["TEMPLATE"],
@@ -99,8 +98,10 @@ interface TemplateQuery {
 }
 
 interface TemplateRequest {
-  data: Template
+  // data: Template
+  templateItemsDto: TemplateItems[]
   shopId: string
+  name: string
 }
 interface TemplateDeleteRequest {
   templateId: string

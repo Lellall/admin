@@ -1,4 +1,4 @@
-import { ShoppingCart, Box, Chart, Setting, Logout } from "iconsax-react"
+import { Box, Setting, Logout, UserSquare } from "iconsax-react"
 import { NavLink, Outlet, useMatch, useNavigate, useResolvedPath } from "react-router-dom"
 import Logo from "../../assets/react.svg"
 import { useDispatch } from "react-redux"
@@ -10,7 +10,7 @@ import Header from "./header"
 import { LayoutContext } from "./LayoutContext"
 import styled from "styled-components"
 
-function RestaurantLayout() {
+function RestaurantSuperAdminLayout() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const resolved = useResolvedPath("/restaurant/templates")
@@ -48,47 +48,35 @@ function RestaurantLayout() {
                 className={({ isActive }) =>
                   `p-2 rounded flex items-center ${isActive ? "bg-green-100 font-bold" : ""}`
                 }
-                to={appPaths.orders}
+                to={appPaths.users}
               >
                 <span>
-                  <ShoppingCart size="24" className="mr-3" />
+                  <UserSquare size="24" className="mr-3" />
                 </span>
-                Orders
+                Users
               </NavLink>
               <NavLink
                 className={({ isActive }) =>
                   `p-2 rounded flex items-center ${isActive ? "bg-green-100 font-bold" : ""}`
                 }
-                to={appPaths.inventory}
+                to={appPaths.analytics}
               >
                 <span>
                   <Box size="24" className="mr-3" />
                 </span>
-                Inventory
+                Analytics
               </NavLink>
 
               <NavLink
                 className={({ isActive }) =>
                   `p-2 rounded flex items-center ${isActive ? "bg-green-100 font-bold" : ""}`
                 }
-                to={appPaths.reports}
-              >
-                <span>
-                  <Chart size="24" className="mr-3" />
-                </span>
-                Reports
-              </NavLink>
-
-              <NavLink
-                className={({ isActive }) =>
-                  `p-2 rounded flex items-center ${isActive ? "bg-green-100 font-bold" : ""}`
-                }
-                to={appPaths.invoices}
+                to={appPaths.settings}
               >
                 <span>
                   <Setting size="24" className="mr-3" />
                 </span>
-                Invoice
+                Settings
               </NavLink>
             </ul>
           </nav>
@@ -108,8 +96,8 @@ function RestaurantLayout() {
           <NavLink
             className={`p-2 rounded flex items-center ${match || exactRestaurantMatch ? "bg-green-100 font-bold" : ""}`}
             to={appPaths.restaurant}
-            end
             onClick={toggleMobileMenu}
+            end
           >
             <span>
               <ShopOutlined className="mr-3" />
@@ -117,46 +105,35 @@ function RestaurantLayout() {
             Shops
           </NavLink>
           <NavLink
-            onClick={toggleMobileMenu}
             className={({ isActive }) => `p-2 rounded flex items-center ${isActive ? "bg-green-100 font-bold" : ""}`}
-            to={appPaths.orders}
+            to={appPaths.users}
+            onClick={toggleMobileMenu}
           >
             <span>
-              <ShoppingCart size="24" className="mr-3" />
+              <UserSquare size="24" className="mr-3" />
             </span>
-            Orders
+            Users
           </NavLink>
           <NavLink
-            onClick={toggleMobileMenu}
             className={({ isActive }) => `p-2 rounded flex items-center ${isActive ? "bg-green-100 font-bold" : ""}`}
-            to={appPaths.inventory}
+            to={appPaths.analytics}
+            onClick={toggleMobileMenu}
           >
             <span>
-              <Box className="mr-3" />
+              <Box size="24" className="mr-3" />
             </span>
-            Inventory
-          </NavLink>
-
-          <NavLink
-            onClick={toggleMobileMenu}
-            className={({ isActive }) => `p-2 rounded flex items-center ${isActive ? "bg-green-100 font-bold" : ""}`}
-            to={appPaths.reports}
-          >
-            <span>
-              <Chart size="24" className="mr-3" />
-            </span>
-            Reports
+            Analytics
           </NavLink>
 
           <NavLink
-            onClick={toggleMobileMenu}
             className={({ isActive }) => `p-2 rounded flex items-center ${isActive ? "bg-green-100 font-bold" : ""}`}
-            to={appPaths.invoices}
+            to={appPaths.settings}
+            onClick={toggleMobileMenu}
           >
             <span>
               <Setting size="24" className="mr-3" />
             </span>
-            Invoice
+            Settings
           </NavLink>
         </Navbar>
 
@@ -173,7 +150,7 @@ function RestaurantLayout() {
   )
 }
 
-export default RestaurantLayout
+export default RestaurantSuperAdminLayout
 
 interface Props {
   isOpen: boolean

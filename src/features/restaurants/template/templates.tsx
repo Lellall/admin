@@ -154,7 +154,7 @@ function Templates() {
                           <div className="dropdown-menu">
                             <div
                               className="dropdown-menu-item"
-                              onClick={() => navigate(`/restaurant/templates/${item.id}`)}
+                              onClick={() => navigate(`/restaurant/templates/${shopId}/id/${item.id}`)}
                             >
                               Edit
                             </div>
