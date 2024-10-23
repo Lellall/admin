@@ -48,7 +48,6 @@ function Templates() {
     name: "",
     size: 10,
   })
-
   const handlePageClick = (pageNumber: number) => {
     setPage(pageNumber)
   }
@@ -57,8 +56,9 @@ function Templates() {
     setIsModalOpen(!isModalOpen)
   }
 
-  const handleDuplicateTemplate = (item: Template) => {
-    createTemplate({ data: item, shopId: shopId ?? "" })
+  const handleDuplicateTemplate = (data: any) => {
+    // @ts-ignore
+    createTemplate(data)
   }
 
   useEffect(() => {
@@ -165,6 +165,7 @@ function Templates() {
                                 const data = {
                                   name: "Duplicate " + item.name,
                                   templateItemsDto: item.templateItems,
+                                  shopId: shopId,
                                 }
                                 if (isCreating) return
                                 handleDuplicateTemplate(data)
@@ -180,6 +181,12 @@ function Templates() {
                               }}
                             >
                               Delete
+                            </div>
+                            <div
+                              className="dropdown-menu-item"
+                              onClick={() => navigate(`/restaurant/templates/${shopId}/inventory`)}
+                            >
+                              Inventory
                             </div>
                           </div>
                         </div>

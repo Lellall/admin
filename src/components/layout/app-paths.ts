@@ -26,15 +26,15 @@ export const appPaths = {
   // RESTAURANT
   restaurant: "/restaurant",
   templates: "/restaurant/templates",
-  invoices: "invoices",
+  invoices: "templates/invoices",
   users: "/restaurant/users",
   analytics: "/restaurant/analytics",
   settings: "/restaurant/setting",
 
   // invoice: "invoices",
-  reports: "/restaurant/reports",
+  reports: "/restaurant/templates/reports",
   // getInvoice: (id = ":id") => `/${id}`,
-  inventory: "/restaurant/inventory",
+  inventory: "/restaurant/templates/:shopId/inventory",
   createTemplate: "/restaurant/templates/create",
   // templates/:shopId/id/:templateId
   editTemplate: "templates/:shopId/id/:templateId",

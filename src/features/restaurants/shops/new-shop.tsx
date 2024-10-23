@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom"
 import Modal from "@/components/modal"
 import ShopForm from "@/features/admin/shop/shop-form"
 import { useState } from "react"
-
+import ShopImg from "@/assets/shop.jpg"
 const ShopCard = styled.div`
   position: relative;
   height: 300px; /* Set the height for the card */
@@ -106,7 +106,7 @@ const ShopList = ({ shops }: any) => {
           <ShopCard key={shop.id}>
             <ShopImage
               style={{
-                backgroundImage: `url(${shop.logoUrl})`,
+                backgroundImage: `url(${ShopImg})`,
               }}
             />
             <ShopDetails>
@@ -115,7 +115,13 @@ const ShopList = ({ shops }: any) => {
                 <StatusBadge isOpen={shop.status === "OPEN"}>
                   {shop.status === "OPEN" ? "Active" : "Inactive"}
                 </StatusBadge>
-                <ViewButton onClick={() => navigateToTemplate(shop.id ?? "")}>View</ViewButton>
+                <ViewButton
+                  onClick={() => {
+                    navigateToTemplate(shop.id ?? "")
+                  }}
+                >
+                  View
+                </ViewButton>
               </div>
             </ShopDetails>
           </ShopCard>
