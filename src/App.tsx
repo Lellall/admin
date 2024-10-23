@@ -15,9 +15,13 @@ import RestaurantLayout from "./features/restaurants/layout"
 import { appPaths } from "./components/layout/app-paths"
 import withRoleAccess from "./components/routes-helpers/withRole"
 import { Unauthorized } from "./components/unauthorized-page"
+import RestaurantSuperAdminLayout from "./features/restaurants/restaurant-superadmin-layout"
 // import TemplateForm from "./features/restaurants/template/template.form"
 
 // pages-routes
+const SettingsPage = lazy(() => import("./features/restaurants/settings/settings"))
+const AnalyticsPage = lazy(() => import("./features/restaurants/analytics/analytics"))
+const UsersPage = lazy(() => import("@/features/restaurants/users/users"))
 const TemplatesPage = lazy(() => import("@/features/restaurants/template/templates"))
 const InvoicesPage = lazy(() => import("@/features/restaurants/invoice/invoices"))
 const InvoicePage = lazy(() => import("@/features/restaurants/invoice/invoice"))
@@ -26,7 +30,7 @@ const InventoryPage = lazy(() => import("@/features/restaurants/inventory/invent
 const OrdersPage = lazy(() => import("@/features/restaurants/orders/orders"))
 const ReportsPage = lazy(() => import("@/features/restaurants/reports/reports"))
 const CreateTemplate = lazy(() => import("@/features/restaurants/template/create.template"))
-const EditTemplate = lazy(() => import("@/features/restaurants/template/edit.template"))
+const EditTemplate = lazy(() => import("@/features/restaurants/template/edit-templates"))
 const OrderForRiderPage = lazy(() => import("@/features/admin/order/orders.component"))
 const ProductsPage = lazy(() => import("@/features/admin/products/products.components"))
 const TransactionPage = lazy(() => import("@/features/admin/transaction/transaction-history.components"))
@@ -45,6 +49,9 @@ const RestaurantDashboard = withRoleAccess("RESTAURANT")(RestaurantBorad)
 const Inventory = withRoleAccess("RESTAURANT")(InventoryPage)
 const Orders = withRoleAccess("RESTAURANT")(OrdersPage)
 const Reports = withRoleAccess("RESTAURANT")(ReportsPage)
+const Users = withRoleAccess("RESTAURANT")(UsersPage)
+const Analytics = withRoleAccess("RESTAURANT")(AnalyticsPage)
+const Settings = withRoleAccess("RESTAURANT")(SettingsPage)
 
 const OrderForRider = withRoleAccess("ADMIN")(OrderForRiderPage)
 const Products = withRoleAccess("ADMIN")(ProductsPage)
@@ -79,7 +86,7 @@ function App() {
               </Suspense>
             }
           />
-          <Route path={appPaths.restaurant} element={<RestaurantLayout />}>
+          <Route path={appPaths.restaurant} element={<RestaurantSuperAdminLayout />}>
             <Route
               index
               element={
@@ -97,10 +104,42 @@ function App() {
               }
             />
             <Route
+              path={`${appPaths.editTemplate}`}
+              element={
+                <Suspense fallback={false}>
+                  <EditTemplate />
+                </Suspense>
+              }
+            />
+            <Route
               path={`${appPaths.inventory}`}
               element={
                 <Suspense fallback={false}>
                   <Inventory />
+                </Suspense>
+              }
+            />
+            <Route
+              path={`${appPaths.users}`}
+              element={
+                <Suspense fallback={false}>
+                  <Users />
+                </Suspense>
+              }
+            />
+            <Route
+              path={`${appPaths.analytics}`}
+              element={
+                <Suspense fallback={false}>
+                  <Analytics />
+                </Suspense>
+              }
+            />
+            <Route
+              path={`${appPaths.settings}`}
+              element={
+                <Suspense fallback={false}>
+                  <Settings />
                 </Suspense>
               }
             />
@@ -129,14 +168,7 @@ function App() {
                 </Suspense>
               }
             />
-            <Route
-              path={`${appPaths.editTemplate}`}
-              element={
-                <Suspense fallback={false}>
-                  <EditTemplate />
-                </Suspense>
-              }
-            />
+
             <Route
               path={appPaths.invoices}
               element={

@@ -1,84 +1,46 @@
-import { useState, useEffect } from "react";
-import styled from "styled-components";
+import { useState, useEffect } from "react"
+import styled from "styled-components"
 
-const CategoryCardWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-  transition: transform 0.2s ease;
-  cursor: pointer;
-  background-color: #fff;
-  
-  &:hover {
-    transform: scale(1.03);
-  }
-`;
+interface PropsModal {
+  isModalOpen: boolean
+  setIsModalOpen: () => void
+  categories: any
+}
 
-const ImageWrapper = styled.div`
-  width: 100%;
-  height: 150px;
-  overflow: hidden;
-`;
-
-const Image = styled.img`
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-bottom: 1px solid #e2e8f0;
-`;
-
-const CardContent = styled.div`
-  padding: 8px;
-  text-align: center;
-`;
-
-const CategoryName = styled.h3`
-  font-size: 16px;
-  font-weight: 600;
-  color: #1a202c;
-`;
-
-const LoadingSpinner = styled.div`
-  text-align: center;
-  margin-top: 16px;
-`;
-
-const CategoryModal = ({ isModalOpen, setIsModalOpen, categories }) => {
-  const [visibleCategories, setVisibleCategories] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [hasMore, setHasMore] = useState(true);
+const CategoryModal = ({ isModalOpen, setIsModalOpen, categories }: PropsModal) => {
+  const [visibleCategories, setVisibleCategories] = useState([])
+  const [loading, setLoading] = useState(false)
+  const [hasMore, setHasMore] = useState(true)
 
   const loadMoreCategories = () => {
-    if (loading || !hasMore) return;
+    if (loading || !hasMore) return
 
-    setLoading(true);
+    setLoading(true)
     // Simulate an API call to load more categories
     setTimeout(() => {
-      const currentLength = visibleCategories.length;
-      const newCategories = categories.slice(currentLength, currentLength + 12);
+      const currentLength = visibleCategories.length
+      const newCategories = categories?.slice(currentLength, currentLength + 12)
 
-      setVisibleCategories((prev) => [...prev, ...newCategories]);
-      setHasMore(newCategories.length > 0);
-      setLoading(false);
-    }, 1000);
-  };
+      setVisibleCategories((prev) => [...prev, ...newCategories])
+      setHasMore(newCategories?.length > 0)
+      setLoading(false)
+    }, 1000)
+  }
 
   const handleScroll = (e) => {
-    const { scrollTop, clientHeight, scrollHeight } = e.target;
+    const { scrollTop, clientHeight, scrollHeight } = e.target
     if (scrollHeight - scrollTop <= clientHeight + 100 && !loading) {
-      loadMoreCategories();
+      loadMoreCategories()
     }
-  };
+  }
 
   useEffect(() => {
     if (isModalOpen) {
       // Load initial set of categories
-      setVisibleCategories(categories?.slice(0, 12));
-      setHasMore(categories.length > 12);
+      setVisibleCategories(categories?.slice(0, 12))
+      setHasMore(categories?.length > 12)
     }
-  }, [isModalOpen, categories]);
+  }, [isModalOpen, categories])
 
   return (
     <div>
@@ -120,7 +82,51 @@ const CategoryModal = ({ isModalOpen, setIsModalOpen, categories }) => {
         </div>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default CategoryModal;
+export default CategoryModal
+
+const CategoryCardWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease;
+  cursor: pointer;
+  background-color: #fff;
+
+  &:hover {
+    transform: scale(1.03);
+  }
+`
+
+const ImageWrapper = styled.div`
+  width: 100%;
+  height: 150px;
+  overflow: hidden;
+`
+
+const Image = styled.img`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-bottom: 1px solid #e2e8f0;
+`
+
+const CardContent = styled.div`
+  padding: 8px;
+  text-align: center;
+`
+
+const CategoryName = styled.h3`
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a202c;
+`
+
+const LoadingSpinner = styled.div`
+  text-align: center;
+  margin-top: 16px;
+`

@@ -15,8 +15,7 @@ function Shops() {
 
   const navigate = useNavigate()
   const { data, isLoading } = useGetShopsQuery({ page: page - 1, size: 10, categoryId: "", filter: "" })
-  console.log(data, ' shops');
-  
+
   const handlePageClick = (pageNumber: number) => {
     setPage(pageNumber)
   }
@@ -41,7 +40,7 @@ function Shops() {
           //     </div>
           //   ))}
           // </Grid>
-          <ShopList shops={data?.data}/>
+          <ShopList shops={data?.data} />
         )}
         <Pagination
           style={{ float: "right", margin: "40px 0px" }}

@@ -3,10 +3,11 @@ import styled from "styled-components"
 import { LayoutContext } from "./LayoutContext"
 import { CloseCircle, HambergerMenu } from "iconsax-react"
 import Logo from "@/assets/react.svg"
+import { capitalizeFirstLetterOFEachWord } from "@/utils/helpers"
 
 function Header() {
   const { isMobileMenuOpen, toggleMobileMenu } = useContext(LayoutContext)
-
+  const user = JSON.parse(localStorage.getItem("user") ?? "")
   const getTitle = () => {
     const path = location.pathname.substring(1)
 
@@ -27,10 +28,12 @@ function Header() {
         <h3>{getTitle()}</h3>
       </div>
       <Profile>
-        <div className="profile-card">MZ</div>
+        <div className="profile-card"> {user.firstName[0] + user.lastName[0]}</div>
         <div>
-          <p className="name">Musa Zubairu</p>
-          <p className="role">Restaurant Manager</p>
+          <p className="name">
+            {capitalizeFirstLetterOFEachWord(user?.firstName)} {capitalizeFirstLetterOFEachWord(user?.lastName)}
+          </p>
+          <p className="role">{capitalizeFirstLetterOFEachWord(user?.role)}</p>
         </div>
       </Profile>
 
