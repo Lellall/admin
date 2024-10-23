@@ -52,7 +52,7 @@ function Shops() {
         <>
           <Modal
             width="100%"
-            title="Create Shop"
+            title="Create Restaurant"
             style={{
               maxWidth: "700px",
               width: "90%",

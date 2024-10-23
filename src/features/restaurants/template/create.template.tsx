@@ -91,14 +91,15 @@ function CreateTemplate() {
     setValue("templateItemsDto", selectedProducts)
   }, [selectedProducts, setValue])
 
-  const handleFormSubmit = (data: TemplateForm) => {
+  const handleFormSubmit = (data: any) => {
     createTemplate({
-      data,
+      name: templateName,
+      templateItemsDto: data,
       shopId,
     })
       .unwrap()
       .finally(() => {
-        navigate("/restaurant")
+        navigate(-1)
       })
   }
 
@@ -134,7 +135,7 @@ function CreateTemplate() {
     createTemplate({ name: templateName, templateItemsDto: data, shopId })
       .unwrap()
       .finally(() => {
-        navigate("/restaurant")
+        navigate(-1)
       })
   }
 
