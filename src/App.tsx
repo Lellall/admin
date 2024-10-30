@@ -40,6 +40,8 @@ const VendorPage = lazy(() => import("@/features/admin/shop/shop.component"))
 const Login = lazy(() => import("@/features/auth/login.component"))
 const ForgotPassword = lazy(() => import("./features/auth/forgot-password"))
 const VendorsProductPage = lazy(() => import("@/features/admin/shop/shops.product"))
+const RestaurantOrdersPage = lazy(() => import("@/features/admin/restaurant-orders/restaurant-orders"))
+const RestaurantOrderDetailsPage = lazy(() => import("@/features/admin/restaurant-orders/order-details"))
 
 // Protected pages with user roles
 const Templates = withRoleAccess("RESTAURANT")(TemplatesPage)
@@ -60,6 +62,8 @@ const OrderHistory = withRoleAccess("ADMIN")(OrderHistoryPage)
 const Vendors = withRoleAccess("ADMIN")(VendorsPage)
 const Vendor = withRoleAccess("ADMIN")(VendorPage)
 const VendorsProduct = withRoleAccess("ADMIN")(VendorsProductPage)
+const RestaurantOrders = withRoleAccess("ADMIN")(RestaurantOrdersPage)
+const RestaurantOrderDetails = withRoleAccess("ADMIN")(RestaurantOrderDetailsPage)
 
 function App() {
   return (
@@ -204,6 +208,26 @@ function App() {
                 <Suspense fallback={<ScreenLoader />}>
                   <PrivateRoute>
                     <Transaction />
+                  </PrivateRoute>
+                </Suspense>
+              }
+            />
+            <Route
+              path={appPaths.restaurantOrders}
+              element={
+                <Suspense fallback={<ScreenLoader />}>
+                  <PrivateRoute>
+                    <RestaurantOrders />
+                  </PrivateRoute>
+                </Suspense>
+              }
+            />
+            <Route
+              path={`/${appPaths.restaurantOrders}/:id`}
+              element={
+                <Suspense fallback={<ScreenLoader />}>
+                  <PrivateRoute>
+                    <RestaurantOrderDetails />
                   </PrivateRoute>
                 </Suspense>
               }

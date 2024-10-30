@@ -41,9 +41,9 @@ export const TableRow = styled.tr`
   font-size: 11px;
   padding: 20px;
   width: 100%;
-  &:nth-child(even) {
+  /* &:nth-child(even) {
     background-color: #f2f2f2;
-  }
+  } */
 `
 
 export const TableDataCell = styled.td`

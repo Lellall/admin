@@ -35,7 +35,6 @@ function Transaction() {
 
   const onChange = (pageNumber: number) => {
     setPage(pageNumber)
-    // refetch(pageNumber);
   }
   const handleSelectChange = (option: Option) => {
     setSelectedOption(option)

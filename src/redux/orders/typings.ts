@@ -1,9 +1,15 @@
+import { UserRoleType } from "@/utils/constant"
 import { User } from "../auth/typings"
 
-export interface OrderRequest {
+export interface IncompleteOrderRequest {
   page: number
   size: number
   sort?: "DESC" | "ASC"
+}
+export interface OrderRequest {
+  pageNo: number
+  pageSize: number
+  role?: UserRoleType
 }
 
 export interface ConsumerHistoryRequest {
@@ -17,26 +23,30 @@ export interface OrderResponse {
   pageTotal: number
   data: Order[]
 }
-
+type Item = {
+  productId: string
+  count: number
+  productName: string
+  price: number
+}
 export interface Order {
   id: string
-  reference: string
-  status: string
-  amount: number
-  userId?: string
-  orderId?: string
-  items: {
-    productId: string
-    count: number
-    productName: string
-    price: number
-  }[]
-  user: User
-  createdAt: string
-  updatedAt: string
   address: Address
-  phoneNumber: string
-  customerName: string
+  status: string
+  consumerPhoneNumber: string
+  distance: number
+  userId: string
+  code: string
+  bundleId: string
+  items: Item[]
+  paymentItems?: Item[]
+  orderCode?: string
+  deliveryPoint: DeliveryPoint
+  riderId: string
+  createdAt: string
+  user?: User
+  amount?: string
+  reference?: string
 }
 
 export interface CompleteOrderRequest {
@@ -111,15 +121,7 @@ interface Invoice {
 }
 
 export interface InvoicesResponse {
-  totalPages: number
-  totalElements: number
-  size: number
-  content: Invoice[]
-  number: number
-  sort: Sort
-  numberOfElements: number
-  pageable: Pageable
-  first: boolean
-  last: boolean
-  empty: boolean
+  pageTotal: number
+  data: Invoice[]
+  resultTotal: number
 }
