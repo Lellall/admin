@@ -12,6 +12,7 @@ export const MainContainer = styled(Box)`
 export const HeadingContainer = styled(Box)`
   display: flex !important;
   padding: 16px !important;
+  flex-wrap: wrap;
   flex-direction: row !important;
   justify-content: space-between !important;
   align-items: center !important;

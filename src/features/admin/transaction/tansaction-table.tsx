@@ -5,6 +5,7 @@ import { formatCurrency } from "@/utils/helpers"
 const TableContainer = styled.div`
   width: 100%;
   overflow-x: auto;
+  background: #fff;
 `
 
 const Table = styled.table`
@@ -99,9 +100,9 @@ function TransactionTable({ transactions }: TransactionTableProps) {
             <tr key={order.id}>
               {/* <Td>{++index}</Td> */}
               <Td>
-                {order.user.firstName} {order.user.lastName}{" "}
+                {order?.user?.firstName} {order?.user?.lastName}{" "}
               </Td>
-              <Td>{formatCurrency(order.amount)}</Td>
+              <Td>{formatCurrency(order?.amount)}</Td>
               <Td>{order.items.length}</Td>
               <StatusTd status={order.status}>
                 <CustomTag status={order.status}>{order.status}</CustomTag>

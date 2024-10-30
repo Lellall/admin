@@ -8,14 +8,17 @@ import {
   ConsumerHistoryResponse,
   InvoiceRequest,
   InvoicesResponse,
-  OrderRequest,
+  IncompleteOrderRequest,
   OrderResponse,
+  OrderRequest,
+  Order,
 } from "./typings"
 import { baseApi } from "../api/baseApi"
+import { Errorhandler } from "@/utils/errorHandler"
 
 const orders = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    incompleteOrders: builder.query<OrderResponse, OrderRequest>({
+    incompleteOrders: builder.query<OrderResponse, IncompleteOrderRequest>({
       query: () => ({
         url: `/transactions/incomplete-order`,
       }),
@@ -34,9 +37,10 @@ const orders = baseApi.injectEndpoints({
           })
         }).catch((err) => {
           console.log("ERR", err.error.data)
-          toast.error(`${err.error.data}`, {
-            position: "top-right",
-          })
+          Errorhandler(err)
+          // toast.error(`${err.error.data}`, {
+          //   position: "top-right",
+          // })
         })
       },
       invalidatesTags: ["ORDERS"],
@@ -60,8 +64,29 @@ const orders = baseApi.injectEndpoints({
       }),
       providesTags: ["ORDERS"],
     }),
+    getOrders: builder.query<OrderResponse, OrderRequest>({
+      query: (params) => ({
+        url: `/orders`,
+        params,
+        method: "GET",
+      }),
+      providesTags: ["ORDERS"],
+    }),
+    getOrder: builder.query<Order, { id: string }>({
+      query: (id) => ({
+        url: `/orders/consumer/${id.id}`,
+        method: "GET",
+      }),
+      providesTags: ["ORDERS"],
+    }),
   }),
 })
 
-export const { useIncompleteOrdersQuery, useCompleteOrderMutation, useGetInvoicesQuery, useGetConsumerHistoryQuery } =
-  orders
+export const {
+  useIncompleteOrdersQuery,
+  useGetOrdersQuery,
+  useCompleteOrderMutation,
+  useGetInvoicesQuery,
+  useGetConsumerHistoryQuery,
+  useGetOrderQuery,
+} = orders

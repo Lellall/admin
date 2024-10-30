@@ -45,7 +45,7 @@ function Shops() {
 
   return (
     <>
-      <div className="flex justify-between w-full items-center  ">
+      <div className="flex flex-wrap justify-between w-full items-center  ">
         <SearchInput placeholder="Who are you looking for?" value={vendorName} onChange={handleSearchChange} />
         <button className="bg-[#F06D04] p-1 m-3 rounded-sm shadow-lg" onClick={toggleModal}>
           Add Shop
@@ -56,7 +56,7 @@ function Shops() {
         <ScreenLoader style={{ height: "50vh" }} />
       ) : (
         <>
-          <div style={{ width: "100%" }}>
+          <div style={{ width: "100%", background: "#fff" }}>
             {!data?.data?.length ? <EmptyState /> : <ShopsTable shops={data?.data} />}
           </div>
           <div style={{ float: "right", margin: "10px" }}>

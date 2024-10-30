@@ -43,9 +43,9 @@ export const TableRow = styled.tr`
   width: 100%;
   cursor: pointer;
 
-  &:nth-child(even) {
+  /* &:nth-child(even) {
     background-color: #f2f2f2;
-  }
+  } */
 `
 
 export const TableDataCell = styled.td`

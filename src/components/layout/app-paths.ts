@@ -22,6 +22,7 @@ export const appPaths = {
   discount: "discount",
   recentlyViewed: "recently-viewed",
   transaction: "transaction-history",
+  restaurantOrders: "restaurant-orders",
 
   // RESTAURANT
   restaurant: "/restaurant",

@@ -58,7 +58,7 @@ function Products() {
 
   return (
     <>
-      <div className="flex justify-between w-full items-center  ">
+      <div className="flex my-3 justify-between w-full items-center  ">
         <SearchInput placeholder="What are you looking for?" value={produtName} onChange={handleSearchChange} />
         {isFetching && <MiniLoader />}
       </div>
@@ -67,7 +67,7 @@ function Products() {
         <ScreenLoader style={{ height: "50vh" }} />
       ) : (
         <>
-          <div style={{ width: "100%" }}>
+          <div style={{ width: "100%", background: "#fff" }}>
             <TableWrapper>
               <Table>
                 <TableHead>

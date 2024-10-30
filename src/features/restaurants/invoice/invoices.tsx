@@ -43,10 +43,10 @@ const Invoices = () => {
             </>
           ) : (
             <>
-              <InvoiceCard title="Total Invoice" total={data?.totalElements ?? 0} type="total" />
-              <InvoiceCard title="Total Paid Invoice" total={data?.totalElements ?? 0} type="paid" />
-              <InvoiceCard title="Total Pending Invoice" total={data?.totalElements ?? 0} type="pending" />
-              <InvoiceCard title="Total Failed Invoices" total={data?.totalElements ?? 0} type="failed" />
+              <InvoiceCard title="Total Invoice" total={data?.resultTotal ?? 0} type="total" />
+              <InvoiceCard title="Total Paid Invoice" total={data?.resultTotal ?? 0} type="paid" />
+              <InvoiceCard title="Total Pending Invoice" total={data?.resultTotal ?? 0} type="pending" />
+              <InvoiceCard title="Total Failed Invoices" total={data?.resultTotal ?? 0} type="failed" />
             </>
           )}
         </Grid>
@@ -70,7 +70,7 @@ const Invoices = () => {
             {isLoading ? (
               <ScreenLoader />
             ) : (
-              data?.content.map((invoice) => {
+              data?.data?.map((invoice) => {
                 return (
                   <InvoiceCardList
                     onClick={viewInvoice}
@@ -86,7 +86,7 @@ const Invoices = () => {
             )}
 
             <div style={{ float: "right", margin: "30px 0px", paddingBottom: "10p" }}>
-              <Pagination onChange={handlePageClick} current={page} total={data?.totalElements} />
+              <Pagination onChange={handlePageClick} current={page} total={data?.resultTotal} />
             </div>
           </TabPanel>
           <TabPanel active={activeTab === "pending"}>
