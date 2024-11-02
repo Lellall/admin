@@ -22,7 +22,7 @@ interface Coordinate {
   longitude: number | string
 }
 export interface Shops {
-  category?: Category
+  category?: Category | null
   id?: string
   logoUrl?: string
   name?: string

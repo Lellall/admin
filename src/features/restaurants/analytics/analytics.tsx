@@ -1,7 +1,7 @@
 import CardIcon from "@/assets/3dcube.svg"
 import styled from "styled-components"
 import DashboardCard from "../dashboard/components/card"
-import { Pie, Bar } from "react-chartjs-2"
+import { Pie } from "react-chartjs-2"
 import Text from "@/components/text/Text"
 
 const PieChartData = {
@@ -46,7 +46,14 @@ function Analytics() {
           <p className="dropDown">Yearly </p>
         </div>
         <div className="chart">
-          <Pie data={PieChartData} key="pieChart" />
+          <Pie
+            key="unique-pie-chart"
+            options={{
+              responsive: true,
+              maintainAspectRatio: false,
+            }}
+            data={PieChartData}
+          />
         </div>
       </MainContainer>
     </div>

@@ -80,9 +80,9 @@ function RestaurantSuperAdminLayout() {
               </NavLink>
               <hr />
 
-              {match?.pathnameBase && (
+              {/* {match?.pathnameBase && (
                 <>
-                  {/* <NavLink
+                  <NavLink
                     onClick={toggleMobileMenu}
                     className={({ isActive }) =>
                       `p-2 rounded flex items-center ${isActive ? "bg-green-100 font-bold" : ""}`
@@ -93,7 +93,7 @@ function RestaurantSuperAdminLayout() {
                       <ShoppingCart size="24" className="mr-3" />
                     </span>
                     Orders
-                  </NavLink> */}
+                  </NavLink>
                   <NavLink
                     onClick={toggleMobileMenu}
                     className={({ isActive }) =>
@@ -133,7 +133,7 @@ function RestaurantSuperAdminLayout() {
                     Invoice
                   </NavLink>
                 </>
-              )}
+              )} */}
             </ul>
           </nav>
           <div className="mt-auto">

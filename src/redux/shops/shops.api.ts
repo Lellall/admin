@@ -42,6 +42,13 @@ const shops = baseApi.injectEndpoints({
       }),
       providesTags: ["SHOPS"],
     }),
+    deleteShop: builder.mutation<any, { shopId: string }>({
+      query: (params) => ({
+        url: `/shops/${params.shopId}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["SHOPS"],
+    }),
     getShopCategories: builder.query<Category[], { shopId: string }>({
       query: ({ shopId }) => ({
         url: `/shops/${shopId}/products/categories`,
@@ -140,4 +147,5 @@ export const {
   useLazyGetSingleShopProductsQuery,
   useAddShopProductMutation,
   useGetShopCategoriesQuery,
+  useDeleteShopMutation,
 } = shops
