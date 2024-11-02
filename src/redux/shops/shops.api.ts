@@ -48,6 +48,18 @@ const shops = baseApi.injectEndpoints({
         method: "DELETE",
       }),
       invalidatesTags: ["SHOPS"],
+      onQueryStarted(_args, { queryFulfilled: qf }) {
+        qf.then(() => {
+          toast.success(`Delete Successfully `, {
+            position: "top-right",
+          })
+        }).catch((err) => {
+          Errorhandler(err)
+          // toast.error(`${err.error.data.title}`, {
+          //   position: "top-right",
+          // })
+        })
+      },
     }),
     getShopCategories: builder.query<Category[], { shopId: string }>({
       query: ({ shopId }) => ({
