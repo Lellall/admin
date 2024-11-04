@@ -95,18 +95,19 @@ const Table = ({ products, onUpdateInv, isUpdatingInv, shopId, showAsList }) => 
   return (
     <div className="overflow-x-auto">
       {!showAsList && (
-        <div className="flex justify-end mb-4">
+        <div className="flex flex-col md:flex-row justify-end mb-4 space-y-2 md:space-y-0 md:space-x-2">
           <button
             onClick={() => onDelete(selectedProducts)}
-            className={`bg-[red] mx-2 text-white px-4 py-1 rounded shadow hover:bg-red-600 transition
-          ${isUpdatingInv ? "cursor-wait" : ""} 
-          ${selectedProducts.length < 1 || deletingInv ? "opacity-50 cursor-not-allowed" : "hover:bg-green-700"}`}
+            className={`bg-red-500 text-white px-4 py-2 rounded shadow hover:bg-red-600 transition 
+        ${isUpdatingInv ? "cursor-wait" : ""} 
+        ${selectedProducts.length < 1 || deletingInv ? "opacity-50 cursor-not-allowed" : "hover:bg-green-700"}`}
+            disabled={selectedProducts.length < 1 || deletingInv}
           >
             Delete Selected
           </button>
           <button
             onClick={onUpdateAll}
-            className={`bg-[purple] text-white px-4 py-1 rounded shadow transition 
+            className={`bg-purple-500 text-white px-4 py-2 rounded shadow transition 
         ${isUpdatingInv ? "cursor-wait" : ""} 
         ${editedProducts.length === 0 || isUpdatingInv ? "opacity-50 cursor-not-allowed" : "hover:bg-green-700"}`}
             disabled={editedProducts.length === 0 || isUpdatingInv}
@@ -114,6 +115,7 @@ const Table = ({ products, onUpdateInv, isUpdatingInv, shopId, showAsList }) => 
             {isUpdatingInv ? "Updating..." : "Update Changes"}
           </button>
         </div>
+
       )}
 
       <table className="min-w-full bg-white">

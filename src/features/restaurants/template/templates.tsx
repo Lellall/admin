@@ -15,6 +15,9 @@ import EmptyState from "@/components/empty-state"
 import { useGetShopQuery } from "@/redux/shops"
 import Skeleton from "react-loading-skeleton"
 import DeleteModal from "./modals/deleteModal"
+import { TabButton, TabContainer, TabPanel } from "@/components/tab.component"
+import Inventory from "../inventory/inventory"
+import Invoices from "../invoice/invoices"
 
 const formatDateTime = (dateTimeString: string | number | Date) => {
   const date = new Date(dateTimeString)
@@ -32,6 +35,7 @@ function Templates() {
   const [page, setPage] = useState(1)
   const [currentItem, setCurrentItem] = useState<any>({})
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
+  const [activeTab, setActiveTab] = useState("template")
 
   const { data: shopData, isLoading: isLoadingShop } = useGetShopQuery({ id: shopId ?? "" })
   const [createTemplate, { isLoading: isCreating }] = useCreateTemplateMutation()
@@ -60,9 +64,10 @@ function Templates() {
     return text.slice(0, maxLength) + "..."
   }
 
+  const handleTabSwitch = (value: string) => setActiveTab(value)
   return (
     <div>
-      <div className="flex flex-col md:flex-row h-auto md:h-[250px] rounded-lg bg-gray-50 w-full  mx-auto items-center gap-6 p-4">
+      <div className="flex flex-col md:flex-row h-auto md:h-[250px] rounded-lg bg-gray-50 w-full  mx-auto items-center gap-6 p-4 mb-5">
         {isLoadingShop ? (
           <>
             {[1, 2].map((el) => (
@@ -74,7 +79,7 @@ function Templates() {
             <div
               className="bg-greenn-900 h-[200px] md:h-[230px] rounded-lg w-full md:w-1/2 flex items-center justify-center"
               style={{
-                backgroundImage: `url(${rose})`,
+                backgroundImage: `url(https://lellall-dev.sfo3.cdn.digitaloceanspaces.com/rose-petals.svg)`,
                 backgroundSize: "cover",
                 backgroundPosition: "center",
                 backgroundRepeat: "no-repeat",
@@ -96,7 +101,7 @@ function Templates() {
                   Experience the convenience you deserve with Lellall.
                 </h1>
                 <p className="text-sm md:text-lg text-gray-600 mb-4 md:mb-6">Get all you want in one store!</p>
-                <button
+                {/* <button
                   type="button"
                   onClick={() => {
                     navigate(`${appPaths.createTemplate}`)
@@ -104,7 +109,20 @@ function Templates() {
                   className="bg-[#0E5D37] text-white py-2 px-3 md:px-4 rounded hover:bg-green-700"
                 >
                   Get Started
-                </button>
+                </button> */}
+                <div className="mt-5 mb-5 border rounded">
+                  <TabContainer>
+                    <TabButton onClick={() => handleTabSwitch("template")} active={activeTab === "template"}>
+                      TEMPLATES
+                    </TabButton>
+                    <TabButton onClick={() => handleTabSwitch("inventory")} active={activeTab === "inventory"}>
+                      INVENTORY
+                    </TabButton>
+                    <TabButton onClick={() => handleTabSwitch("invoice")} active={activeTab === "invoice"}>
+                      INVOICES
+                    </TabButton>
+                  </TabContainer>
+                </div>
               </div>
             </div>
           </>
@@ -115,120 +133,132 @@ function Templates() {
         <ScreenLoader style={{ height: "50vh" }} />
       ) : (
         <>
-          <div
-            className="grid cursor-pointer gap-2 mt-4 justify-center items-center"
-            style={{ gridTemplateColumns: "repeat(auto-fit, minmax(350px, 1fr))" }}
-          >
-            <ReusableCard className="flex justify-center border rounded-md mx-auto items-center" noBg bgColor="#F3FAF5">
-              <AddSquare
-                onClick={() => {
-                  navigate(`${appPaths.createTemplate}`)
+          <TabPanel active={activeTab === "template"}>
+            <>
+              <div
+                className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+              // style={{ gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))" }}
+              >
+                <ReusableCard width="350px" className="flex justify-center border rounded-md mx-auto items-center" noBg bgColor="#F3FAF5">
+                  <AddSquare
+                    onClick={() => {
+                      navigate(`${appPaths.createTemplate}`)
+                    }}
+                    size="50"
+                    color="#0E5D37"
+                    variant="Bold"
+                  />
+                </ReusableCard>
+
+                {!data?.data?.length ? (
+                  <EmptyState />
+                ) : (
+                  data?.data?.map((item) => {
+                    return (
+                      <div key={item.id} className="mx-auto items-center">
+                        <Card width="350px" key={item?.id}>
+                          <div className="flex p-4 justify-between">
+                            <div>
+                              <div className="text-white text-2xl semi-bold ">{truncateText(item.name)}</div>
+                            </div>
+                            <div className="dropdown">
+                              <More size="22" className="mt-1 cursor-pointer" color="#fff" />
+
+                              <div className="dropdown-menu">
+                                <div
+                                  className="dropdown-menu-item"
+                                  onClick={() => navigate(`/restaurant/templates/${shopId}/id/${item.id}`)}
+                                >
+                                  Edit
+                                </div>
+                                <div
+                                  className="dropdown-menu-item"
+                                  onClick={() => {
+                                    setCurrentItem(item)
+                                    const data = {
+                                      name: "Duplicate " + item.name,
+                                      templateItemsDto: item.templateItems,
+                                      shopId: shopId,
+                                    }
+                                    if (isCreating) return
+                                    handleDuplicateTemplate(data)
+                                  }}
+                                >
+                                  {isCreating ? "Duplicating..." : "Duplicate"}
+                                </div>
+                                <div
+                                  className="dropdown-menu-item"
+                                  onClick={() => {
+                                    toggleModal()
+                                    setCurrentItem(item)
+                                  }}
+                                >
+                                  Delete
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="flex p-4 mt-4">
+                            <div>
+                              <ShoppingCart variant="Bold" size="25" color="#fff" />
+                            </div>
+                            <div className="ml-2">
+                              <div className="text-white text-1xl semi-bold ">
+                                {item?.templateItems?.length} item listed
+                              </div>
+                            </div>
+                          </div>
+                          <div className="flex  px-4">
+                            <div>
+                              <Clock variant="Bold" size="25" color="#fff" />
+                            </div>
+                            <div>
+                              <div className="text-white ml-2 text-1xl semi-bold ">
+                                Created on {formatDateTime(item?.createdAt)}
+                              </div>
+                            </div>
+                          </div>
+                          <div className="flex mt-4 px-4">
+                            <div>
+                              <Calendar2 variant="Bold" size="25" color="#fff" />
+                            </div>
+                            <div>
+                              <div className="text-white ml-2 text-1xl semi-bold ">Order Delivered on Mon 04, 2024</div>
+                            </div>
+                          </div>
+                        </Card>
+                      </div>
+                    )
+                  })
+                )}
+              </div>
+
+              <div
+                style={{
+                  float: "right",
+                  margin: "20px 10px",
+                  paddingBottom: "20px",
                 }}
-                size="50"
-                color="#0E5D37"
-                variant="Bold"
+              >
+                <Pagination onChange={handlePageClick} current={page} total={data?.resultTotal} />
+              </div>
+
+              <DeleteModal
+                isModalOpen={isModalOpen}
+                shopId={shopId}
+                templateId={currentItem.id}
+                toggleModal={toggleModal}
               />
-            </ReusableCard>
-
-            {!data?.data?.length ? (
-              <EmptyState />
-            ) : (
-              data?.data?.map((item) => {
-                return (
-                  <div key={item.id} className="mx-auto items-center">
-                    <Card key={item?.id}>
-                      <div className="flex p-4 justify-between">
-                        <div>
-                          <div className="text-white text-2xl semi-bold ">{truncateText(item.name)}</div>
-                        </div>
-                        <div className="dropdown">
-                          <More size="22" className="mt-1 cursor-pointer" color="#fff" />
-
-                          <div className="dropdown-menu">
-                            <div
-                              className="dropdown-menu-item"
-                              onClick={() => navigate(`/restaurant/templates/${shopId}/id/${item.id}`)}
-                            >
-                              Edit
-                            </div>
-                            <div
-                              className="dropdown-menu-item"
-                              onClick={() => {
-                                setCurrentItem(item)
-                                const data = {
-                                  name: "Duplicate " + item.name,
-                                  templateItemsDto: item.templateItems,
-                                  shopId: shopId,
-                                }
-                                if (isCreating) return
-                                handleDuplicateTemplate(data)
-                              }}
-                            >
-                              {isCreating ? "Duplicating..." : "Duplicate"}
-                            </div>
-                            <div
-                              className="dropdown-menu-item"
-                              onClick={() => {
-                                toggleModal()
-                                setCurrentItem(item)
-                              }}
-                            >
-                              Delete
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="flex p-4 mt-4">
-                        <div>
-                          <ShoppingCart variant="Bold" size="25" color="#fff" />
-                        </div>
-                        <div className="ml-2">
-                          <div className="text-white text-1xl semi-bold ">
-                            {item?.templateItems?.length} item listed
-                          </div>
-                        </div>
-                      </div>
-                      <div className="flex  px-4">
-                        <div>
-                          <Clock variant="Bold" size="25" color="#fff" />
-                        </div>
-                        <div>
-                          <div className="text-white ml-2 text-1xl semi-bold ">
-                            Created on {formatDateTime(item?.createdAt)}
-                          </div>
-                        </div>
-                      </div>
-                      <div className="flex mt-4 px-4">
-                        <div>
-                          <Calendar2 variant="Bold" size="25" color="#fff" />
-                        </div>
-                        <div>
-                          <div className="text-white ml-2 text-1xl semi-bold ">Order Delivered on Mon 04, 2024</div>
-                        </div>
-                      </div>
-                    </Card>
-                  </div>
-                )
-              })
-            )}
-          </div>
-
-          <div
-            style={{
-              float: "right",
-              margin: "20px 10px",
-              paddingBottom: "20px",
-            }}
-          >
-            <Pagination onChange={handlePageClick} current={page} total={data?.resultTotal} />
-          </div>
-
-          <DeleteModal
-            isModalOpen={isModalOpen}
-            shopId={shopId}
-            templateId={currentItem.id}
-            toggleModal={toggleModal}
-          />
+            </>
+          </TabPanel>
+          <TabPanel active={activeTab === "inventory"}>
+            <Inventory />
+          </TabPanel>
+          <TabPanel active={activeTab === "invoice"}>
+            <div className="mx-5">
+              <Invoices />
+            </div>
+          </TabPanel>
         </>
       )}
     </div>

@@ -78,62 +78,6 @@ function RestaurantSuperAdminLayout() {
                 </span>
                 Settings
               </NavLink>
-              <hr />
-
-              {/* {match?.pathnameBase && (
-                <>
-                  <NavLink
-                    onClick={toggleMobileMenu}
-                    className={({ isActive }) =>
-                      `p-2 rounded flex items-center ${isActive ? "bg-green-100 font-bold" : ""}`
-                    }
-                    to={appPaths.orders}
-                  >
-                    <span>
-                      <ShoppingCart size="24" className="mr-3" />
-                    </span>
-                    Orders
-                  </NavLink>
-                  <NavLink
-                    onClick={toggleMobileMenu}
-                    className={({ isActive }) =>
-                      `p-2 rounded flex items-center ${isActive ? "bg-green-100 font-bold" : ""}`
-                    }
-                    to={appPaths.inventory}
-                  >
-                    <span>
-                      <Box className="mr-3" />
-                    </span>
-                    Inventory
-                  </NavLink>
-
-                  <NavLink
-                    onClick={toggleMobileMenu}
-                    className={({ isActive }) =>
-                      `p-2 rounded flex items-center ${isActive ? "bg-green-100 font-bold" : ""}`
-                    }
-                    to={appPaths.reports}
-                  >
-                    <span>
-                      <Chart size="24" className="mr-3" />
-                    </span>
-                    Reports
-                  </NavLink>
-
-                  <NavLink
-                    onClick={toggleMobileMenu}
-                    className={({ isActive }) =>
-                      `p-2 rounded flex items-center ${isActive ? "bg-green-100 font-bold" : ""}`
-                    }
-                    to={appPaths.invoices}
-                  >
-                    <span>
-                      <Setting size="24" className="mr-3" />
-                    </span>
-                    Invoice
-                  </NavLink>
-                </>
-              )} */}
             </ul>
           </nav>
           <div className="mt-auto">
@@ -201,6 +145,62 @@ function RestaurantSuperAdminLayout() {
             <Outlet />
           </div>
         </main>
+        {/* {match?.pathnameBase && (<aside className="w-1/7 border-l p-4 sticky top-0 h-screen md:flex flex-col hidden">
+          <nav className="mt-20">
+            <>
+              <NavLink
+                onClick={toggleMobileMenu}
+                className={({ isActive }) =>
+                  `p-2 rounded text-xs flex items-center ${isActive ? "bg-green-100 font-bold" : ""}`
+                }
+                to={appPaths.templates}
+              >
+                <span>
+                  <Box size="15" className="mr-3" />
+                </span>
+                Templates
+              </NavLink>
+              <NavLink
+                onClick={toggleMobileMenu}
+                className={({ isActive }) =>
+                  `p-2 rounded text-xs flex items-center ${isActive ? "bg-green-100 font-bold" : ""}`
+                }
+                to={appPaths.inventory}
+              >
+                <span>
+                  <Box size="15" className="mr-3" />
+                </span>
+                Inventory
+              </NavLink>
+
+              <NavLink
+                onClick={toggleMobileMenu}
+                className={({ isActive }) =>
+                  `p-2 rounded text-xs flex items-center ${isActive ? "bg-green-100 font-bold" : ""}`
+                }
+                to={appPaths.reports}
+              >
+                <span>
+                  <Chart size="15" className="mr-3" />
+                </span>
+                Reports
+              </NavLink>
+
+              <NavLink
+                onClick={toggleMobileMenu}
+                className={({ isActive }) =>
+                  `p-2 rounded text-xs flex items-center ${isActive ? "bg-green-100 font-bold" : ""}`
+                }
+                to={appPaths.invoices}
+              >
+                <span>
+                  <Setting size="15" className="mr-3" />
+                </span>
+                Invoice
+              </NavLink>
+            </>
+          </nav>
+        </aside>)} */}
       </div>
     </>
   )
