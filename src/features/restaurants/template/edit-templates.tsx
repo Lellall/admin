@@ -4,25 +4,16 @@ import { useNavigate, useParams } from "react-router-dom"
 import { Grid1, Trash, TableDocument, ShoppingCart, Category } from "iconsax-react"
 import empty from "@/assets/empty.svg"
 import { Template as TemplateForm } from "@/redux/templates/typings"
-import { useUpdateTemplateMutation, useGetTemplateQuery } from "@/redux/templates/template.api"
-import { Product } from "@/redux/products/typings"
+import { useUpdateTemplateMutation, useGetTemplateQuery, TemplateItems } from "@/redux/templates/template.api"
 import { TitledBackButton } from "@/components/ui/base/back-button"
 import CardList from "./product-select"
 import { useDebounce } from "react-use"
 import { useGetProductsQuery } from "@/redux/products"
 import { useGetCategoriesQuery } from "@/redux/categories/categories.api"
-import CategoryModal from "./category-modal"
+import CategoryModal from "./modals/category-modal"
 import Modal from "./container"
 import Button from "@/components/button/button"
 import ScreenLoader from "@/components/screen.loader"
-
-export type SelectedProduct = Product & {
-  productId: string
-  quantity: number
-  label?: string
-  measurement?: string
-  unitPrice?: number
-}
 
 const getFormattedDate = () => {
   const now = new Date()
@@ -56,12 +47,13 @@ function EditTemplates() {
   const [showSubmit, setShowSubmit] = useState(false)
   const { data } = useGetTemplateQuery({ shopId: shopId ?? "", templateId: templateId ?? "" })
 
-  const [selectedProducts, setSelectedProducts] = useState<any[]>(data?.templateItems ?? [])
+  const [selectedProducts, setSelectedProducts] = useState<TemplateItems[]>(data?.templateItems ?? [])
   const [templateName, setTemplateName] = useState(getFormattedDate())
 
   const handleCategoryClick = () => {
     setIsModalOpen(!isModalOpen)
   }
+
   useEffect(() => {
     if (data?.templateItems) {
       setSelectedProducts(data.templateItems)
@@ -100,17 +92,17 @@ function EditTemplates() {
   }, [selectedProducts, setValue])
 
   const handleQuantityChange = (id: string, newQuantity: number) => {
-    setSelectedProducts((prev) => prev.map((p) => (p.id === id ? { ...p, newQNT: newQuantity } : p)))
+    setSelectedProducts((prev) => prev.map((p) => (p.productId === id ? { ...p, quantity: newQuantity } : p)))
   }
   const handleMeasurementChange = (id: string, measurement: string) => {
-    setSelectedProducts((prev) => prev.map((p) => (p.id === id ? { ...p, measurement } : p)))
+    setSelectedProducts((prev) => prev.map((p) => (p.productId === id ? { ...p, measurement } : p)))
   }
-  const handleUnitChange = (id: string, unit: string) => {
-    setSelectedProducts((prev) => prev.map((p) => (p.id === id ? { ...p, unitPrice: unit } : p)))
+  const handleUnitChange = (id: string, unit: number) => {
+    setSelectedProducts((prev) => prev.map((p) => (p.productId === id ? { ...p, unitPrice: unit } : p)))
   }
 
   const handleDeleteProduct = (id: string) => {
-    setSelectedProducts((prev) => prev.filter((p) => p.id !== id))
+    setSelectedProducts((prev) => prev.filter((p) => p.productId !== id))
   }
 
   useEffect(() => {
@@ -119,16 +111,19 @@ function EditTemplates() {
     }
   }, [debouncedSearchTerm])
 
-  const transformData = (selectedProducts) => {
-    const data = selectedProducts?.map((item) => ({
-      productId: item.id,
-      quantity: item.newQNT,
-      measurement: item.measurement,
-      price: item.price,
-      unitPrice: parseFloat(item.unitPrice) || 0,
-    }))
+  const transformData = (selectedProducts: TemplateItems[]) => {
+    const dataToSubmit = {
+      shopId: shopId ?? "",
+      templateId: templateId ?? "",
+      // templateItemsDto: data,
+      templateItemsDto: selectedProducts,
+      unavailableTemplateItems: [],
+      name: templateName,
+    }
 
-    updateTemplate({ templateId: templateId ?? "", data: data, shopId: shopId ?? "" })
+    console.log(dataToSubmit)
+
+    updateTemplate(dataToSubmit)
       .unwrap()
       .finally(() => {
         navigate("/restaurant")
@@ -237,14 +232,14 @@ function EditTemplates() {
 
                     {selectedProducts?.map((product) => (
                       <div
-                        key={product.id}
+                        key={product.productId}
                         className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 bg-gray-50 border rounded-lg"
                       >
                         <div className="flex flex-col">
                           <label className="font-semibold mb-1">Product Name</label>
                           <input
                             type="text"
-                            value={product.name}
+                            value={product.productName}
                             className="border p-2 rounded bg-gray-200 outline-none"
                             disabled
                           />
@@ -255,8 +250,9 @@ function EditTemplates() {
                           <input
                             type="number"
                             min="1"
+                            value={product.quantity}
                             className="border p-2 rounded outline-none"
-                            onChange={(e) => handleQuantityChange(product.id, parseInt(e.target.value, 10))}
+                            onChange={(e) => handleQuantityChange(product.productId, parseInt(e.target.value, 10))}
                           />
                         </div>
 
@@ -267,18 +263,18 @@ function EditTemplates() {
                             value={product.measurement}
                             className="border p-2 rounded outline-none"
                             placeholder="Ex: Basket"
-                            onChange={(e) => handleMeasurementChange(product.id, e.target.value)}
+                            onChange={(e) => handleMeasurementChange(product.productId, e.target.value)}
                           />
                         </div>
 
                         <div className="flex flex-col">
                           <label className="font-semibold mb-1">Unit Price</label>
                           <input
-                            type="text"
+                            type="number"
                             value={product.unitPrice}
                             className="border p-2 rounded outline-none"
                             placeholder="Ex: 4 or 4.4"
-                            onChange={(e) => handleUnitChange(product.id, e.target.value)}
+                            onChange={(e) => handleUnitChange(product.productId, parseInt(e.target.value, 10))}
                           />
                         </div>
 
@@ -286,7 +282,7 @@ function EditTemplates() {
                           <button
                             type="button"
                             className="text-red-500 hover:text-red-700"
-                            onClick={() => handleDeleteProduct(product.id)}
+                            onClick={() => handleDeleteProduct(product.productId)}
                             aria-label="Delete product"
                           >
                             <Trash size="22" color="#FF8A65" />

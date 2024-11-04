@@ -1,6 +1,5 @@
 import { toast } from "react-toastify"
 
-import { Template } from "./typings"
 import { baseApi } from "../api/baseApi"
 import { Errorhandler } from "@/utils/errorHandler"
 
@@ -55,10 +54,10 @@ const template = baseApi.injectEndpoints({
       invalidatesTags: ["TEMPLATE"],
     }),
     updateTemplate: builder.mutation<TemplateResponse, TemplatePatchRequest>({
-      query: (QueryTemplate) => ({
-        url: `/template/${QueryTemplate.shopId}/${QueryTemplate.templateId}`,
+      query: ({ shopId, templateId, ...rest }) => ({
+        url: `/template/${shopId}/${templateId}`,
         method: "PATCH",
-        body: QueryTemplate.data,
+        body: rest,
       }),
       async onQueryStarted(_args, { queryFulfilled: qf }) {
         qf.then(() => {
@@ -97,27 +96,43 @@ interface TemplateQuery {
   // createdAt:
 }
 
-interface TemplateRequest {
-  // data: Template
-  templateItemsDto: TemplateItems[]
-  shopId: string
+export interface TemplateRequest {
   name: string
+  shopId: string
+  templateItemsDto: TemplateItems[]
+  unavailableTemplateItems?:
+    | {
+        productName: string
+        quantity: 0
+        measurement: string
+      }[]
+    | []
 }
 interface TemplateDeleteRequest {
   templateId: string
   shopId: string
 }
 interface TemplatePatchRequest {
-  data: Template
   shopId: string
   templateId: string
+  name: string
+  templateItemsDto: TemplateItems[]
+  unavailableTemplateItems?:
+    | {
+        productName: string
+        quantity: 0
+        measurement: string
+      }[]
+    | []
 }
-interface TemplateItems {
+export interface TemplateItems {
   productId: string
-  productName: string
-  quantity: 0
   available: boolean
-  price: 0
+  productName?: string
+  quantity: number
+  price: number
+  measurement: string
+  unitPrice: number
 }
 
 interface TemplateResponse {

@@ -1,42 +1,101 @@
 import Text from "@/components/text/Text"
+import { setShop } from "@/redux/shops/shops-slice"
 import { Shops } from "@/redux/shops/typings"
 import { MoreVert } from "@mui/icons-material"
+import { useDispatch } from "react-redux"
+import { useNavigate } from "react-router-dom"
 import styled from "styled-components"
+import DeleteModal from "./modals/deleteShop"
+import { useState } from "react"
 
-function ShopCard(props: Shops) {
+interface propsCard {
+  shop: Shops
+  editShop?: () => void
+}
+
+function ShopCard(props: propsCard) {
+  const { editShop, shop } = props
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+
+  const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false)
+  const toggleDeletetModalShop = () => {
+    setDeleteModalOpen(!deleteModalOpen)
+  }
+
+  const navigateToTemplate = (shopId: string) => {
+    navigate(`/restaurant/templates/${shopId}`)
+  }
+  const navigateToInventory = (shopId: string) => {
+    navigate(`/restaurant/templates/${shopId}/inventory`)
+  }
+
   return (
-    <Card>
-      <div className="img"></div>
+    <>
+      <Card>
+        <div className="img"></div>
 
-      <StatusCard status={props.status} />
+        <StatusCard status={shop.status} />
 
-      <div className="info">
-        <div>
-          <Text color="#fff">
-            Name:
-            <Text h3 color="#fff" style={{ marginLeft: "5px" }}>
-              {props.name}
+        <div className="info">
+          <div>
+            <Text color="#fff">
+              Name:
+              <Text h3 color="#fff" style={{ marginLeft: "5px" }}>
+                {shop.name}
+              </Text>
             </Text>
-          </Text>
-          <Text block color="#fff">
-            Category:
-            <Text h3 color="#fff" style={{ marginLeft: "5px" }}>
-              {props.category?.name}
+            <Text block color="#fff">
+              Category:
+              <Text h3 color="#fff" style={{ marginLeft: "5px" }}>
+                {shop.category?.name}
+              </Text>
             </Text>
-          </Text>
-        </div>
+          </div>
 
-        <div className="dropdown">
-          <div className="  ">
-            <MoreVert className="icon" />
-          </div>
-          <div className="dropdown-menu">
-            <div className="dropdown-menu-item">Edit</div>
-            <div className="dropdown-menu-item">Delete</div>
+          <div className="dropdown">
+            <div className="  ">
+              <MoreVert className="icon" />
+            </div>
+            <div className="dropdown-menu">
+              <div
+                className="dropdown-menu-item"
+                onClick={() => {
+                  if (editShop) {
+                    editShop()
+                  }
+                  dispatch(setShop(shop))
+                }}
+              >
+                Edit
+              </div>
+              <div className="dropdown-menu-item" onClick={toggleDeletetModalShop}>
+                Delete
+              </div>
+              <div
+                className="dropdown-menu-item"
+                onClick={() => {
+                  navigateToInventory(shop.id ?? "")
+                  dispatch(setShop(shop))
+                }}
+              >
+                Inventory
+              </div>
+              <div
+                className="dropdown-menu-item"
+                onClick={() => {
+                  navigateToTemplate(shop.id ?? "")
+                  dispatch(setShop(shop))
+                }}
+              >
+                Template
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    </Card>
+      </Card>
+      <DeleteModal isModalOpen={deleteModalOpen} shopId={shop.id ?? ""} toggleModal={toggleDeletetModalShop} />
+    </>
   )
 }
 

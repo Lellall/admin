@@ -17,11 +17,13 @@ import { Category } from "@/redux/categories/typings"
 interface ShopFormProps {
   mode: "create" | "update"
   close?: () => void
+  restaurantId?: string
 }
 
-function ShopForm({ mode, close }: ShopFormProps) {
+function ShopForm({ mode, close, restaurantId }: ShopFormProps) {
   const { id: shopId } = useParams()
-  const { data: shopData, isLoading } = useGetShopQuery({ id: shopId ?? "" }, { skip: mode === "create" })
+  const activeId = restaurantId ? restaurantId : shopId
+  const { data: shopData, isLoading } = useGetShopQuery({ id: activeId ?? "" }, { skip: mode === "create" })
   const [updateShop, { isLoading: isUpdating, isSuccess: isUpdatingSuccess }] = useUpdateShopMutation()
   const [createShop, { isLoading: isCreating, isSuccess }] = useCreateShopMutation()
   const { data: markets } = useGetMarketsQuery()
@@ -41,7 +43,7 @@ function ShopForm({ mode, close }: ShopFormProps) {
 
   useEffect(() => {
     if (mode === "update" && shopData) {
-      reset(shopData)
+      reset({ paystackAccountId: shopData.subAccountId, ...shopData })
     }
 
     if (isSuccess || isUpdatingSuccess) {
@@ -52,20 +54,21 @@ function ShopForm({ mode, close }: ShopFormProps) {
   }, [mode, shopData, reset, isSuccess, isUpdatingSuccess, close])
 
   const handleFormSubmit: SubmitHandler<Shop> = (data) => {
-    const { market, category, metadata, ...restData } = data
+    const { market, category, metadata, paystackAccountId, ...restData } = data
 
     if (mode === "update") {
       const dataToSubmit = {
         ...restData,
         marketId: market?.id,
         categoryId: category?.id,
-        paystackAccountId: metadata?.PAYSTACK_ACCOUNT_CODE,
+        paystackAccountId: paystackAccountId ? paystackAccountId : metadata?.PAYSTACK_ACCOUNT_CODE,
       }
       updateShop({ id: data.id, ...dataToSubmit })
     } else {
       const createShopData = {
         ...data,
         marketId: market?.id,
+        categoryId: category?.id,
       }
       createShop(createShopData)
     }
@@ -92,7 +95,6 @@ function ShopForm({ mode, close }: ShopFormProps) {
       <div className=" w-[100%]">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-5">
           <InputComponent errorMessage={errors?.name?.message} name="name" control={control} label="Name" />
-
           <InputComponent
             styledContainer={{ display: "none" }}
             disabled

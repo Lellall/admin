@@ -11,10 +11,11 @@ import CardList from "./product-select"
 import { useDebounce } from "react-use"
 import { useGetProductsQuery } from "@/redux/products"
 import { useGetCategoriesQuery } from "@/redux/categories/categories.api"
-import CategoryModal from "./category-modal"
+import CategoryModal from "./modals/category-modal"
 import Modal from "./container"
 import Button from "@/components/button/button"
 import ScreenLoader from "@/components/screen.loader"
+import { useShopSlice } from "@/redux/shops/shops-slice"
 
 export type SelectedProduct = Product & {
   productId: string
@@ -25,33 +26,18 @@ export type SelectedProduct = Product & {
 }
 
 function CreateTemplate() {
+  const navigate = useNavigate()
+  const { id } = useShopSlice()
   const [selectedProducts, setSelectedProducts] = useState<SelectedProduct[]>([])
   const [subtotal, setSubtotal] = useState<number>(0)
-  const navigate = useNavigate()
-  const userData = JSON.parse(localStorage.getItem("user") ?? "")
-  const shopId = userData?.shopIds[0]
-  const [createTemplate, { isLoading: isCreating }] = useCreateTemplateMutation()
   const [current, setCurrent] = useState(1)
   const [produtName, setProductName] = useState<string>("")
-  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("")
   const [showTable, setShowTable] = useState(false)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [showSubmit, setShowSubmit] = useState(false)
 
-  const getFormattedDate = () => {
-    const now = new Date()
-
-    const day = String(now.getDate()).padStart(2, "0")
-    const month = String(now.getMonth() + 1).padStart(2, "0") // Months are 0-indexed
-    const year = now.getFullYear()
-
-    let hours = now.getHours()
-    const minutes = String(now.getMinutes()).padStart(2, "0")
-    const ampm = hours >= 12 ? "pm" : "am"
-    hours = hours % 12 || 12
-
-    return `untitled_${hours}:${minutes}${ampm}`
-  }
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("")
+  const [createTemplate, { isLoading: isCreating }] = useCreateTemplateMutation()
   const [templateName, setTemplateName] = useState(getFormattedDate())
 
   const handleCategoryClick = () => {
@@ -95,7 +81,7 @@ function CreateTemplate() {
     createTemplate({
       name: templateName,
       templateItemsDto: data,
-      shopId,
+      shopId: id ?? "",
     })
       .unwrap()
       .finally(() => {
@@ -110,7 +96,7 @@ function CreateTemplate() {
     setSelectedProducts((prev) => prev.map((p) => (p.id === id ? { ...p, measurement } : p)))
   }
   const handleUnitChange = (id: string, unit: string) => {
-    setSelectedProducts((prev) => prev.map((p) => (p.id === id ? { ...p, unitPrice: unit } : p)))
+    setSelectedProducts((prev) => prev.map((p) => (p.productId === id ? { ...p, unitPrice: parseInt(unit) } : p)))
   }
 
   const handleDeleteProduct = (id: string) => {
@@ -132,7 +118,7 @@ function CreateTemplate() {
       unitPrice: parseFloat(item.unitPrice) || 0,
     }))
 
-    createTemplate({ name: templateName, templateItemsDto: data, shopId })
+    createTemplate({ name: templateName, templateItemsDto: data, shopId: id ?? "" })
       .unwrap()
       .finally(() => {
         navigate(-1)
@@ -329,3 +315,18 @@ function CreateTemplate() {
 }
 
 export default CreateTemplate
+
+const getFormattedDate = () => {
+  const now = new Date()
+
+  const day = String(now.getDate()).padStart(2, "0")
+  const month = String(now.getMonth() + 1).padStart(2, "0") // Months are 0-indexed
+  const year = now.getFullYear()
+
+  let hours = now.getHours()
+  const minutes = String(now.getMinutes()).padStart(2, "0")
+  const ampm = hours >= 12 ? "pm" : "am"
+  hours = hours % 12 || 12
+
+  return `untitled_${hours}:${minutes}${ampm}`
+}

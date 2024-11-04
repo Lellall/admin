@@ -1,12 +1,132 @@
 import styled from "styled-components"
 import HeaderProfile from "../components/header"
 import { Shop } from "@/redux/shops/typings"
-import { useNavigate } from "react-router-dom"
 import Modal from "@/components/modal"
 import ShopForm from "@/features/admin/shop/shop-form"
 import { useState } from "react"
-import ShopImg from "@/assets/shop.jpg"
-const ShopCard = styled.div`
+// import ShopImg from "@/assets/shop.jpg"
+// import { setShop } from "@/redux/shops/shops-slice"
+import ShopCard from "./shop-card"
+import { useShopSlice } from "@/redux/shops/shops-slice"
+
+const ShopList = ({ shops }: any) => {
+  const [isShopModalOpen, setIsShopModalOpen] = useState<boolean>(false)
+  const { id } = useShopSlice()
+
+  const toggleModalShop = () => {
+    setIsShopModalOpen(!isShopModalOpen)
+  }
+  const [isEditShopModalOpen, setEditShopModalOpen] = useState<boolean>(false)
+  const toggleEditModalShop = () => {
+    setEditShopModalOpen(!isEditShopModalOpen)
+  }
+
+  {
+    /**
+  
+      <ShopCardContainer key={shop.id}>
+        <ShopImage
+          style={{
+            backgroundImage: `url(${ShopImg})`,
+          }}
+        />
+        <ShopDetails>
+          <h2>{shop.name}</h2>
+          <div className="flex justify-between items-center mt-2">
+            <StatusBadge isOpen={shop.status === "OPEN"}>
+              {shop.status === "OPEN" ? "Active" : "Inactive"}
+            </StatusBadge>
+            <ViewButton
+              onClick={() => {
+                navigateToTemplate(shop.id ?? "")
+                dispatch(setShop(shop))
+              }}
+            >
+              T
+            </ViewButton>
+            <ViewButton
+              onClick={() => {
+                navigateToInventory(shop.id ?? "")
+                dispatch(setShop(shop))
+              }}
+            >
+              Inv
+            </ViewButton>
+            <ViewButton
+              onClick={() => {
+                navigateToTemplate(shop.id ?? "")
+                dispatch(setShop(shop))
+              }}
+            >
+              View
+            </ViewButton>
+          </div>
+        </ShopDetails>
+      </ShopCardContainer>
+     */
+  }
+  return (
+    <div className="container mx-auto px-3 py-5">
+      <HeaderProfile openShopModal={toggleModalShop} />
+      <div
+        className="grid cursor-pointer gap-2 mt-4 justify-center items-center grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
+        style={{ gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))" }}
+      >
+        {shops?.map((shop: Shop) => (
+          <div
+            className="grid cursor-pointer gap-2 mt-4 justify-center items-center grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
+            style={{ gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))" }}
+          >
+            <ShopCard editShop={toggleEditModalShop} shop={shop} key={shop.id} />
+          </div>
+        ))}
+      </div>
+
+      <>
+        <Modal
+          width="100%"
+          title="Create Restaurant"
+          style={{
+            maxWidth: "700px",
+            width: "90%",
+            margin: "auto",
+            overflowY: "auto",
+          }}
+          show={isShopModalOpen}
+          onClose={toggleModalShop}
+        >
+          <ShopForm mode="create" close={toggleModalShop} />
+        </Modal>
+        <Modal
+          width="100%"
+          title="Edit Restaurant"
+          style={{
+            maxWidth: "700px",
+            width: "90%",
+            margin: "auto",
+            overflowY: "auto",
+          }}
+          show={isEditShopModalOpen}
+          onClose={toggleEditModalShop}
+        >
+          <ShopForm mode="update" restaurantId={id} close={toggleEditModalShop} />
+        </Modal>
+      </>
+    </div>
+  )
+}
+
+export default ShopList
+
+const Grid = styled.div`
+  display: grid;
+  /* grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); */
+  grid-template-columns: repeat(auto-fit, minmax(min-content, 350px));
+  grid-template-rows: masonry;
+  gap: 15px;
+`
+
+const ShopCardContainer = styled.div`
   position: relative;
   height: 300px; /* Set the height for the card */
   border-radius: 0.75rem;
@@ -86,66 +206,3 @@ const ViewButton = styled.button`
     transform: scale(1.05);
   }
 `
-
-const ShopList = ({ shops }: any) => {
-  const [isShopModalOpen, setIsShopModalOpen] = useState<boolean>(false)
-
-  const navigate = useNavigate()
-  const navigateToTemplate = (shopId: string) => {
-    navigate(`/restaurant/templates/${shopId}`)
-  }
-  const toggleModalShop = () => {
-    setIsShopModalOpen(!isShopModalOpen)
-  }
-
-  return (
-    <div className="container mx-auto px-3 py-5">
-      <HeaderProfile openShopModal={toggleModalShop} />
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-6">
-        {shops?.map((shop: Shop) => (
-          <ShopCard key={shop.id}>
-            <ShopImage
-              style={{
-                backgroundImage: `url(${ShopImg})`,
-              }}
-            />
-            <ShopDetails>
-              <h2>{shop.name}</h2>
-              <div className="flex justify-between items-center mt-2">
-                <StatusBadge isOpen={shop.status === "OPEN"}>
-                  {shop.status === "OPEN" ? "Active" : "Inactive"}
-                </StatusBadge>
-                <ViewButton
-                  onClick={() => {
-                    navigateToTemplate(shop.id ?? "")
-                  }}
-                >
-                  View
-                </ViewButton>
-              </div>
-            </ShopDetails>
-          </ShopCard>
-        ))}
-      </div>
-
-      <>
-        <Modal
-          width="100%"
-          title="Create Shop"
-          style={{
-            maxWidth: "700px",
-            width: "90%",
-            margin: "auto",
-            overflowY: "auto",
-          }}
-          show={isShopModalOpen}
-          onClose={toggleModalShop}
-        >
-          <ShopForm mode="create" close={toggleModalShop} />
-        </Modal>
-      </>
-    </div>
-  )
-}
-
-export default ShopList

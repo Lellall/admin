@@ -1,6 +1,6 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { AddSquare, Calendar2, Clock, More, ShoppingCart } from "iconsax-react"
 import { useNavigate, useParams } from "react-router-dom"
 import styled from "styled-components"
@@ -8,18 +8,13 @@ import Pagination from "rc-pagination/lib/Pagination"
 import ReusableCard from "../components/card"
 import rose from "@/assets/rose-petals.svg"
 import main from "@/assets/scattered-forcefields.svg"
-import {
-  useCreateTemplateMutation,
-  useDeleteTemplateMutation,
-  useGetTemplatesQuery,
-} from "@/redux/templates/template.api"
+import { useCreateTemplateMutation, useGetTemplatesQuery } from "@/redux/templates/template.api"
 import { appPaths } from "@/components/layout/app-paths"
 import ScreenLoader from "@/components/screen.loader"
 import EmptyState from "@/components/empty-state"
-import Modal from "@/components/modal"
-import { Template } from "@/redux/templates/typings"
 import { useGetShopQuery } from "@/redux/shops"
 import Skeleton from "react-loading-skeleton"
+import DeleteModal from "./modals/deleteModal"
 
 const formatDateTime = (dateTimeString: string | number | Date) => {
   const date = new Date(dateTimeString)
@@ -39,7 +34,6 @@ function Templates() {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
 
   const { data: shopData, isLoading: isLoadingShop } = useGetShopQuery({ id: shopId ?? "" })
-  const [deleteTemplate, { isLoading: isDeleting, isSuccess }] = useDeleteTemplateMutation()
   const [createTemplate, { isLoading: isCreating }] = useCreateTemplateMutation()
 
   const { data, isLoading } = useGetTemplatesQuery({
@@ -61,12 +55,11 @@ function Templates() {
     createTemplate(data)
   }
 
-  useEffect(() => {
-    if (isSuccess) {
-      toggleModal()
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isSuccess])
+  const truncateText = (text: string, maxLength = 20) => {
+    if (text.length <= maxLength) return text
+    return text.slice(0, maxLength) + "..."
+  }
+
   return (
     <div>
       <div className="flex flex-col md:flex-row h-auto md:h-[250px] rounded-lg bg-gray-50 w-full  mx-auto items-center gap-6 p-4">
@@ -146,7 +139,7 @@ function Templates() {
                     <Card key={item?.id}>
                       <div className="flex p-4 justify-between">
                         <div>
-                          <div className="text-white text-2xl semi-bold ">{item.name}</div>
+                          <div className="text-white text-2xl semi-bold ">{truncateText(item.name)}</div>
                         </div>
                         <div className="dropdown">
                           <More size="22" className="mt-1 cursor-pointer" color="#fff" />
@@ -181,12 +174,6 @@ function Templates() {
                               }}
                             >
                               Delete
-                            </div>
-                            <div
-                              className="dropdown-menu-item"
-                              onClick={() => navigate(`/restaurant/templates/${shopId}/inventory`)}
-                            >
-                              Inventory
                             </div>
                           </div>
                         </div>
@@ -235,28 +222,13 @@ function Templates() {
           >
             <Pagination onChange={handlePageClick} current={page} total={data?.resultTotal} />
           </div>
-          <Modal width="500px" show={isModalOpen} onClose={toggleModal} title="Delete Template">
-            <p>Are you sure you want to permanently delete this template?</p>
 
-            <div className="flex justify-between mt-10">
-              <button
-                type="button"
-                onClick={toggleModal}
-                className="bg-[#0E5D37] text-white min-w-[100px] py-2 px-4 rounded hover:bg-green-700"
-              >
-                No
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  deleteTemplate({ shopId: shopId ?? "", templateId: currentItem.id })
-                }}
-                className="bg-[#5d1b0e] text-white  min-w-[100px]  py-2 px-4 rounded hover:bg-red-700"
-              >
-                {isDeleting ? "Deleting..." : "Yes"}
-              </button>
-            </div>
-          </Modal>
+          <DeleteModal
+            isModalOpen={isModalOpen}
+            shopId={shopId}
+            templateId={currentItem.id}
+            toggleModal={toggleModal}
+          />
         </>
       )}
     </div>
