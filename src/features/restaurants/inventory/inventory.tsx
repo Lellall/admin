@@ -6,15 +6,16 @@ import { useParams } from "react-router-dom"
 
 const Inventory = () => {
   const user = JSON.parse(localStorage.getItem("user") ?? "")
+  const shopId = localStorage.getItem("shopId")
 
   const [query, setQuery] = useState("")
-  const { shopId } = useParams()
+  // const { shopId } = useParams()
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(e.target.value)
   }
 
-  const { data: products, isLoading } = useGetInventoryDetailsQuery({ shopId, query })
+  const { data: products, isLoading } = useGetInventoryDetailsQuery({ shopId })
   const [onUpdateInv, { isLoading: isUpdatingInv }] = useUpdateInventoryMutation()
 
   return (
@@ -24,11 +25,11 @@ const Inventory = () => {
       ) : (
         <div className="flex px-2 h-screen">
           <div className="w-full mr-4">
-            <div className="h-[150px] px-2 rounded-lg w-full flex items-center justify-between">
-              <div>
-                <h1 className="text-2xl semi-bold">STOCK SHEET</h1>
+            <div className="h-auto md:h-[150px] px-2 py-4 rounded-lg w-full flex flex-col md:flex-row items-center justify-between">
+              <div className="mb-4 md:mb-0">
+                <h1 className="text-xl md:text-2xl font-semibold">Inventory</h1>
               </div>
-              <div className="w-[600px] ml-1">
+              <div className="w-full md:w-[600px] mb-4 md:mb-0">
                 <input
                   type="search"
                   value={query}
@@ -39,12 +40,13 @@ const Inventory = () => {
                   className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-700"
                 />
               </div>
-              <div className="flex justify-end p-4">
-                <button className="bg-[#0E5D37] hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-md shadow-md transition duration-200">
+              <div className="flex justify-end w-full md:w-auto">
+                <button className="bg-[#0E5D37] hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-md shadow-md transition duration-200 w-full md:w-auto">
                   Export Sheet
                 </button>
               </div>
             </div>
+
             <Table
               products={products}
               onUpdateInv={onUpdateInv}

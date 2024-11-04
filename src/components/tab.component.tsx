@@ -13,7 +13,7 @@ export const TabButton = styled.div<{ active: boolean }>`
   width: 33%;
   max-width: 200px;
   height: 30px;
-  border-radius: 5px;
+  // border-radius: 5px;
   background: ${(props) => (props.active ? "#125f3a" : "#F3FAF5")};
   color: ${(props) => (props.active ? "#fff" : "#4F5D75")};
   cursor: pointer;

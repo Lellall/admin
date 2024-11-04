@@ -30,6 +30,11 @@ function CreateTemplate() {
   const { id } = useShopSlice()
   const [selectedProducts, setSelectedProducts] = useState<SelectedProduct[]>([])
   const [subtotal, setSubtotal] = useState<number>(0)
+  const navigate = useNavigate()
+  const userData = JSON.parse(localStorage.getItem("user") ?? "")
+  // const shopId = userData?.shopIds[0]
+  const shopId = localStorage.getItem("shopId")
+  const [createTemplate, { isLoading: isCreating }] = useCreateTemplateMutation()
   const [current, setCurrent] = useState(1)
   const [produtName, setProductName] = useState<string>("")
   const [showTable, setShowTable] = useState(false)
@@ -201,7 +206,7 @@ function CreateTemplate() {
         )}
       </div>
       <button
-        className={`fixed bottom-6 right-6 px-6 py-3 rounded-full text-white transition-all duration-200 ${
+        className={`fixed bottom-6 z-[9999] right-6 px-6 py-3 rounded-full text-white transition-all duration-200 ${
           selectedProducts.length > 0 ? "bg-green-500 hover:bg-green-600" : "bg-gray-400 cursor-not-allowed"
         }`}
         disabled={selectedProducts.length === 0}

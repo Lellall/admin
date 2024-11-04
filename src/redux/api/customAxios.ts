@@ -21,6 +21,7 @@ const endpointsRequiringToken = [
   "inventory",
   "/shops",
   "/markets",
+  "^\/restaurants/[a-fA-F0-9-]+$/",
   /^\/products\/[a-fA-F0-9-]+$/,
 ]
 CustomAxios.interceptors.request.use(

@@ -46,11 +46,12 @@ const ContentText = styled.p`
   font-size: 1.125rem; /* Tailwind's text-lg equivalent */
 `
 
-const HeaderProfile = ({ openShopModal }: any) => {
+const HeaderProfile = ({ openShopModal, showOther, url }: any) => {
   return (
     <HeaderWrapper>
       <BackgroundImage
-        src="https://plus.unsplash.com/premium_photo-1670601440146-3b33dfcd7e17?q=80&w=2738&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+        src={url ? url : "https://plus.unsplash.com/premium_photo-1670601440146-3b33dfcd7e17?q=80&w=2738&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"}
+        // src="https://plus.unsplash.com/premium_photo-1670601440146-3b33dfcd7e17?q=80&w=2738&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
         alt="Header Profile"
       />
       <GradientOverlay />
@@ -59,7 +60,7 @@ const HeaderProfile = ({ openShopModal }: any) => {
         <h1 className="text-[#092d2b] text-2xl  font-light tracking-wider leading-tight">Cafe Dimanche</h1>
 
         <ContentText>
-          <div className="flex justify-content">
+          {showOther ? showOther : <div className="flex justify-content">
             <button
               type="button"
               className="bg-white mr-4 shadow-lg py-2 px-3 md:px-4 text-xs rounded-lg hover:bg-green-100 flex items-center justify-center space-x-2 font-light tracking-wider leading-tight"
@@ -89,7 +90,8 @@ const HeaderProfile = ({ openShopModal }: any) => {
               <Add size="15" color="#092d2b" />
               <span>CREATE SHOP</span>
             </button>
-          </div>
+          </div>}
+
         </ContentText>
       </BottomBox>
     </HeaderWrapper>
