@@ -111,6 +111,9 @@ function CreateTemplate() {
       console.log("Debounced Search Term:", debouncedSearchTerm)
     }
   }, [debouncedSearchTerm])
+  console.log('====================================');
+  console.log(shopId,'shopId');
+  console.log('====================================');
 
   const transformData = (selectedProducts) => {
     const data = selectedProducts.map((item) => ({
@@ -121,7 +124,7 @@ function CreateTemplate() {
       unitPrice: parseFloat(item.unitPrice) || 0,
     }))
 
-    createTemplate({ name: templateName, templateItemsDto: data, shopId: id ?? "" })
+    createTemplate({ name: templateName, templateItemsDto: data, shopId })
       .unwrap()
       .finally(() => {
         navigate(-1)
