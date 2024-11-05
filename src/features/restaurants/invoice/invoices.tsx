@@ -122,7 +122,6 @@ const Grid = styled.div`
   gap: 10px;
   margin: 30px 0px;
   grid-template-columns: repeat(2, 1fr);
-
   @media (min-width: 887px) {
     grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
   }
