@@ -32,7 +32,7 @@ function CreateTemplate() {
   const [subtotal, setSubtotal] = useState<number>(0)
   const userData = JSON.parse(localStorage.getItem("user") ?? "")
   // const shopId = userData?.shopIds[0]
-  const shopId = localStorage.getItem("shopId")
+  // const shopId = localStorage.getItem("shopId")
   const [current, setCurrent] = useState(1)
   const [produtName, setProductName] = useState<string>("")
   const [showTable, setShowTable] = useState(false)
@@ -99,9 +99,6 @@ function CreateTemplate() {
       console.log("Debounced Search Term:", debouncedSearchTerm)
     }
   }, [debouncedSearchTerm])
-  console.log("====================================")
-  console.log(shopId, "shopId")
-  console.log("====================================")
 
   const transformData = (selectedProducts) => {
     const data = selectedProducts.map((item) => ({
@@ -112,7 +109,7 @@ function CreateTemplate() {
       unitPrice: parseFloat(item.unitPrice) || 0,
     }))
 
-    createTemplate({ name: templateName, templateItemsDto: data, shopId })
+    createTemplate({ name: templateName, templateItemsDto: data, shopId: id ?? "" })
       .unwrap()
       .finally(() => {
         navigate(-1)
