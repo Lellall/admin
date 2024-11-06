@@ -7,48 +7,48 @@ import { LayoutContext } from "@/features/restaurants/LayoutContext"
 
 function AdminHeader() {
   const { isMobileMenuOpen, toggleMobileMenu } = useContext(LayoutContext)
-  const user = JSON.parse(localStorage.getItem("user") ?? "{}")
-  const getTitle = () => {
-    // const path = location.pathname.substring(1)
 
-    // if (path === "restaurant") return "Dashboard"
+  // Get and parse user data with error handling
+  const user = (() => {
+    try {
+      const storedUser = localStorage.getItem("user")
+      return JSON.parse(storedUser ?? "{}")
+    } catch (error) {
+      console.error("Error parsing user data from localStorage:", error)
+      return {}
+    }
+  })()
 
-    // Split path and get last segment
-    // const segments = path.split("/")
-    // const lastSegment = segments[segments.length - 1]
-    return "Super Admin Dashboard"
-    // return segments[1]
-    //   .split("-")
-    //   .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    //   .join(" ")
-  }
+  const getTitle = () => "Super Admin Dashboard"
+
+  const userInitials = user?.firstName?.[0] + user?.lastName?.[0]
+  const fullName = `${capitalizeFirstLetterOFEachWord(user?.firstName ?? "")} ${capitalizeFirstLetterOFEachWord(user?.lastName ?? "")}`
+  const role = capitalizeFirstLetterOFEachWord(user?.role ?? "")
+
   return (
     <Wrapper>
       <div className="title">
         <h3>{getTitle()}</h3>
       </div>
+
       <Profile>
-        <div className="profile-card"> {user?.firstName[0] + user?.lastName[0]}</div>
+        <div className="profile-card">{userInitials}</div>
         <div>
-          <p className="name">
-            {capitalizeFirstLetterOFEachWord(user?.firstName ?? "")}{" "}
-            {capitalizeFirstLetterOFEachWord(user?.lastName ?? "")}
-          </p>
-          <p className="role">{capitalizeFirstLetterOFEachWord(user?.role ?? "")}</p>
+          <p className="name">{fullName}</p>
+          <p className="role">{role}</p>
         </div>
       </Profile>
 
       <img src={Logo} alt="Logo" className="h-8 w-auto" />
+
       <div className="menu">
-        <button onClick={toggleMobileMenu} className=" text-white p-2 rounded">
+        <button onClick={toggleMobileMenu} className="text-white p-2 rounded">
           {isMobileMenuOpen ? <CloseCircle size="32" color="#0E5D37" /> : <HambergerMenu size="32" color="#0E5D37" />}
         </button>
       </div>
     </Wrapper>
   )
 }
-
-export default AdminHeader
 
 const Profile = styled.div`
   display: flex;
@@ -65,15 +65,19 @@ const Profile = styled.div`
     font-size: small;
     text-align: center;
   }
+
   p {
     font-size: small;
   }
+
   .name {
     color: #0e5d37;
   }
+
   .role {
     color: #0e5d3796;
   }
+
   @media screen and (max-width: 768px) {
     display: none;
   }
@@ -89,6 +93,7 @@ const Wrapper = styled.div`
       display: none;
     }
   }
+
   @media screen and (min-width: 768px) {
     img,
     .menu {
@@ -96,3 +101,5 @@ const Wrapper = styled.div`
     }
   }
 `
+
+export default AdminHeader

@@ -1,5 +1,6 @@
 import { UserRoleType } from "@/utils/constant"
 import { User } from "../auth/typings"
+import { Shop } from "../shops/typings"
 
 export interface IncompleteOrderRequest {
   page: number
@@ -47,6 +48,7 @@ export interface Order {
   user?: User
   amount?: string
   reference?: string
+  shop?: Shop
 }
 
 export interface CompleteOrderRequest {

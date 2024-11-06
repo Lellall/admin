@@ -7,7 +7,18 @@ import { capitalizeFirstLetterOFEachWord } from "@/utils/helpers"
 
 function Header() {
   const { isMobileMenuOpen, toggleMobileMenu } = useContext(LayoutContext)
-  const user = JSON.parse(localStorage.getItem("user") ?? "")
+  const user = (() => {
+    try {
+      const storedUser = localStorage.getItem("user")
+      return JSON.parse(storedUser ?? "{}")
+    } catch (error) {
+      console.error("Error parsing user data from localStorage:", error)
+      return {}
+    }
+  })()
+  // const user = JSON.parse(localStorage.getItem("user") ?? "")
+  const userInitials = user?.firstName?.[0] + user?.lastName?.[0]
+
   const getTitle = () => {
     const path = location.pathname.substring(1)
 
@@ -28,10 +39,11 @@ function Header() {
         <h3>{getTitle()}</h3>
       </div>
       <Profile>
-        <div className="profile-card"> {user.firstName[0] + user.lastName[0]}</div>
+        <div className="profile-card"> {userInitials}</div>
         <div>
           <p className="name">
-            {capitalizeFirstLetterOFEachWord(user?.firstName)} {capitalizeFirstLetterOFEachWord(user?.lastName)}
+            {capitalizeFirstLetterOFEachWord(user?.firstName ?? "")}{" "}
+            {capitalizeFirstLetterOFEachWord(user?.lastName ?? "")}
           </p>
           <p className="role">{capitalizeFirstLetterOFEachWord(user?.role)}</p>
         </div>

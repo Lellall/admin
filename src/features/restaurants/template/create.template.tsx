@@ -30,11 +30,7 @@ function CreateTemplate() {
   const { id } = useShopSlice()
   const [selectedProducts, setSelectedProducts] = useState<SelectedProduct[]>([])
   const [subtotal, setSubtotal] = useState<number>(0)
-  const navigate = useNavigate()
-  const userData = JSON.parse(localStorage.getItem("user") ?? "")
-  // const shopId = userData?.shopIds[0]
-  const shopId = localStorage.getItem("shopId")
-  const [createTemplate, { isLoading: isCreating }] = useCreateTemplateMutation()
+
   const [current, setCurrent] = useState(1)
   const [produtName, setProductName] = useState<string>("")
   const [showTable, setShowTable] = useState(false)
@@ -81,18 +77,6 @@ function CreateTemplate() {
     setSubtotal(newSubtotal)
     setValue("templateItemsDto", selectedProducts)
   }, [selectedProducts, setValue])
-
-  const handleFormSubmit = (data: any) => {
-    createTemplate({
-      name: templateName,
-      templateItemsDto: data,
-      shopId: id ?? "",
-    })
-      .unwrap()
-      .finally(() => {
-        navigate(-1)
-      })
-  }
 
   const handleQuantityChange = (id: string, newQuantity: number) => {
     setSelectedProducts((prev) => prev.map((p) => (p.id === id ? { ...p, newQNT: newQuantity } : p)))

@@ -6,6 +6,8 @@ import Modal from "@/components/modal"
 import ShopForm from "@/features/admin/shop/shop-form"
 import { useState } from "react"
 import ShopImg from "@/assets/shop.jpg"
+import { useDispatch } from "react-redux"
+import { setShop } from "@/redux/shops/shops-slice"
 const ShopCard = styled.div`
   position: relative;
   height: 300px; /* Set the height for the card */
@@ -98,11 +100,7 @@ const ShopList = ({ shops }: any) => {
     setIsShopModalOpen(!isShopModalOpen)
   }
 
-  const storeShop = async (shop) => {
-    await localStorage.setItem("shopId", shop.id)
-    navigateToTemplate(shop.id ?? "")
-  }
-
+  const dispatch = useDispatch()
   return (
     <div className="container mx-auto px-3 py-5">
       <HeaderProfile openShopModal={toggleModalShop} />
@@ -122,7 +120,8 @@ const ShopList = ({ shops }: any) => {
                 </StatusBadge>
                 <ViewButton
                   onClick={() => {
-                    storeShop(shop ?? "")
+                    navigateToTemplate(shop.id ?? "")
+                    dispatch(setShop(shop))
                   }}
                 >
                   View
