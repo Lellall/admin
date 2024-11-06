@@ -7,7 +7,9 @@ import ShopForm from "@/features/admin/shop/shop-form"
 import { useState } from "react"
 import ShopImg from "@/assets/shop.jpg"
 import { useDispatch } from "react-redux"
-import { setShop } from "@/redux/shops/shops-slice"
+import { setShop, useShopSlice } from "@/redux/shops/shops-slice"
+import { MoreVert } from "@mui/icons-material"
+import DeleteModal from "./modals/deleteShop"
 const ShopCard = styled.div`
   position: relative;
   height: 300px; /* Set the height for the card */
@@ -91,65 +93,165 @@ const ViewButton = styled.button`
 
 const ShopList = ({ shops }: any) => {
   const [isShopModalOpen, setIsShopModalOpen] = useState<boolean>(false)
+  const [editShopModalOpen, setEditShopModalOpen] = useState<boolean>(false)
 
   const navigate = useNavigate()
-  const navigateToTemplate = (shopId: string) => {
-    navigate(`/restaurant/templates/${shopId}`)
-  }
+  const { id } = useShopSlice()
   const toggleModalShop = () => {
     setIsShopModalOpen(!isShopModalOpen)
   }
 
   const dispatch = useDispatch()
-  return (
-    <div className="container mx-auto px-3 py-5">
-      <HeaderProfile openShopModal={toggleModalShop} />
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-6">
-        {shops?.map((shop: Shop) => (
-          <ShopCard key={shop.id}>
-            <ShopImage
-              style={{
-                backgroundImage: `url(${ShopImg})`,
-              }}
-            />
-            <ShopDetails>
-              <h2>{shop.name}</h2>
-              <div className="flex justify-between items-center mt-2">
-                <StatusBadge isOpen={shop.status === "OPEN"}>
-                  {shop.status === "OPEN" ? "Active" : "Inactive"}
-                </StatusBadge>
-                <ViewButton
-                  onClick={() => {
-                    navigateToTemplate(shop.id ?? "")
-                    dispatch(setShop(shop))
-                  }}
-                >
-                  View
-                </ViewButton>
-              </div>
-            </ShopDetails>
-          </ShopCard>
-        ))}
-      </div>
+  const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false)
+  const toggleDeletetModalShop = () => {
+    setDeleteModalOpen(!deleteModalOpen)
+  }
+  const toggleEditModalShop = () => {
+    setEditShopModalOpen(!editShopModalOpen)
+  }
+  const navigateToTemplate = (shopId: string) => {
+    navigate(`/restaurant/templates/${shopId}`)
+  }
 
-      <>
-        <Modal
-          width="100%"
-          title="Create Shop"
-          style={{
-            maxWidth: "700px",
-            width: "90%",
-            margin: "auto",
-            overflowY: "auto",
-          }}
-          show={isShopModalOpen}
-          onClose={toggleModalShop}
-        >
-          <ShopForm mode="create" close={toggleModalShop} />
-        </Modal>
-      </>
-    </div>
+  return (
+    <Container>
+      <div className="container mx-auto px-3 py-5">
+        <HeaderProfile openShopModal={toggleModalShop} />
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-6">
+          {shops?.map((shop: Shop) => (
+            <ShopCard key={shop.id}>
+              <ShopImage
+                style={{
+                  backgroundImage: `url(${ShopImg})`,
+                }}
+              />
+              <>
+                <div className="dropdown">
+                  <div className="  ">
+                    <MoreVert className="icon" style={{ color: "#fff" }} />
+                  </div>
+                  <div className="dropdown-menu">
+                    <div
+                      className="dropdown-menu-item"
+                      onClick={() => {
+                        // if (editShop) {
+                        //   editShop()
+                        // }
+                        toggleEditModalShop()
+                        dispatch(setShop(shop))
+                      }}
+                    >
+                      Edit
+                    </div>
+                    <div className="dropdown-menu-item" onClick={toggleDeletetModalShop}>
+                      Delete
+                    </div>
+                  </div>
+                </div>
+              </>
+              <ShopDetails>
+                <h2>{shop.name}</h2>
+                <div className="flex justify-between items-center mt-2">
+                  <StatusBadge isOpen={shop.status === "OPEN"}>
+                    {shop.status === "OPEN" ? "Active" : "Inactive"}
+                  </StatusBadge>
+                  <ViewButton
+                    onClick={() => {
+                      navigateToTemplate(shop.id ?? "")
+                      dispatch(setShop(shop))
+                    }}
+                  >
+                    View
+                  </ViewButton>
+                </div>
+              </ShopDetails>
+            </ShopCard>
+          ))}
+        </div>
+
+        <>
+          <Modal
+            width="100%"
+            title="Create Shop"
+            style={{
+              maxWidth: "700px",
+              width: "90%",
+              margin: "auto",
+              overflowY: "auto",
+            }}
+            show={isShopModalOpen}
+            onClose={toggleModalShop}
+          >
+            <ShopForm mode="create" close={toggleModalShop} />
+          </Modal>
+          <Modal
+            width="100%"
+            title="Edit Restaurant"
+            style={{
+              maxWidth: "700px",
+              width: "90%",
+              margin: "auto",
+              overflowY: "auto",
+            }}
+            show={editShopModalOpen}
+            onClose={toggleEditModalShop}
+          >
+            <ShopForm mode="update" restaurantId={id} close={toggleEditModalShop} />
+          </Modal>
+          <DeleteModal isModalOpen={deleteModalOpen} shopId={id ?? ""} toggleModal={toggleDeletetModalShop} />
+        </>
+      </div>
+    </Container>
   )
 }
 
 export default ShopList
+
+const Container = styled.div`
+  .dropdown {
+    position: absolute;
+    width: 100px;
+    right: 0px;
+    top: -40px;
+    bottom: 0px;
+    div:nth-child(1) {
+      padding: 10px;
+      bottom: 0;
+      top: 0;
+      margin-bottom: -10px;
+      .icon {
+        float: right;
+        clear: both;
+        margin-top: 40px;
+      }
+    }
+  }
+
+  .dropdown-menu {
+    display: none;
+    position: absolute;
+    background: #fff;
+    z-index: 9;
+    left: 0px;
+    top: 75px;
+    color: #fff;
+    border-radius: 4px;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+    min-width: 100px;
+  }
+
+  .dropdown:hover .dropdown-menu {
+    display: block;
+  }
+
+  .dropdown-menu-item {
+    padding: 8px 10px;
+    cursor: pointer;
+    color: #000;
+  }
+
+  .dropdown-menu-item:hover {
+    /* background-color: #f4f3f3e3; */
+    color: green;
+  }
+`
