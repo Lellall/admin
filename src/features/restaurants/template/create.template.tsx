@@ -80,18 +80,6 @@ function CreateTemplate() {
     setValue("templateItemsDto", selectedProducts)
   }, [selectedProducts, setValue])
 
-  const handleFormSubmit = (data: any) => {
-    createTemplate({
-      name: templateName,
-      templateItemsDto: data,
-      shopId: id ?? "",
-    })
-      .unwrap()
-      .finally(() => {
-        navigate(-1)
-      })
-  }
-
   const handleQuantityChange = (id: string, newQuantity: number) => {
     setSelectedProducts((prev) => prev.map((p) => (p.id === id ? { ...p, newQNT: newQuantity } : p)))
   }
@@ -111,9 +99,9 @@ function CreateTemplate() {
       console.log("Debounced Search Term:", debouncedSearchTerm)
     }
   }, [debouncedSearchTerm])
-  console.log('====================================');
-  console.log(shopId,'shopId');
-  console.log('====================================');
+  console.log("====================================")
+  console.log(shopId, "shopId")
+  console.log("====================================")
 
   const transformData = (selectedProducts) => {
     const data = selectedProducts.map((item) => ({

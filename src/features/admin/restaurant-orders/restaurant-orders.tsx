@@ -39,6 +39,7 @@ function RestaurantOrders() {
                   <thead>
                     <tr>
                       <th className="px-4 py-2 text-left text-sm font-semibold text-gray-600 border-b">S/n</th>
+                      <th className="px-4 py-2 text-left text-sm font-semibold text-gray-600 border-b">User</th>
                       <th className="px-4 py-2 text-left text-sm font-semibold text-gray-600 border-b">Phone number</th>
                       <th className="px-4 py-2 text-left text-sm font-semibold text-gray-600 border-b">Status</th>
                       <th className="px-4 py-2 text-left text-sm font-semibold text-gray-600 border-b">
@@ -55,6 +56,7 @@ function RestaurantOrders() {
                         onClick={() => navigateToOrderDetails(order.id)}
                       >
                         <td className="px-4 py-2 text-sm text-gray-700">{++index}</td>
+                        <td className="px-4 py-2 text-sm text-gray-700">{order.shop?.name}</td>
                         <td className="px-4 py-2 text-sm text-gray-700">{order.consumerPhoneNumber}</td>
                         <td className="px-4 py-2 text-sm text-gray-700">
                           <StatusCard status={order.status}>
@@ -74,9 +76,7 @@ function RestaurantOrders() {
             )}
           </div>
           <div style={{ float: "right", margin: "10px" }}>
-            {data?.data?.length ? (
-              <Pagination onChange={onChange} current={page - 1} total={data?.resultTotal} />
-            ) : null}
+            {data?.data?.length ? <Pagination onChange={onChange} current={page} total={data?.resultTotal} /> : null}
           </div>
         </div>
       )}
