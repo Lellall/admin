@@ -182,7 +182,7 @@ function App() {
               }
             />
             <Route
-              path={`${appPaths.invoices}/:id`}
+              path={`/restaurant/template/invoices/:id`}
               element={
                 <Suspense fallback={false}>
                   <Invoice />

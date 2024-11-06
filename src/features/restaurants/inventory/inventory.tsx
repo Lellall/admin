@@ -2,12 +2,12 @@ import Table from "../components/table"
 import { useGetInventoryDetailsQuery, useUpdateInventoryMutation } from "@/redux/inventory/inventory.api"
 import ScreenLoader from "@/components/screen.loader"
 import { useState } from "react"
-import { useParams } from "react-router-dom"
+import { useShopSlice } from "@/redux/shops/shops-slice"
 
 const Inventory = () => {
   const user = JSON.parse(localStorage.getItem("user") ?? "")
-  const shopId = localStorage.getItem("shopId")
-
+  // const shopId = localStorage.getItem("shopId")
+  const { id: shopId } = useShopSlice()
   const [query, setQuery] = useState("")
   // const { shopId } = useParams()
 
