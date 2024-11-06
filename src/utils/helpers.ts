@@ -39,6 +39,9 @@ export const capitalizeFirstLetter = (input: string): string => {
 }
 const exceptions: string[] = ["and", "in", "of"]
 export const capitalizeFirstLetterOFEachWord = (input: string): string => {
+  if (!input) {
+    return ""
+  }
   return input
     .split(" ")
     .map((word) => {

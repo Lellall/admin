@@ -47,7 +47,7 @@ function Analytics() {
         </div>
         <div className="chart">
           <Pie
-            key="unique-pie-chart"
+            key="pie-chart-analytics"
             options={{
               responsive: true,
               maintainAspectRatio: false,

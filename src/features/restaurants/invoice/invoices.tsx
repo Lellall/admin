@@ -27,7 +27,8 @@ const Invoices = () => {
   }
 
   const viewInvoice = () => {
-    navigate(`/restaurant/invoices/121`)
+    // templates/invoices
+    navigate(`/restaurant/template/invoices/121`)
   }
   return (
     <>
@@ -43,10 +44,10 @@ const Invoices = () => {
             </>
           ) : (
             <div className="grid grid-cols-1  lg:grid-cols-4 gap-6 items-center">
-              <InvoiceCard title="Total Invoice" total={data?.totalElements ?? 0} type="total" />
-              <InvoiceCard title="Total Paid Invoice" total={data?.totalElements ?? 0} type="paid" />
-              <InvoiceCard title="Total Pending Invoice" total={data?.totalElements ?? 0} type="pending" />
-              <InvoiceCard title="Total Failed Invoices" total={data?.totalElements ?? 0} type="failed" />
+              <InvoiceCard title="Total Invoice" total={data?.resultTotal ?? 0} type="total" />
+              <InvoiceCard title="Total Paid Invoice" total={data?.resultTotal ?? 0} type="paid" />
+              <InvoiceCard title="Total Pending Invoice" total={data?.resultTotal ?? 0} type="pending" />
+              <InvoiceCard title="Total Failed Invoices" total={data?.resultTotal ?? 0} type="failed" />
             </div>
           )}
         </Grid>
