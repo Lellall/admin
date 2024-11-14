@@ -139,13 +139,13 @@ function ShopForm({ mode, close, restaurantId }: ShopFormProps) {
           />
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-5">
-          <InputComponent
+          {/* <InputComponent
             errorMessage={errors?.subAccountId?.message}
             name="subAccountId"
             control={control}
             label="Sub Account Id"
             type="text"
-          />
+          /> */}
 
           <InputComponent
             errorMessage={errors?.active?.message}
@@ -264,7 +264,7 @@ const schema = yup.object().shape({
   categoryId: yup.string(),
   openingTime: yup.string().required("Opening time is required."),
   closingTime: yup.string().required("Closing time is required"),
-  subAccountId: yup.string().required("Subaccount ID is required"),
+  // subAccountId: yup.string().required("Subaccount ID is required"),
   vatCharge: yup.number().required("VAT charge is required"),
   marketId: yup.string(),
   coordinate: yup.object().shape({

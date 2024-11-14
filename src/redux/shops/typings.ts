@@ -50,7 +50,7 @@ export interface Shop {
   paystackAccountId?: string
   vatCharge: number
   market: Market
-  subAccountId: string
+  // subAccountId: string
   metadata?: Metadata
 }
 // export interface Shop {

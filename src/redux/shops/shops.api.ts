@@ -99,9 +99,10 @@ const shops = baseApi.injectEndpoints({
             position: "top-right",
           })
         }).catch((err) => {
-          toast.error(`${err.error.data.title}`, {
-            position: "top-right",
-          })
+          // toast.error(`${err.error.data.title}`, {
+          //   position: "top-right",
+          // })
+          Errorhandler(err)
         })
       },
     }),

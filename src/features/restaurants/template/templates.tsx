@@ -137,9 +137,14 @@ function Templates() {
             <>
               <div
                 className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
-              // style={{ gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))" }}
+                // style={{ gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))" }}
               >
-                <ReusableCard width="350px" className="flex justify-center border rounded-md mx-auto items-center" noBg bgColor="#F3FAF5">
+                <ReusableCard
+                  width="350px"
+                  className="flex justify-center border rounded-md mx-auto items-center"
+                  noBg
+                  bgColor="#F3FAF5"
+                >
                   <AddSquare
                     onClick={() => {
                       navigate(`${appPaths.createTemplate}`)
@@ -165,12 +170,12 @@ function Templates() {
                               <More size="22" className="mt-1 cursor-pointer" color="#fff" />
 
                               <div className="dropdown-menu">
-                                <div
+                                {/* <div
                                   className="dropdown-menu-item"
                                   onClick={() => navigate(`/restaurant/templates/${shopId}/id/${item.id}`)}
                                 >
                                   Edit
-                                </div>
+                                </div> */}
                                 <div
                                   className="dropdown-menu-item"
                                   onClick={() => {

@@ -65,9 +65,7 @@ const template = baseApi.injectEndpoints({
             position: "top-right",
           })
         }).catch((err) => {
-          toast.error(`${err.error?.data?.message}`, {
-            position: "top-right",
-          })
+          Errorhandler(err)
         })
       },
       invalidatesTags: ["TEMPLATE"],
@@ -133,6 +131,8 @@ export interface TemplateItems {
   price: number
   measurement: string
   unitPrice: number
+  // this is added on client side only to match the product id if backend update the productId to id remove the comment
+  id?: string
 }
 
 interface TemplateResponse {
