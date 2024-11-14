@@ -47,18 +47,20 @@ function EditTemplates() {
   const [showSubmit, setShowSubmit] = useState(false)
   const { data } = useGetTemplateQuery({ shopId: shopId ?? "", templateId: templateId ?? "" })
 
-  const [selectedProducts, setSelectedProducts] = useState<TemplateItems[]>(data?.templateItems ?? [])
+  const updateTemplateData = data?.templateItems.map((item) => ({ ...item, id: item.productId }))
+
+  const [selectedProducts, setSelectedProducts] = useState<TemplateItems[] | any>(updateTemplateData)
   const [templateName, setTemplateName] = useState(getFormattedDate())
 
   const handleCategoryClick = () => {
     setIsModalOpen(!isModalOpen)
   }
 
-  useEffect(() => {
-    if (data?.templateItems) {
-      setSelectedProducts(data.templateItems)
-    }
-  }, [data])
+  // useEffect(() => {
+  //   if (data?.templateItems) {
+  //     setSelectedProducts(data.templateItems)
+  //   }
+  // }, [data])
 
   useDebounce(
     () => {
@@ -202,7 +204,11 @@ function EditTemplates() {
         {isLoading || isFetching ? (
           <ScreenLoader style={{ height: "50vh" }} />
         ) : (
-          <CardList setSelectedProducts={setSelectedProducts} cards={products?.data ?? []} />
+          <CardList
+            setSelectedProducts={setSelectedProducts}
+            selectedProducts={selectedProducts}
+            cards={products?.data ?? []}
+          />
         )}
       </div>
       <button
