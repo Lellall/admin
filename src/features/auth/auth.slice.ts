@@ -2,6 +2,7 @@
 // src/features/auth/authSlice.ts
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { User } from "@/redux/auth/typings"
+import { useSelector } from "react-redux"
 
 export interface AuthState {
   // Ensure AuthState is exported
@@ -48,6 +49,7 @@ export const authSlice = createSlice({
       state.isAuthenticated = isAuthenticated
       state.accessToken = accessToken
       state.refreshToken = refreshToken
+      state.user = user
       if (isAuthenticated) {
         localStorage.setItem("isAuthenticated", "true")
       } else {
@@ -79,4 +81,6 @@ export const authSlice = createSlice({
 })
 
 export const { setAuthState, logout } = authSlice.actions
+export const useAuthSlice = () => useSelector((state: { auth: AuthState }) => state.auth)
+
 // export default authSlice.reducer

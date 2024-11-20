@@ -29,6 +29,12 @@ const shops = baseApi.injectEndpoints({
       }),
       providesTags: ["SHOPS"],
     }),
+    getShopUsers: builder.query<Shop, { shopId: string }>({
+      query: ({ shopId }) => ({
+        url: `/shops/${shopId}/users`,
+      }),
+      providesTags: ["SHOPS"],
+    }),
     getShopProducts: builder.query<ShopsProductResponse, ShopsProductsRequest>({
       query: (params: ShopsProductsRequest) => ({
         url: `/shops/${params.id}/products`,
@@ -99,9 +105,23 @@ const shops = baseApi.injectEndpoints({
             position: "top-right",
           })
         }).catch((err) => {
-          // toast.error(`${err.error.data.title}`, {
-          //   position: "top-right",
-          // })
+          Errorhandler(err)
+        })
+      },
+    }),
+    createShopUser: builder.mutation<any, { shopId: string; data: any }>({
+      query: ({ shopId, data }) => ({
+        url: `/shops/${shopId}/users`,
+        body: data,
+        method: "POST",
+      }),
+      invalidatesTags: ["SHOPS"],
+      onQueryStarted(_args, { queryFulfilled: qf }) {
+        qf.then(() => {
+          toast.success(`User Created Successfully `, {
+            position: "top-right",
+          })
+        }).catch((err) => {
           Errorhandler(err)
         })
       },
@@ -161,4 +181,6 @@ export const {
   useAddShopProductMutation,
   useGetShopCategoriesQuery,
   useDeleteShopMutation,
+  useGetShopUsersQuery,
+  useCreateShopUserMutation,
 } = shops

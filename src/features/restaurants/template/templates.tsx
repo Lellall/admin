@@ -113,7 +113,7 @@ function Templates() {
                 <div className="mt-5 mb-5 border rounded">
                   <TabContainer>
                     <TabButton onClick={() => handleTabSwitch("template")} active={activeTab === "template"}>
-                      TEMPLATES
+                      ORDERS
                     </TabButton>
                     <TabButton onClick={() => handleTabSwitch("inventory")} active={activeTab === "inventory"}>
                       INVENTORY

@@ -4,28 +4,34 @@ import styled from "styled-components"
 import PrivilegesModal from "./modals/privilegesModal"
 import { useState } from "react"
 import Text from "@/components/text/Text"
-
-type TabTypes = "Overview" | "Statistics" | "Courses"
+import { useGetShopUsersQuery } from "@/redux/shops/shops.api"
+import { useAuthSlice } from "@/features/auth/auth.slice"
+import { useNavigate } from "react-router-dom"
+import { appPaths } from "@/components/layout/app-paths"
+import Modal from "@/components/modal"
+import CreateUser from "./modals/createUserModal"
 
 function Users() {
+  const navigate = useNavigate()
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
+  const { user, isAuthenticated } = useAuthSlice()
+
+  const { data } = useGetShopUsersQuery({ shopId: user?.id ?? "" })
+
   const toggled = () => {
     setIsModalOpen(!isModalOpen)
   }
-  const [activeTab, setActiveTab] = useState<TabTypes>("Overview")
-
-  const handleTabChange = (tabLabel: TabTypes) => {
-    setActiveTab(tabLabel)
+  const toggledCreateModal = () => {
+    setIsCreateModalOpen(!isCreateModalOpen)
   }
+
+  console.log(data)
   return (
     <div>
       <div className="flex justify-between my-5">
         <Text h1>Users</Text>
-        <Button
-          onClick={() => {}}
-          loading={false}
-          className={"flex bg-transparent text-black border-2 border-[#125F3A]"}
-        >
+        <Button onClick={toggledCreateModal} loading={false} className={"flex  text-black border-2 border-[#125F3A]"}>
           <Add /> Create new user
         </Button>
       </div>
@@ -98,6 +104,16 @@ function Users() {
       </Table>
 
       <PrivilegesModal onclose={toggled} show={isModalOpen} />
+      <Modal
+        style={{ maxWidth: "600px", paddingBottom: "3rem" }}
+        onClose={toggledCreateModal}
+        title="Create User"
+        show={isCreateModalOpen}
+      >
+        <>
+          <CreateUser />
+        </>
+      </Modal>
     </div>
   )
 }

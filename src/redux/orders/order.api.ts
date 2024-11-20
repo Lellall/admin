@@ -30,17 +30,13 @@ const orders = baseApi.injectEndpoints({
         method: "PUT",
       }),
       async onQueryStarted(_args, { queryFulfilled: qf }) {
-        qf.then((res) => {
-          console.log("RES", res)
-          toast.success(`${res}`, {
+        qf.then(() => {
+          toast.success(`Order Completed Succesfully`, {
             position: "top-right",
           })
         }).catch((err) => {
           console.log("ERR", err.error.data)
           Errorhandler(err)
-          // toast.error(`${err.error.data}`, {
-          //   position: "top-right",
-          // })
         })
       },
       invalidatesTags: ["ORDERS"],
