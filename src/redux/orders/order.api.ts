@@ -12,6 +12,7 @@ import {
   OrderResponse,
   OrderRequest,
   Order,
+  InvoicesStatsResponse,
 } from "./typings"
 import { baseApi } from "../api/baseApi"
 import { Errorhandler } from "@/utils/errorHandler"
@@ -60,6 +61,13 @@ const orders = baseApi.injectEndpoints({
       }),
       providesTags: ["ORDERS"],
     }),
+    getInvoicesStats: builder.query<InvoicesStatsResponse, { restaurantId: string }>({
+      query: ({ restaurantId }) => ({
+        url: `/orders/${restaurantId}/order-statistic`,
+        method: "GET",
+      }),
+      providesTags: ["ORDERS"],
+    }),
     getOrders: builder.query<OrderResponse, OrderRequest>({
       query: (params) => ({
         url: `/orders`,
@@ -85,4 +93,5 @@ export const {
   useGetInvoicesQuery,
   useGetConsumerHistoryQuery,
   useGetOrderQuery,
+  useGetInvoicesStatsQuery,
 } = orders

@@ -5,7 +5,7 @@ import { TabButton, TabContainer, TabPanel } from "@/components/tab.component"
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import InvoiceHeader from "./components/InvoiceHeader"
-import { useGetInvoicesQuery } from "@/redux/orders"
+import { useGetInvoicesQuery, useGetInvoicesStatsQuery } from "@/redux/orders"
 import Pagination from "rc-pagination"
 import ScreenLoader from "@/components/screen.loader"
 import Skeleton from "react-loading-skeleton"
@@ -19,7 +19,8 @@ const Invoices = () => {
   const user = userStored ? JSON.parse(userStored) : ""
   const userId = user?.id
   const { data, isLoading } = useGetInvoicesQuery({ restaurantId: userId, page: page - 1 })
-
+  const { data: stats } = useGetInvoicesStatsQuery({ restaurantId: userId })
+  console.log(stats)
   const handleTabSwitch = (value: string) => setActiveTab(value)
 
   const handlePageClick = (pageNumber: number) => {
@@ -44,10 +45,10 @@ const Invoices = () => {
             </>
           ) : (
             <div className="grid grid-cols-1  lg:grid-cols-4 gap-6 items-center">
-              <InvoiceCard title="Total Invoice" total={data?.resultTotal ?? 0} type="total" />
-              <InvoiceCard title="Total Paid Invoice" total={data?.resultTotal ?? 0} type="paid" />
-              <InvoiceCard title="Total Pending Invoice" total={data?.resultTotal ?? 0} type="pending" />
-              <InvoiceCard title="Total Failed Invoices" total={data?.resultTotal ?? 0} type="failed" />
+              <InvoiceCard title="Total Invoice" total={stats?.total ?? 0} type="total" />
+              <InvoiceCard title="Total Paid Invoice" total={stats?.paid ?? 0} type="paid" />
+              <InvoiceCard title="Total Pending Invoice" total={stats?.pending ?? 0} type="pending" />
+              <InvoiceCard title="Total Failed Invoices" total={stats?.failed ?? 0} type="failed" />
             </div>
           )}
         </Grid>

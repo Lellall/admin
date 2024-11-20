@@ -127,3 +127,13 @@ export interface InvoicesResponse {
   data: Invoice[]
   resultTotal: number
 }
+export interface InvoicesStatsResponse {
+  accepted: number
+  completed: number
+  failed: number
+  onGoing: number
+  packaged: number
+  paid: number
+  pending: number
+  total: number
+}
