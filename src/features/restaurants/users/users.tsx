@@ -1,23 +1,38 @@
-import Button from "@/components/button/button"
 import { Add } from "iconsax-react"
 import styled from "styled-components"
 import PrivilegesModal from "./modals/privilegesModal"
 import { useState } from "react"
 import Text from "@/components/text/Text"
-import { useGetShopUsersQuery } from "@/redux/shops/shops.api"
-import { useAuthSlice } from "@/features/auth/auth.slice"
-import { useNavigate } from "react-router-dom"
-import { appPaths } from "@/components/layout/app-paths"
+import { useGetShopsQuery, useGetShopUsersQuery } from "@/redux/shops/shops.api"
 import Modal from "@/components/modal"
 import CreateUser from "./modals/createUserModal"
+import Select from "react-select"
+import { capitalizeFirstLetterOFEachWord } from "@/utils/helpers"
+import Skeleton from "react-loading-skeleton"
+// import { useDebounce } from "react-use"
 
 function Users() {
-  const navigate = useNavigate()
+  // const [name, setName] = useState("")
+  // const [searchName, setSearchName] = useState("")
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [shopId, setShop] = useState("")
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
-  const { user, isAuthenticated } = useAuthSlice()
+  const { data: shops, isLoading: isLoadingShop } = useGetShopsQuery({
+    page: 0,
+    size: 10,
+    categoryId: "",
+    filter: "",
+  })
 
-  const { data } = useGetShopUsersQuery({ shopId: user?.id ?? "" })
+  const { data, isLoading } = useGetShopUsersQuery({ shopId: shopId ?? "" })
+
+  // useDebounce(
+  //   () => {
+  //     setSearchName(name)
+  //   },
+  //   2000,
+  //   [name]
+  // )
 
   const toggled = () => {
     setIsModalOpen(!isModalOpen)
@@ -26,82 +41,105 @@ function Users() {
     setIsCreateModalOpen(!isCreateModalOpen)
   }
 
-  console.log(data)
+  const customStyles = {
+    container: (provided: any) => ({
+      ...provided,
+      width: "300px", // Fixed width
+      minWidth: "250px", // Minimum width
+    }),
+    control: (provided: any) => ({
+      ...provided,
+      width: "100%",
+    }),
+  }
+
+  // useEffect(() => {
+  //   if (shopId) {
+  //     refetch()
+  //   }
+  // }, [shopId, refetch])
   return (
     <div>
       <div className="flex justify-between my-5">
         <Text h1>Users</Text>
-        <Button onClick={toggledCreateModal} loading={false} className={"flex  text-black border-2 border-[#125F3A]"}>
-          <Add /> Create new user
-        </Button>
+        <button
+          disabled={!shopId}
+          onClick={toggledCreateModal}
+          className={`flex items-center
+          ${shopId ? "bg-[#125F3A]" : "bg-[#0E5D3726]"} 
+          p-1 
+          rounded-md 
+          ${shopId ? "text-[#fff]" : "text-[#000]"} 
+          ${shopId ? "border" : ""} 
+
+       
+          border-[#125F3A]`}
+        >
+          <Add />
+          Create new user
+        </button>
       </div>
-      <div>
-        <input type="search" className="my-3 p-3 w-full outline-none bg-[#34A8530F]" placeholder="Search user" />
+      <div className="flex items-center flex-wrap justify-between">
+        <>
+          <Select
+            placeholder="Select shop"
+            onChange={(e) => {
+              setShop(e?.value ?? "")
+            }}
+            styles={customStyles}
+            options={shops?.data.map((shop) => {
+              return { label: shop.name, value: shop.id }
+            })}
+          />
+        </>
+        <input
+          type="search"
+          className="my-3 p-3  w-[100%] md:w-[50%] outline-none  bg-[#34A8530F]"
+          placeholder="Search user"
+          // value={name}
+          // onChange={(e) => setName(e.target.value)}
+        />
       </div>
-      <Table>
-        <thead>
-          <tr>
-            <th>S/N</th>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Privilegs</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>1</td>
-            <td>John Doe</td>
-            <td>johndoe@example.com</td>
-            <td>
-              <span
-                onClick={toggled}
-                className="bg-[#0E5D3726]  text-[#3F7E60]  text-center block text-sm rounded-lg p-1 cursor-pointer w-[70px]"
-              >
-                View
-              </span>
-            </td>
-          </tr>
-          <tr>
-            <td>2</td>
-            <td>Jane Smith</td>
-            <td>janesmith@example.com</td>
-            <td>
-              <span
-                onClick={toggled}
-                className="bg-[#0E5D3726] text-[#3F7E60]  text-center block text-sm rounded-lg p-1 cursor-pointer w-[70px]"
-              >
-                View
-              </span>
-            </td>
-          </tr>
-          <tr>
-            <td>3</td>
-            <td>Alice Johnson</td>
-            <td>alicejohnson@example.com</td>
-            <td>
-              <span
-                onClick={toggled}
-                className="bg-[#0E5D3726] text-[#3F7E60]  text-center block text-sm rounded-lg p-1 cursor-pointer w-[70px]"
-              >
-                View
-              </span>
-            </td>
-          </tr>
-          <tr>
-            <td>4</td>
-            <td>Bob Brown</td>
-            <td>bobbrown@example.com</td>
-            <td>
-              <span
-                onClick={toggled}
-                className="bg-[#0E5D3726] text-[#3F7E60]  text-center block text-sm rounded-lg p-1 cursor-pointer w-[70px]"
-              >
-                View
-              </span>
-            </td>
-          </tr>
-        </tbody>
-      </Table>
+
+      <>
+        {isLoading ? (
+          [1].map((el) => (
+            <Skeleton key={el} count={1} baseColor="#cdd6de33" highlightColor="#5a626833" width="100%" height="80vh " />
+          ))
+        ) : data?.length ? (
+          <Table>
+            <thead>
+              <tr>
+                <th>S/N</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone Number</th>
+                <th>Role</th>
+              </tr>
+            </thead>
+            <tbody>
+              {data.map((user, index) => (
+                <tr key={user.id}>
+                  <td>{++index}</td>
+                  <td>{capitalizeFirstLetterOFEachWord(`${user.firstName} ${user.lastName}`)}</td>
+                  <td>{user.phoneNumber}</td>
+                  <td>{user.email}</td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+        ) : shopId ? (
+          <>
+            <div style={{ textAlign: "center", padding: "50px", color: "#555" }}>
+              <h2>No data available</h2>
+            </div>
+          </>
+        ) : (
+          <div style={{ textAlign: "center", padding: "50px", color: "#555" }}>
+            <h2>Select a shop to find users </h2>
+          </div>
+        )}
+      </>
 
       <PrivilegesModal onclose={toggled} show={isModalOpen} />
       <Modal
@@ -111,7 +149,7 @@ function Users() {
         show={isCreateModalOpen}
       >
         <>
-          <CreateUser />
+          <CreateUser shopId={shopId} toggleModal={toggledCreateModal} />
         </>
       </Modal>
     </div>
@@ -138,3 +176,12 @@ const Table = styled.table`
     text-align: left;
   }
 `
+
+// export const Select = styled.select`
+//   border: 1px solid #ccc;
+//   /* margin-bottom: 20px; */
+//   padding: 7px;
+//   border-radius: 5px;
+//   outline: none;
+//   color: #000;
+// `

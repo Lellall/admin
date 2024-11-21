@@ -9,6 +9,7 @@ import {
   ShopsResponse,
   ShopsProductResponse,
   SingleShopProductRequest,
+  ShopUsers,
 } from "./typings"
 import { Product } from "../products/typings"
 import { Category } from "../categories/typings"
@@ -29,7 +30,7 @@ const shops = baseApi.injectEndpoints({
       }),
       providesTags: ["SHOPS"],
     }),
-    getShopUsers: builder.query<Shop, { shopId: string }>({
+    getShopUsers: builder.query<ShopUsers[], { shopId: string }>({
       query: ({ shopId }) => ({
         url: `/shops/${shopId}/users`,
       }),

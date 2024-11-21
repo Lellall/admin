@@ -20,7 +20,6 @@ const Invoices = () => {
   const userId = user?.id
   const { data, isLoading } = useGetInvoicesQuery({ restaurantId: userId, page: page - 1 })
   const { data: stats } = useGetInvoicesStatsQuery({ restaurantId: userId })
-  console.log(stats)
   const handleTabSwitch = (value: string) => setActiveTab(value)
 
   const handlePageClick = (pageNumber: number) => {

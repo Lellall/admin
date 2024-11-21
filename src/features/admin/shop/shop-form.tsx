@@ -43,7 +43,7 @@ function ShopForm({ mode, close, restaurantId }: ShopFormProps) {
 
   useEffect(() => {
     if (mode === "update" && shopData) {
-      reset({ paystackAccountId: shopData.subAccountId, ...shopData })
+      reset({ paystackAccountId: shopData?.subAccountId, ...shopData })
     }
 
     if (isSuccess || isUpdatingSuccess) {

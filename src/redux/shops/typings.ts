@@ -134,3 +134,11 @@ export interface SingleShopProductRequest {
   productId: string
   shopId: string
 }
+
+export interface ShopUsers {
+  firstName: string
+  lastName: string
+  email: string
+  id: string
+  phoneNumber: string
+}
