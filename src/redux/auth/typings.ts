@@ -1,3 +1,4 @@
+import { Privilege } from "@/components/privileges"
 import { UserRoleType } from "@/utils/constant"
 
 export interface RefreshRequest {
@@ -10,22 +11,21 @@ export interface User {
   username: string
   firstName: string
   lastName: string
-  role: UserRoleType
+  role: string
   isEmailVerified: boolean
   registrationSource: string
-  streetName: string
-  houseNumber: string
-  apartmentName: string
-  estate: string
-  poBox: string
+  phoneNumber: string
   address: {
     streetName: string
     houseNumber: string
     apartmentName: string
     estate: string
     poBox: string
-    region: string
   }
+  isPhoneNumberVerified: boolean
+  deviceId: string
+  shopIds: string[]
+  privileges: Privilege | []
 }
 
 export interface LoginResponse {

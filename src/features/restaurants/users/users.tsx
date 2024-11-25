@@ -9,6 +9,7 @@ import CreateUser from "./modals/createUserModal"
 import Select from "react-select"
 import { capitalizeFirstLetterOFEachWord } from "@/utils/helpers"
 import Skeleton from "react-loading-skeleton"
+import { usePrivileges } from "@/components/privileges"
 // import { useDebounce } from "react-use"
 
 function Users() {
@@ -23,7 +24,7 @@ function Users() {
     categoryId: "",
     filter: "",
   })
-
+  const { hasAllPrivileges } = usePrivileges()
   const { data, isLoading } = useGetShopUsersQuery({ shopId: shopId ?? "" })
 
   // useDebounce(
@@ -58,14 +59,16 @@ function Users() {
   //     refetch()
   //   }
   // }, [shopId, refetch])
+
   return (
     <div>
       <div className="flex justify-between my-5">
         <Text h1>Users</Text>
-        <button
-          disabled={!shopId}
-          onClick={toggledCreateModal}
-          className={`flex items-center
+        {hasAllPrivileges(["c:user"]) && (
+          <button
+            disabled={!shopId}
+            onClick={toggledCreateModal}
+            className={`flex items-center
           ${shopId ? "bg-[#125F3A]" : "bg-[#0E5D3726]"} 
           p-1 
           rounded-md 
@@ -74,11 +77,13 @@ function Users() {
 
        
           border-[#125F3A]`}
-        >
-          <Add />
-          Create new user
-        </button>
+          >
+            <Add />
+            Create new user
+          </button>
+        )}
       </div>
+
       <div className="flex items-center flex-wrap justify-between">
         <>
           <Select
@@ -86,19 +91,20 @@ function Users() {
             onChange={(e) => {
               setShop(e?.value ?? "")
             }}
+            isLoading={isLoadingShop}
             styles={customStyles}
             options={shops?.data.map((shop) => {
               return { label: shop.name, value: shop.id }
             })}
           />
         </>
-        <input
+        {/* <input
           type="search"
           className="my-3 p-3  w-[100%] md:w-[50%] outline-none  bg-[#34A8530F]"
           placeholder="Search user"
           // value={name}
           // onChange={(e) => setName(e.target.value)}
-        />
+        /> */}
       </div>
 
       <>
@@ -122,8 +128,9 @@ function Users() {
                 <tr key={user.id}>
                   <td>{++index}</td>
                   <td>{capitalizeFirstLetterOFEachWord(`${user.firstName} ${user.lastName}`)}</td>
-                  <td>{user.phoneNumber}</td>
                   <td>{user.email}</td>
+                  <td>{user.phoneNumber}</td>
+                  <td></td>
                 </tr>
               ))}
             </tbody>

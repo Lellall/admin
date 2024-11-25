@@ -3,7 +3,7 @@ import InvoiceCard from "./components/card"
 import InvoiceCardList from "./components/invoiceCardList"
 import { TabButton, TabContainer, TabPanel } from "@/components/tab.component"
 import { useState } from "react"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import InvoiceHeader from "./components/InvoiceHeader"
 import { useGetInvoicesQuery, useGetInvoicesStatsQuery } from "@/redux/orders"
 import Pagination from "rc-pagination"
@@ -18,8 +18,9 @@ const Invoices = () => {
   const userStored = localStorage.getItem("user")
   const user = userStored ? JSON.parse(userStored) : ""
   const userId = user?.id
-  const { data, isLoading } = useGetInvoicesQuery({ restaurantId: userId, page: page - 1 })
-  const { data: stats } = useGetInvoicesStatsQuery({ restaurantId: userId })
+  const { shopId } = useParams()
+  const { data, isLoading } = useGetInvoicesQuery({ restaurantId: userId ?? "", page: page - 1 })
+  const { data: stats } = useGetInvoicesStatsQuery({ restaurantId: shopId ?? "" })
   const handleTabSwitch = (value: string) => setActiveTab(value)
 
   const handlePageClick = (pageNumber: number) => {

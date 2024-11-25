@@ -91,7 +91,7 @@ function ShopForm({ mode, close, restaurantId }: ShopFormProps) {
   })
 
   return (
-    <form className="w-[100%] px-4" onSubmit={handleSubmit(handleFormSubmit)}>
+    <form className="w-[90%] m-auto " onSubmit={handleSubmit(handleFormSubmit)}>
       <div className=" w-[100%]">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-5">
           <InputComponent errorMessage={errors?.name?.message} name="name" control={control} label="Name" />

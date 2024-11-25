@@ -9,13 +9,14 @@ import { RestaurantMenu, ShopOutlined } from "@mui/icons-material"
 import Header from "./header"
 import { LayoutContext } from "./LayoutContext"
 import styled from "styled-components"
+import { usePrivileges } from "@/components/privileges"
 
 function RestaurantSuperAdminLayout() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const resolved = useResolvedPath("/restaurant/templates")
   const { isMobileMenuOpen, toggleMobileMenu } = useContext(LayoutContext)
-
+  const { hasAllPrivileges } = usePrivileges()
   const match = useMatch({ path: resolved.pathname + "/*", end: false })
 
   const exactRestaurantMatch = useMatch({ path: "/restaurant", end: true })
@@ -44,17 +45,20 @@ function RestaurantSuperAdminLayout() {
                 </span>
                 Restaurant
               </NavLink>
-              <NavLink
-                className={({ isActive }) =>
-                  `p-2 rounded flex items-center ${isActive ? "bg-green-100 font-bold" : ""}`
-                }
-                to={appPaths.users}
-              >
-                <span>
-                  <UserSquare size="24" className="mr-3" />
-                </span>
-                Users
-              </NavLink>
+
+              {hasAllPrivileges(["c:user"]) && (
+                <NavLink
+                  className={({ isActive }) =>
+                    `p-2 rounded flex items-center ${isActive ? "bg-green-100 font-bold" : ""}`
+                  }
+                  to={appPaths.users}
+                >
+                  <span>
+                    <UserSquare size="24" className="mr-3" />
+                  </span>
+                  Users
+                </NavLink>
+              )}
               <NavLink
                 className={({ isActive }) =>
                   `p-2 rounded flex items-center ${isActive ? "bg-green-100 font-bold" : ""}`

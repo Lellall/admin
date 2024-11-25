@@ -16,6 +16,7 @@ import { appPaths } from "./components/layout/app-paths"
 import withRoleAccess from "./components/routes-helpers/withRole"
 import { Unauthorized } from "./components/unauthorized-page"
 import RestaurantSuperAdminLayout from "./features/restaurants/restaurant-superadmin-layout"
+import { PrivilegedRoute } from "./components/privileges"
 // import TemplateForm from "./features/restaurants/template/template.form"
 
 // pages-routes
@@ -103,7 +104,9 @@ function App() {
               path={`${appPaths.templates}/:shopId`}
               element={
                 <Suspense fallback={false}>
-                  <Templates />
+                  <PrivilegedRoute privileges={["c:order", "d:order", "r:order", "u:order"]}>
+                    <Templates />
+                  </PrivilegedRoute>
                 </Suspense>
               }
             />
@@ -111,7 +114,9 @@ function App() {
               path={`${appPaths.editTemplate}`}
               element={
                 <Suspense fallback={false}>
-                  <EditTemplate />
+                  <PrivilegedRoute privileges={["r:order", "u:order"]}>
+                    <EditTemplate />
+                  </PrivilegedRoute>
                 </Suspense>
               }
             />
@@ -127,7 +132,9 @@ function App() {
               path={`${appPaths.users}`}
               element={
                 <Suspense fallback={false}>
-                  <Users />
+                  <PrivilegedRoute privileges={["r:user"]}>
+                    <Users />
+                  </PrivilegedRoute>
                 </Suspense>
               }
             />
