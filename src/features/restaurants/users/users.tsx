@@ -45,8 +45,9 @@ function Users() {
   const customStyles = {
     container: (provided: any) => ({
       ...provided,
-      width: "300px", // Fixed width
-      minWidth: "250px", // Minimum width
+      width: "300px",
+      minWidth: "250px",
+      marginBottom: "15px",
     }),
     control: (provided: any) => ({
       ...provided,

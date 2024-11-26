@@ -9,6 +9,7 @@ import { useGetInvoicesQuery, useGetInvoicesStatsQuery } from "@/redux/orders"
 import Pagination from "rc-pagination"
 import ScreenLoader from "@/components/screen.loader"
 import Skeleton from "react-loading-skeleton"
+import EmptyState from "@/components/empty-state"
 
 const Invoices = () => {
   const navigate = useNavigate()
@@ -71,6 +72,10 @@ const Invoices = () => {
           <TabPanel active={activeTab === "paid"}>
             {isLoading ? (
               <ScreenLoader />
+            ) : !data?.data.length ? (
+              <>
+                <EmptyState />
+              </>
             ) : (
               data?.data?.map((invoice) => {
                 return (
