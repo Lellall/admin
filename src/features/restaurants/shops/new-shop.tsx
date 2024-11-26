@@ -10,6 +10,7 @@ import { useDispatch } from "react-redux"
 import { setShop, useShopSlice } from "@/redux/shops/shops-slice"
 import { MoreVert } from "@mui/icons-material"
 import DeleteModal from "./modals/deleteShop"
+import { usePrivileges } from "@/components/privileges"
 const ShopCard = styled.div`
   position: relative;
   height: 300px; /* Set the height for the card */
@@ -94,7 +95,7 @@ const ViewButton = styled.button`
 const ShopList = ({ shops }: any) => {
   const [isShopModalOpen, setIsShopModalOpen] = useState<boolean>(false)
   const [editShopModalOpen, setEditShopModalOpen] = useState<boolean>(false)
-
+const {hasAnyPrivilege} = usePrivileges()
   const navigate = useNavigate()
   const { id } = useShopSlice()
   const toggleModalShop = () => {
@@ -143,6 +144,7 @@ const ShopList = ({ shops }: any) => {
                     >
                       Edit
                     </div>
+                    {}
                     <div className="dropdown-menu-item" onClick={toggleDeletetModalShop}>
                       Delete
                     </div>

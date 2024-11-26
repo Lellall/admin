@@ -18,6 +18,7 @@ import DeleteModal from "./modals/deleteModal"
 import { TabButton, TabContainer, TabPanel } from "@/components/tab.component"
 import Inventory from "../inventory/inventory"
 import Invoices from "../invoice/invoices"
+import { usePrivileges } from "@/components/privileges"
 
 const formatDateTime = (dateTimeString: string | number | Date) => {
   const date = new Date(dateTimeString)
@@ -31,7 +32,7 @@ const formatDateTime = (dateTimeString: string | number | Date) => {
 function Templates() {
   const navigate = useNavigate()
   const { shopId } = useParams()
-
+  const { hasPrivilege, hasAllPrivileges } = usePrivileges()
   const [page, setPage] = useState(1)
   const [currentItem, setCurrentItem] = useState<any>({})
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
@@ -66,8 +67,8 @@ function Templates() {
 
   const handleTabSwitch = (value: string) => setActiveTab(value)
   return (
-    <div>
-      <div className="flex flex-col md:flex-row h-auto md:h-[250px] rounded-lg bg-gray-50 w-full  mx-auto items-center gap-6 p-4 mb-5">
+    <div className="max-w-[1440px] ">
+      <div className="flex flex-col md:flex-row h-auto md:h-[250px] rounded-lg bg-gray-50 max-w-[1440px] w-full  mx-auto items-center gap-6 p-4 mb-5">
         {isLoadingShop ? (
           <>
             {[1, 2].map((el) => (
@@ -112,15 +113,21 @@ function Templates() {
                 </button> */}
                 <div className="mt-5 mb-5 border rounded">
                   <TabContainer>
-                    <TabButton onClick={() => handleTabSwitch("template")} active={activeTab === "template"}>
-                      TEMPLATES
-                    </TabButton>
-                    <TabButton onClick={() => handleTabSwitch("inventory")} active={activeTab === "inventory"}>
-                      INVENTORY
-                    </TabButton>
-                    <TabButton onClick={() => handleTabSwitch("invoice")} active={activeTab === "invoice"}>
-                      INVOICES
-                    </TabButton>
+                    {hasAllPrivileges(["c:order", "r:order", "d:order"]) && (
+                      <TabButton onClick={() => handleTabSwitch("template")} active={activeTab === "template"}>
+                        ORDERS
+                      </TabButton>
+                    )}
+                    {hasPrivilege("c:inventory") && (
+                      <TabButton onClick={() => handleTabSwitch("inventory")} active={activeTab === "inventory"}>
+                        INVENTORY
+                      </TabButton>
+                    )}
+                    {hasAllPrivileges(["r:order"]) && (
+                      <TabButton onClick={() => handleTabSwitch("invoice")} active={activeTab === "invoice"}>
+                        INVOICES
+                      </TabButton>
+                    )}
                   </TabContainer>
                 </div>
               </div>
@@ -133,137 +140,150 @@ function Templates() {
         <ScreenLoader style={{ height: "50vh" }} />
       ) : (
         <>
-          <TabPanel active={activeTab === "template"}>
-            <>
-              <div
-                className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+          {hasAllPrivileges(["r:order"]) && (
+            <TabPanel active={activeTab === "template"}>
+              <>
+                <Grid
+                // className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
                 // style={{ gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))" }}
-              >
-                <ReusableCard
-                  width="350px"
-                  className="flex justify-center border rounded-md mx-auto items-center"
-                  noBg
-                  bgColor="#F3FAF5"
                 >
-                  <AddSquare
-                    onClick={() => {
-                      navigate(`${appPaths.createTemplate}`)
-                    }}
-                    size="50"
-                    color="#0E5D37"
-                    variant="Bold"
-                  />
-                </ReusableCard>
+                  <ReusableCard
+                    width="100%"
+                    className="flex justify-center border rounded-md mx-auto items-center"
+                    noBg
+                    bgColor="#F3FAF5"
+                  >
+                    <AddSquare
+                      onClick={() => {
+                        navigate(`${appPaths.createTemplate}`)
+                      }}
+                      size="50"
+                      color="#0E5D37"
+                      variant="Bold"
+                    />
+                  </ReusableCard>
 
-                {!data?.data?.length ? (
-                  <EmptyState />
-                ) : (
-                  data?.data?.map((item) => {
-                    return (
-                      <div key={item.id} className="mx-auto items-center">
-                        <Card width="350px" key={item?.id}>
-                          <div className="flex p-4 justify-between">
-                            <div>
-                              <div className="text-white text-2xl semi-bold ">{truncateText(item.name)}</div>
-                            </div>
-                            <div className="dropdown">
-                              <More size="22" className="mt-1 cursor-pointer" color="#fff" />
+                  {!data?.data?.length ? (
+                    <EmptyState />
+                  ) : (
+                    data?.data?.map((item) => {
+                      return (
+                        <div
+                          key={item.id}
+                          // className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-6"
+                          // className="mx-auto items-center"
+                        >
+                          <Card width="100%" key={item?.id}>
+                            <div className="flex p-4 justify-between">
+                              <div>
+                                <div className="text-white text-2xl semi-bold ">{truncateText(item.name)}</div>
+                              </div>
+                              <div className="dropdown">
+                                <More size="22" className="mt-1 cursor-pointer" color="#fff" />
 
-                              <div className="dropdown-menu">
-                                {/* <div
+                                <div className="dropdown-menu">
+                                  {/* <div
                                   className="dropdown-menu-item"
                                   onClick={() => navigate(`/restaurant/templates/${shopId}/id/${item.id}`)}
                                 >
                                   Edit
                                 </div> */}
-                                <div
-                                  className="dropdown-menu-item"
-                                  onClick={() => {
-                                    setCurrentItem(item)
-                                    const data = {
-                                      name: "Duplicate " + item.name,
-                                      templateItemsDto: item.templateItems,
-                                      shopId: shopId,
-                                    }
-                                    if (isCreating) return
-                                    handleDuplicateTemplate(data)
-                                  }}
-                                >
-                                  {isCreating ? "Duplicating..." : "Duplicate"}
+                                  <div
+                                    className="dropdown-menu-item"
+                                    onClick={() => {
+                                      setCurrentItem(item)
+                                      const data = {
+                                        name: "Duplicate " + item.name,
+                                        templateItemsDto: item.templateItems,
+                                        shopId: shopId,
+                                      }
+                                      if (isCreating) return
+                                      handleDuplicateTemplate(data)
+                                    }}
+                                  >
+                                    {isCreating ? "Duplicating..." : "Duplicate"}
+                                  </div>
+                                  <div
+                                    className="dropdown-menu-item"
+                                    onClick={() => {
+                                      toggleModal()
+                                      setCurrentItem(item)
+                                    }}
+                                  >
+                                    Delete
+                                  </div>
                                 </div>
-                                <div
-                                  className="dropdown-menu-item"
-                                  onClick={() => {
-                                    toggleModal()
-                                    setCurrentItem(item)
-                                  }}
-                                >
-                                  Delete
+                              </div>
+                            </div>
+                            <div className="flex p-4 mt-4">
+                              <div>
+                                <ShoppingCart variant="Bold" size="25" color="#fff" />
+                              </div>
+                              <div className="ml-2">
+                                <div className="text-white text-1xl semi-bold ">
+                                  {item?.templateItems?.length} item listed
                                 </div>
                               </div>
                             </div>
-                          </div>
-                          <div className="flex p-4 mt-4">
-                            <div>
-                              <ShoppingCart variant="Bold" size="25" color="#fff" />
-                            </div>
-                            <div className="ml-2">
-                              <div className="text-white text-1xl semi-bold ">
-                                {item?.templateItems?.length} item listed
+                            <div className="flex  px-4">
+                              <div>
+                                <Clock variant="Bold" size="25" color="#fff" />
+                              </div>
+                              <div>
+                                <div className="text-white ml-2 text-1xl semi-bold ">
+                                  Created on {formatDateTime(item?.createdAt)}
+                                </div>
                               </div>
                             </div>
-                          </div>
-                          <div className="flex  px-4">
-                            <div>
-                              <Clock variant="Bold" size="25" color="#fff" />
-                            </div>
-                            <div>
-                              <div className="text-white ml-2 text-1xl semi-bold ">
-                                Created on {formatDateTime(item?.createdAt)}
+                            <div className="flex mt-4 px-4">
+                              <div>
+                                <Calendar2 variant="Bold" size="25" color="#fff" />
+                              </div>
+                              <div>
+                                <div className="text-white ml-2 text-1xl semi-bold ">
+                                  Order Delivered on Mon 04, 2024
+                                </div>
                               </div>
                             </div>
-                          </div>
-                          <div className="flex mt-4 px-4">
-                            <div>
-                              <Calendar2 variant="Bold" size="25" color="#fff" />
-                            </div>
-                            <div>
-                              <div className="text-white ml-2 text-1xl semi-bold ">Order Delivered on Mon 04, 2024</div>
-                            </div>
-                          </div>
-                        </Card>
-                      </div>
-                    )
-                  })
-                )}
-              </div>
+                          </Card>
+                        </div>
+                      )
+                    })
+                  )}
+                </Grid>
 
-              <div
-                style={{
-                  float: "right",
-                  margin: "20px 10px",
-                  paddingBottom: "20px",
-                }}
-              >
-                <Pagination onChange={handlePageClick} current={page} total={data?.resultTotal} />
-              </div>
+                <div
+                  style={{
+                    float: "right",
+                    margin: "20px 10px",
+                    paddingBottom: "20px",
+                  }}
+                >
+                  <Pagination onChange={handlePageClick} current={page} total={data?.resultTotal} />
+                </div>
 
-              <DeleteModal
-                isModalOpen={isModalOpen}
-                shopId={shopId}
-                templateId={currentItem.id}
-                toggleModal={toggleModal}
-              />
-            </>
-          </TabPanel>
-          <TabPanel active={activeTab === "inventory"}>
-            <Inventory />
-          </TabPanel>
-          <TabPanel active={activeTab === "invoice"}>
-            <div className="mx-5">
-              <Invoices />
-            </div>
-          </TabPanel>
+                <DeleteModal
+                  isModalOpen={isModalOpen}
+                  shopId={shopId}
+                  templateId={currentItem.id}
+                  toggleModal={toggleModal}
+                />
+              </>
+            </TabPanel>
+          )}
+
+          {hasAllPrivileges(["c:inventory"]) && (
+            <TabPanel active={activeTab === "inventory"}>
+              <Inventory />
+            </TabPanel>
+          )}
+          {hasAllPrivileges(["r:order"]) && (
+            <TabPanel active={activeTab === "invoice"}>
+              <div className="mx-5">
+                <Invoices />
+              </div>
+            </TabPanel>
+          )}
         </>
       )}
     </div>
@@ -273,6 +293,8 @@ function Templates() {
 export default Templates
 
 const Card = styled(ReusableCard)`
+  /* max-width: 350px; */
+  /* width: 100%; */
   .dropdown {
     position: relative;
     display: inline-block;
@@ -303,5 +325,23 @@ const Card = styled(ReusableCard)`
   .dropdown-menu-item:hover {
     background-color: #f4f3f3e3;
     color: green;
+  }
+`
+
+const Grid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 350px), 1fr));
+  gap: 1rem; // adjust spacing as needed
+  /* grid-template-columns: repeat(auto-fit, minmax(min(100%, 350px), 1fr)); */
+  /* grid-template-columns: repeat(1, 1fr); */
+  /* gap: 1.5rem; */
+  /* margin-top: 1.5rem; */
+
+  @media (min-width: 640px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (min-width: 1024px) {
+    grid-template-columns: repeat(3, 1fr);
   }
 `

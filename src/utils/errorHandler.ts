@@ -50,6 +50,7 @@ export const Errorhandler = (err: ServerError, obj?: IObj | IObj[], show = true)
     "401": "",
     "403": "Apologies, but you do not have permission to access the requested document or program.",
     "408": "Your request is taking longer than expected. Please try again.",
+    "405": "Method Not Allowed.",
     "502":
       "We are currently facing an issue with this service. Rest assured, we are aware of it and are working on a fix.",
     "503":

@@ -12,6 +12,7 @@ import {
   OrderResponse,
   OrderRequest,
   Order,
+  InvoicesStatsResponse,
 } from "./typings"
 import { baseApi } from "../api/baseApi"
 import { Errorhandler } from "@/utils/errorHandler"
@@ -30,17 +31,13 @@ const orders = baseApi.injectEndpoints({
         method: "PUT",
       }),
       async onQueryStarted(_args, { queryFulfilled: qf }) {
-        qf.then((res) => {
-          console.log("RES", res)
-          toast.success(`${res}`, {
+        qf.then(() => {
+          toast.success(`Order Completed Succesfully`, {
             position: "top-right",
           })
         }).catch((err) => {
           console.log("ERR", err.error.data)
           Errorhandler(err)
-          // toast.error(`${err.error.data}`, {
-          //   position: "top-right",
-          // })
         })
       },
       invalidatesTags: ["ORDERS"],
@@ -60,6 +57,13 @@ const orders = baseApi.injectEndpoints({
       query: (params) => ({
         url: `/orders/${params.restaurantId}/invoices`,
         params,
+        method: "GET",
+      }),
+      providesTags: ["ORDERS"],
+    }),
+    getInvoicesStats: builder.query<InvoicesStatsResponse, { restaurantId: string }>({
+      query: ({ restaurantId }) => ({
+        url: `/orders/${restaurantId}/order-statistic`,
         method: "GET",
       }),
       providesTags: ["ORDERS"],
@@ -89,4 +93,5 @@ export const {
   useGetInvoicesQuery,
   useGetConsumerHistoryQuery,
   useGetOrderQuery,
+  useGetInvoicesStatsQuery,
 } = orders

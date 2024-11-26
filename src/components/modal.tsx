@@ -21,7 +21,7 @@ function Modal({ onClose, title, show, children, width, style }: ModalProps) {
                 <h3>{title}</h3>
                 <CloseButton onClick={onClose}>X</CloseButton>
               </ModalHeader>
-              {children}
+              <div className="mt-1">{children}</div>
             </div>
           </ModalContent>
         </ModalOverlay>
