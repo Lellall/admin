@@ -15,7 +15,6 @@ import { useGetCategoriesQuery } from "@/redux/categories/categories.api"
 import { Category } from "@/redux/categories/typings"
 import GooglePlacesAutocomplete from "react-google-places-autocomplete"
 import { geocodeByAddress, getLatLng } from "react-google-places-autocomplete"
-import { error } from "console"
 
 interface ShopFormProps {
   mode: "create" | "update"
@@ -79,8 +78,7 @@ function ShopForm({ mode, close, restaurantId }: ShopFormProps) {
         timeZone: "GMT+1",
         address,
       }
-      console.log(createShopData)
-      // createShop(createShopData)
+      createShop(createShopData)
     }
     // updateVendor({ id: data.id, ...dataToSubmit })
   }
@@ -101,13 +99,10 @@ function ShopForm({ mode, close, restaurantId }: ShopFormProps) {
   })
 
   useEffect(() => {
-    console.log("trying to load", location)
     if (location) {
       geocodeByAddress(location.label)
         .then((results) => getLatLng(results[0]))
         .then(({ lat, lng }) => {
-          console.log("LAT", lat)
-          console.log("LNG", lng)
           setValue("coordinate.latitude", lat)
           setValue("coordinate.longitude", lng)
         })
@@ -117,7 +112,7 @@ function ShopForm({ mode, close, restaurantId }: ShopFormProps) {
   return (
     <form className="w-[90%] m-auto " onSubmit={handleSubmit(handleFormSubmit)}>
       <div className=" w-[100%]">
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-1">
           <InputComponent errorMessage={errors?.name?.message} name="name" control={control} label="Name" />
           <InputComponent
             errorMessage={errors?.status?.message}
@@ -146,7 +141,12 @@ function ShopForm({ mode, close, restaurantId }: ShopFormProps) {
             label="ID"
           />
         </div>
-        <div>
+        <div
+          style={{
+            // background: "red",
+            marginBottom: "1rem",
+          }}
+        >
           <label
             style={{
               fontSize: "12px",
@@ -170,14 +170,11 @@ function ShopForm({ mode, close, restaurantId }: ShopFormProps) {
               styles: {
                 control: (provided) => ({
                   ...provided,
-                  // border: mapError ? "1px solid red" : "1px solid initial",
-                  // fontSize: "11px",
                   height: "55px",
                 }),
                 input: (provided) => ({
                   ...provided,
                   width: "100% !important",
-                  fontSize: "11px",
                   height: "100% !important",
                 }),
                 option: (provided) => ({
@@ -190,7 +187,7 @@ function ShopForm({ mode, close, restaurantId }: ShopFormProps) {
             }}
           />
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 gap-4 mb-5">
+        <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 gap-4 mb-1">
           <InputComponent
             errorMessage={errors?.description?.message}
             name="description"

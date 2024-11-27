@@ -96,7 +96,6 @@ function CreateTemplate() {
 
   useEffect(() => {
     if (debouncedSearchTerm) {
-      console.log("Debounced Search Term:", debouncedSearchTerm)
     }
   }, [debouncedSearchTerm])
 

@@ -36,7 +36,6 @@ function EditTemplates() {
 
   // const [createTemplate, { isLoading: isCreating }] = useCreateTemplateMutation()
   const { shopId, templateId } = useParams()
-  // console.log("data", data)
 
   const [updateTemplate, { isLoading: isUpdating }] = useUpdateTemplateMutation()
   const [current, setCurrent] = useState(1)
@@ -107,12 +106,6 @@ function EditTemplates() {
     setSelectedProducts((prev) => prev.filter((p) => p.productId !== id))
   }
 
-  useEffect(() => {
-    if (debouncedSearchTerm) {
-      console.log("Debounced Search Term:", debouncedSearchTerm)
-    }
-  }, [debouncedSearchTerm])
-
   const transformData = (selectedProducts: TemplateItems[]) => {
     const dataToSubmit = {
       shopId: shopId ?? "",
@@ -122,8 +115,6 @@ function EditTemplates() {
       unavailableTemplateItems: [],
       name: templateName,
     }
-
-    console.log(dataToSubmit)
 
     updateTemplate(dataToSubmit)
       .unwrap()

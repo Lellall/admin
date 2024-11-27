@@ -125,7 +125,7 @@ function InputComponent({
               style={{
                 fontSize: "12px",
                 color: "red",
-                marginTop: "25px",
+                // marginTop: "25px",
               }}
             >
               {errorMessage}
