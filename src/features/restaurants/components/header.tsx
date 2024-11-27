@@ -1,5 +1,7 @@
+import { appPaths } from "@/components/layout/app-paths"
 import { usePrivileges } from "@/components/privileges"
 import { Add, Data, Diagram, Profile2User, Setting4, Settings } from "iconsax-react"
+import { useNavigate } from "react-router-dom"
 import styled from "styled-components"
 
 const HeaderWrapper = styled.div`
@@ -46,14 +48,14 @@ const ContentText = styled.p`
   color: #2d3748;
   font-size: 1.125rem; /* Tailwind's text-lg equivalent */
   @media (max-width: 900px) {
-    background: red;
-    display: none;
+    /* display: none; */
     grid-template-columns: repeat(2, 1fr);
   }
 `
 
 const HeaderProfile = ({ openShopModal, showOther, url }: any) => {
   const { hasPrivilege } = usePrivileges()
+  const navigate = useNavigate()
   return (
     <HeaderWrapper>
       <BackgroundImage
@@ -68,38 +70,43 @@ const HeaderProfile = ({ openShopModal, showOther, url }: any) => {
       <GradientOverlay />
 
       <BottomBox>
-        <h1 className="text-[#092d2b] text-2xl  font-light tracking-wider leading-tight">Cafe Dimanche</h1>
+        <h1 className="hidden md:block text-[#092d2b] text-2xl  font-light tracking-wider leading-tight">
+          Cafe Dimanche
+        </h1>
 
         <ContentText>
           {showOther ? (
             showOther
           ) : (
             <div className="flex justify-content">
-              <button
+              {/* <button
                 type="button"
                 className="bg-white mr-4 shadow-lg py-2 px-3 md:px-4 text-xs rounded-lg hover:bg-green-100 flex items-center justify-center space-x-2 font-light tracking-wider leading-tight"
               >
                 <Setting4 size="15" color="#092d2b" />
                 <span>SYSTEM</span>
-              </button>
+              </button> */}
               {hasPrivilege("r:user") && (
                 <>
                   <button
                     type="button"
                     className="bg-white mr-4 shadow-lg py-2 px-3 md:px-4 text-xs rounded-lg hover:bg-green-100 flex items-center justify-center space-x-2 font-light tracking-wider leading-tight"
+                    onClick={() => {
+                      navigate(appPaths.users)
+                    }}
                   >
                     <Data size="15" color="#092d2b" />
                     <span>VIEW USERS</span>
                   </button>
                 </>
               )}
-              <button
+              {/* <button
                 type="button"
                 className="bg-white mr-4 shadow-lg py-2 px-3 md:px-4 text-xs rounded-lg hover:bg-green-100 flex items-center justify-center space-x-2 font-light tracking-wider leading-tight"
               >
                 <Diagram size="15" color="#092d2b" />
                 <span>VIEW ANALYTICS</span>
-              </button>
+              </button> */}
               {hasPrivilege("c:shop") && (
                 <>
                   <button

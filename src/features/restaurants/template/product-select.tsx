@@ -1,5 +1,4 @@
 import { Product } from "@/redux/products/typings"
-import { formatCurrency } from "@/utils/helpers"
 import { useEffect, useState } from "react"
 import styled from "styled-components"
 
@@ -27,9 +26,6 @@ const Card: React.FC<CardProps> = ({ imageUrl, title, price, isShopClose, isSele
       <Image src={imageUrl} alt="Product Image" />
       <CardContent>
         <Title>{title}</Title>
-        <div className="flex justify-between items-center">
-          <Price isShopClose={isShopClose}>{formatCurrency(price)}</Price>
-        </div>
       </CardContent>
     </CardWrapper>
   )
@@ -43,7 +39,6 @@ interface CardListProps {
 
 const CardList: React.FC<CardListProps> = ({ cards, setSelectedProducts, selectedProducts }) => {
   const [selectedCards, setSelectedCards] = useState<Product[]>(selectedProducts || [])
-  console.log(selectedCards)
   useEffect(() => {
     setSelectedCards(selectedProducts || [])
   }, [selectedProducts])
@@ -52,7 +47,7 @@ const CardList: React.FC<CardListProps> = ({ cards, setSelectedProducts, selecte
     if (!cards || !selectedProducts) return
 
     const matchedCards = cards.filter((card) =>
-      selectedProducts.some((selectedProduct) => selectedProduct.productId === card.id)
+      selectedProducts.some((selectedProduct) => selectedProduct?.productId === card.id)
     )
 
     if (matchedCards.length > 0) {

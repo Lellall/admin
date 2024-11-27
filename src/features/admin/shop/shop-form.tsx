@@ -1,4 +1,4 @@
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { SubmitHandler, useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
 import * as yup from "yup"
@@ -13,6 +13,9 @@ import { Shop } from "@/redux/shops/typings"
 import { useGetMarketsQuery } from "@/redux/markets/market.api"
 import { useGetCategoriesQuery } from "@/redux/categories/categories.api"
 import { Category } from "@/redux/categories/typings"
+import GooglePlacesAutocomplete from "react-google-places-autocomplete"
+import { geocodeByAddress, getLatLng } from "react-google-places-autocomplete"
+import { error } from "console"
 
 interface ShopFormProps {
   mode: "create" | "update"
@@ -28,6 +31,8 @@ function ShopForm({ mode, close, restaurantId }: ShopFormProps) {
   const [createShop, { isLoading: isCreating, isSuccess }] = useCreateShopMutation()
   const { data: markets } = useGetMarketsQuery()
   const { data: categories } = useGetCategoriesQuery({ type: "SHOP" })
+  const [location, setLocation] = useState(null)
+  // const [address, setAddress] = useState("")
 
   const {
     // register,
@@ -35,6 +40,7 @@ function ShopForm({ mode, close, restaurantId }: ShopFormProps) {
     handleSubmit,
     control,
     getValues,
+    setValue,
     formState: { errors },
   } = useForm<Shop>({
     defaultValues: shopData,
@@ -54,7 +60,7 @@ function ShopForm({ mode, close, restaurantId }: ShopFormProps) {
   }, [mode, shopData, reset, isSuccess, isUpdatingSuccess, close])
 
   const handleFormSubmit: SubmitHandler<Shop> = (data) => {
-    const { market, category, metadata, paystackAccountId, ...restData } = data
+    const { market, address, category, timeZone, vatCharge, metadata, paystackAccountId, ...restData } = data
 
     if (mode === "update") {
       const dataToSubmit = {
@@ -69,8 +75,12 @@ function ShopForm({ mode, close, restaurantId }: ShopFormProps) {
         ...data,
         marketId: market?.id,
         categoryId: category?.id,
+        vatCharge: "7.5",
+        timeZone: "GMT+1",
+        address,
       }
-      createShop(createShopData)
+      console.log(createShopData)
+      // createShop(createShopData)
     }
     // updateVendor({ id: data.id, ...dataToSubmit })
   }
@@ -90,35 +100,25 @@ function ShopForm({ mode, close, restaurantId }: ShopFormProps) {
     }
   })
 
+  useEffect(() => {
+    console.log("trying to load", location)
+    if (location) {
+      geocodeByAddress(location.label)
+        .then((results) => getLatLng(results[0]))
+        .then(({ lat, lng }) => {
+          console.log("LAT", lat)
+          console.log("LNG", lng)
+          setValue("coordinate.latitude", lat)
+          setValue("coordinate.longitude", lng)
+        })
+    }
+  }, [location])
+
   return (
     <form className="w-[90%] m-auto " onSubmit={handleSubmit(handleFormSubmit)}>
       <div className=" w-[100%]">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-5">
           <InputComponent errorMessage={errors?.name?.message} name="name" control={control} label="Name" />
-          <InputComponent
-            styledContainer={{ display: "none" }}
-            disabled
-            errorMessage={errors?.id?.message}
-            name="id"
-            control={control}
-            label="ID"
-          />
-          <InputComponent
-            errorMessage={errors?.description?.message}
-            name="description"
-            control={control}
-            label="Description"
-          />
-          <InputComponent
-            errorMessage={errors?.logoUrl?.message}
-            name="logoUrl"
-            control={control}
-            label="Logo URL"
-            type="text"
-          />
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-5">
-          <InputComponent errorMessage={errors?.address?.message} name="address" control={control} label="Address" />
           <InputComponent
             errorMessage={errors?.status?.message}
             name="status"
@@ -137,33 +137,70 @@ function ShopForm({ mode, close, restaurantId }: ShopFormProps) {
             label="Inventory"
             type="number"
           />
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-5">
-          {/* <InputComponent
-            errorMessage={errors?.subAccountId?.message}
-            name="subAccountId"
-            control={control}
-            label="Sub Account Id"
-            type="text"
-          /> */}
-
           <InputComponent
-            errorMessage={errors?.active?.message}
-            name="active"
+            styledContainer={{ display: "none" }}
+            disabled
+            errorMessage={errors?.id?.message}
+            name="id"
             control={control}
-            label="Active"
-            type="checkbox"
-          />
-          <InputComponent
-            errorMessage={errors?.timeZone?.message}
-            name="timeZone"
-            control={control}
-            label="Timezone"
-            // disabled
+            label="ID"
           />
         </div>
+        <div>
+          <label
+            style={{
+              fontSize: "12px",
+              fontWeight: "bold",
+              marginBottom: "10px",
+              color: "#808080",
+            }}
+          >
+            Address
+          </label>
 
-        {/* <HeaderTitle>Category</HeaderTitle> */}
+          <GooglePlacesAutocomplete
+            apiKey="AIzaSyBrdpKCFrR1oMxYds0rkd80BWkhzREXmSY"
+            selectProps={{
+              value: location,
+              onChange: (e) => {
+                setLocation(e)
+                setValue("address", e?.label)
+              },
+              placeholder: "Search address",
+              styles: {
+                control: (provided) => ({
+                  ...provided,
+                  // border: mapError ? "1px solid red" : "1px solid initial",
+                  // fontSize: "11px",
+                  height: "55px",
+                }),
+                input: (provided) => ({
+                  ...provided,
+                  width: "100% !important",
+                  fontSize: "11px",
+                  height: "100% !important",
+                }),
+                option: (provided) => ({
+                  ...provided,
+                }),
+                singleValue: (provided) => ({
+                  ...provided,
+                }),
+              },
+            }}
+          />
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 gap-4 mb-5">
+          <InputComponent
+            errorMessage={errors?.description?.message}
+            name="description"
+            control={control}
+            label="Description"
+            type="textArea"
+            styledInput={{ width: "100%" }}
+          />
+        </div>
+
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-5">
           <InputComponent
             errorMessage={errors?.category?.id?.message}
@@ -174,13 +211,7 @@ function ShopForm({ mode, close, restaurantId }: ShopFormProps) {
             options={categoriesData}
             // disabled
           />
-          <InputComponent
-            errorMessage={errors?.vatCharge?.message}
-            name="vatCharge"
-            control={control}
-            label="VAT Charge"
-            type="number"
-          />
+
           <InputComponent
             errorMessage={errors?.market?.id?.message}
             name="market.id"
@@ -190,31 +221,6 @@ function ShopForm({ mode, close, restaurantId }: ShopFormProps) {
             type="select"
             options={marketsData}
           />
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-5">
-          <InputComponent
-            errorMessage={errors?.coordinate?.latitude?.message}
-            name="coordinate.latitude"
-            control={control}
-            label="Latitude"
-            type="number"
-          />
-          <InputComponent
-            errorMessage={errors?.coordinate?.longitude?.message}
-            name="coordinate.longitude"
-            control={control}
-            label="Longitude"
-            type="number"
-          />
-          <InputComponent
-            errorMessage={errors?.paystackAccountId?.message}
-            name="paystackAccountId"
-            control={control}
-            label="Paystack Account Id "
-            type="text"
-          />
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-5">
           <InputComponent
             errorMessage={errors?.openingTime?.message}
             name="openingTime"
@@ -222,6 +228,9 @@ function ShopForm({ mode, close, restaurantId }: ShopFormProps) {
             label="Opening Time"
             type="time"
           />
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-5">
           <InputComponent
             errorMessage={errors?.closingTime?.message}
             name="closingTime"
@@ -252,24 +261,24 @@ const HeaderTitle = styled.h3`
 const schema = yup.object().shape({
   id: yup.string(),
   description: yup.string().required("Description is required"),
-  logoUrl: yup.string().url("Logo URL must be a valid URL").required("Logo URL is required"),
+  logoUrl: yup.string(),
   name: yup.string().required("Name is required"),
   address: yup.string().required("Address is required"),
   status: yup.string().required("Status is required"),
   inventory: yup.number().required("Inventory is required"),
-  active: yup.boolean().required("Active status is required"),
+  active: yup.boolean(),
   createdAt: yup.string(),
   updatedAt: yup.string(),
-  timeZone: yup.string().required("Timezone is required"),
+  timeZone: yup.string(),
   categoryId: yup.string(),
   openingTime: yup.string().required("Opening time is required."),
   closingTime: yup.string().required("Closing time is required"),
   // subAccountId: yup.string().required("Subaccount ID is required"),
-  vatCharge: yup.number().required("VAT charge is required"),
+  vatCharge: yup.number(),
   marketId: yup.string(),
   coordinate: yup.object().shape({
     latitude: yup.number().required("Latitude is required"),
     longitude: yup.number().required("Longitude is required"),
   }),
-  paystackAccountId: yup.string().required("Pay stack account Id is required"),
+  paystackAccountId: yup.string(),
 })

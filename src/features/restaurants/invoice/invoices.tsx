@@ -20,7 +20,7 @@ const Invoices = () => {
   const user = userStored ? JSON.parse(userStored) : ""
   const userId = user?.id
   const { shopId } = useParams()
-  const { data, isLoading } = useGetInvoicesQuery({ restaurantId: userId ?? "", page: page - 1 })
+  const { data, isLoading } = useGetInvoicesQuery({ restaurantId: shopId ?? "", page: page - 1 })
   const { data: stats } = useGetInvoicesStatsQuery({ restaurantId: shopId ?? "" })
   const handleTabSwitch = (value: string) => setActiveTab(value)
 
@@ -37,7 +37,7 @@ const Invoices = () => {
       <>
         <InvoiceHeader />
 
-        <Grid>
+        <>
           {isLoading ? (
             <>
               {[1, 2, 3, 4].map((el) => (
@@ -45,14 +45,14 @@ const Invoices = () => {
               ))}
             </>
           ) : (
-            <div className="grid grid-cols-1  lg:grid-cols-4 gap-6 items-center">
+            <Grid>
               <InvoiceCard title="Total Invoice" total={stats?.total ?? 0} type="total" />
               <InvoiceCard title="Total Paid Invoice" total={stats?.paid ?? 0} type="paid" />
               <InvoiceCard title="Total Pending Invoice" total={stats?.pending ?? 0} type="pending" />
               <InvoiceCard title="Total Failed Invoices" total={stats?.failed ?? 0} type="failed" />
-            </div>
+            </Grid>
           )}
-        </Grid>
+        </>
 
         <div>
           <TabContainer>
@@ -129,7 +129,7 @@ const Grid = styled.div`
   gap: 10px;
   margin: 30px 0px;
   grid-template-columns: repeat(2, 1fr);
-  @media (min-width: 887px) {
+  @media (min-width: 942px) {
     grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
   }
 `
