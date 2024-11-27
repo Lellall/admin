@@ -1,14 +1,27 @@
 import { Product } from "@/redux/products/typings"
-import { TemplateItems } from "@/redux/templates/template.api"
 import { formatCurrency } from "@/utils/helpers"
 import { useEffect, useState } from "react"
 import styled from "styled-components"
 
-const Card = ({ imageUrl, title, price, isShopClose, isSelected, toggleSelect }) => {
+interface CardProps {
+  imageUrl: string
+  title: string
+  price: number
+  isShopClose: boolean
+  isSelected: boolean
+  toggleSelect: () => void
+}
+
+const Card: React.FC<CardProps> = ({ imageUrl, title, price, isShopClose, isSelected, toggleSelect }) => {
   return (
     <CardWrapper selected={isSelected} onClick={toggleSelect}>
       <div className="checkbox-container">
-        <input type="checkbox" checked={isSelected} onChange={toggleSelect} onClick={(e) => e.stopPropagation()} />
+        <input
+          type="checkbox"
+          checked={isSelected}
+          onChange={toggleSelect}
+          onClick={(e: React.MouseEvent) => e.stopPropagation()}
+        />
         <div className="custom-checkbox"></div>
       </div>
       <Image src={imageUrl} alt="Product Image" />
@@ -22,35 +35,25 @@ const Card = ({ imageUrl, title, price, isShopClose, isSelected, toggleSelect })
   )
 }
 
-interface CardPropsList {
+interface CardListProps {
   cards: Product[]
   setSelectedProducts: (products: Product[]) => void
   selectedProducts: Product[]
 }
-const CardList = ({ cards, setSelectedProducts, selectedProducts }: CardPropsList) => {
-  const [selectedCards, setSelectedCards] = useState<Product[]>(selectedProducts)
 
-  console.log("Current cards:", cards)
-  console.log("Current selectedProducts:", selectedProducts)
-  console.log("Current selectedCards:", selectedCards)
-
-  // First useEffect
+const CardList: React.FC<CardListProps> = ({ cards, setSelectedProducts, selectedProducts }) => {
+  const [selectedCards, setSelectedCards] = useState<Product[]>(selectedProducts || [])
+  console.log(selectedCards)
   useEffect(() => {
-    console.log("selectedProducts changed:", selectedProducts)
-    setSelectedCards(selectedProducts)
+    setSelectedCards(selectedProducts || [])
   }, [selectedProducts])
 
-  // Use useEffect to check for matches when cards or selectedProducts change
-
   useEffect(() => {
-    const matchedCards = cards?.filter((card) =>
-      selectedProducts?.some((selectedProduct) => {
-        console.log(`Comparing card ${card.id} with selected product ${selectedProduct.id}`)
-        return selectedProduct.productId === card.id
-      })
-    )
+    if (!cards || !selectedProducts) return
 
-    console.log("Matched Cards:", matchedCards)
+    const matchedCards = cards.filter((card) =>
+      selectedProducts.some((selectedProduct) => selectedProduct.productId === card.id)
+    )
 
     if (matchedCards.length > 0) {
       setSelectedCards((prevSelected) => {
@@ -62,20 +65,20 @@ const CardList = ({ cards, setSelectedProducts, selectedProducts }: CardPropsLis
   }, [cards, selectedProducts])
 
   const toggleSelect = (card: Product) => {
-    if (selectedCards.some((selectedCard) => selectedCard.id === card.id)) {
-      const updatedCards = selectedCards.filter((selectedCard) => selectedCard.id !== card.id)
-      // setSelectedCards(updatedCards)
+    setSelectedCards((prevSelected) => {
+      const isSelected = prevSelected.some((selectedCard) => selectedCard.id === card.id)
+      const updatedCards = isSelected
+        ? prevSelected.filter((selectedCard) => selectedCard.id !== card.id)
+        : [...prevSelected, card]
+
       setSelectedProducts(updatedCards)
-    } else {
-      const updatedCards = [...selectedCards, { ...card, productName: card.name }]
-      // setSelectedCards(updatedCards)
-      setSelectedProducts(updatedCards)
-    }
+      return updatedCards
+    })
   }
 
   return (
     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 p-4">
-      {cards.map((card) => (
+      {cards?.map((card) => (
         <Card
           key={card.id}
           imageUrl={card.imageUrl}
@@ -92,9 +95,17 @@ const CardList = ({ cards, setSelectedProducts, selectedProducts }: CardPropsLis
 
 export default CardList
 
-const CardWrapper = styled.div`
+interface CardWrapperProps {
+  selected?: boolean
+}
+
+interface PriceProps {
+  isShopClose?: boolean
+}
+
+const CardWrapper = styled.div<CardWrapperProps>`
   position: relative;
-  width: 100%; /* Ensure the card takes full width of the grid cell */
+  width: 100%;
   box-sizing: border-box;
   height: 220px;
   cursor: pointer;
@@ -206,7 +217,7 @@ const Title = styled.h3`
   }
 `
 
-const Price = styled.span`
+const Price = styled.span<PriceProps>`
   font-size: 14px;
   font-weight: bold;
   color: ${({ isShopClose }) => (isShopClose ? "#888" : "#000")};
