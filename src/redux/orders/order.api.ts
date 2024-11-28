@@ -63,7 +63,7 @@ const orders = baseApi.injectEndpoints({
     }),
     getInvoicesStats: builder.query<InvoicesStatsResponse, { restaurantId: string }>({
       query: ({ restaurantId }) => ({
-        url: `/orders/${restaurantId}/order-statistic`,
+        url: `/invoices/${restaurantId}/order-statistic`,
         method: "GET",
       }),
       providesTags: ["ORDERS"],
