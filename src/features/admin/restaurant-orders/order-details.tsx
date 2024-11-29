@@ -48,7 +48,6 @@ function RestaurantOrderDetails() {
       return
     }
     handleCompleteOrder({ id: orderId ?? "" })
-    console.log("Generating invoice for:", selectedOrder.paymentItems)
   }
 
   if (isLoading) {

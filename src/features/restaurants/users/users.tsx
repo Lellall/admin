@@ -69,9 +69,9 @@ function Users() {
           <button
             disabled={!shopId}
             onClick={toggledCreateModal}
-            className={`flex items-center
+            className={`flex items-center 
           ${shopId ? "bg-[#125F3A]" : "bg-[#0E5D3726]"} 
-          p-1 
+          p-[.5em] 
           rounded-md 
           ${shopId ? "text-[#fff]" : "text-[#000]"} 
           ${shopId ? "border" : ""} 

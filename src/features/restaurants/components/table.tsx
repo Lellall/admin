@@ -74,7 +74,6 @@ const Table = ({ products, onUpdateInv, isUpdatingInv, shopId, showAsList }) => 
     if (productToUpdate) {
       const data = { data: transformData([productToUpdate]), shopId }
       onUpdateInv(data)
-      console.log("Updating product", transformData([productToUpdate]))
     }
   }
 
@@ -87,7 +86,6 @@ const Table = ({ products, onUpdateInv, isUpdatingInv, shopId, showAsList }) => 
   const onDelete = () => {
     const res = transformDataForDelete(selectedProducts)
     const data = { data: res, shopId }
-    console.log(data)
 
     onDeleteInv(data)
   }
@@ -115,7 +113,6 @@ const Table = ({ products, onUpdateInv, isUpdatingInv, shopId, showAsList }) => 
             {isUpdatingInv ? "Updating..." : "Update Changes"}
           </button>
         </div>
-
       )}
 
       <table className="min-w-full bg-white">
