@@ -1,7 +1,7 @@
 import Button from "@/components/button/button"
 import Modal from "@/components/modal"
 import { useAddRoleMutation, usePrivilegesQuery } from "@/redux/roles-privileges/roles-privileges.api"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import styled from "styled-components"
 
 interface ModalProps {
@@ -32,6 +32,12 @@ function PrivilegesModal({ onclose, show, shopId }: ModalProps) {
     console.log(payloads)
     addPrivileges(payloads)
   }
+
+  useEffect(() => {
+    if (isAdded) {
+      onclose()
+    }
+  }, [isAdded])
 
   return (
     <Modal onClose={onclose} show={show} title="Manage Privileges" width="80%">
