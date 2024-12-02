@@ -11,7 +11,6 @@ const persistConfig = {
   storage,
   whitelist: ["auth", "shop"], // only auth and shop will be persisted
 }
-
 const rootReducer = combineReducers({
   [authSlice.name]: authSlice.reducer,
   [shopSlice.name]: shopSlice.reducer,

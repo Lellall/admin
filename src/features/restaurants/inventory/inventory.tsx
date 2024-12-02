@@ -1,5 +1,9 @@
 import Table from "../components/table"
-import { useGetInventoryDetailsQuery, useUpdateInventoryMutation } from "@/redux/inventory/inventory.api"
+import {
+  useGetInventoryDetailsQuery,
+  useLazyExportInventoryQuery,
+  useUpdateInventoryMutation,
+} from "@/redux/inventory/inventory.api"
 import ScreenLoader from "@/components/screen.loader"
 import { useState } from "react"
 import { useShopSlice } from "@/redux/shops/shops-slice"
@@ -17,7 +21,7 @@ const Inventory = () => {
 
   const { data: products, isLoading } = useGetInventoryDetailsQuery({ shopId })
   const [onUpdateInv, { isLoading: isUpdatingInv }] = useUpdateInventoryMutation()
-
+  const [handleExportInventory, { isLoading: isExporting }] = useLazyExportInventoryQuery()
   return (
     <>
       {isLoading ? (
@@ -41,8 +45,13 @@ const Inventory = () => {
                 />
               </div>
               <div className="flex justify-end w-full md:w-auto">
-                <button className="bg-[#0E5D37] hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-md shadow-md transition duration-200 w-full md:w-auto">
-                  Export Sheet
+                <button
+                  onClick={() => {
+                    handleExportInventory({ shopId: shopId ?? "", query: "" })
+                  }}
+                  className="bg-[#0E5D37] hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-md shadow-md transition duration-200 w-full md:w-auto"
+                >
+                  {isExporting ? "Exporting..." : "Export Sheet"}
                 </button>
               </div>
             </div>

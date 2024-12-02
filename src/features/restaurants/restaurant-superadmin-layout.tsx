@@ -61,9 +61,10 @@ function RestaurantSuperAdminLayout() {
               )}
               <NavLink
                 className={({ isActive }) =>
-                  `p-2 rounded flex items-center ${isActive ? "bg-green-100 font-bold" : ""}`
+                  `p-2 rounded flex items-center ${isActive ? "bg-green-100 font-bold" : "bg-[#f3f3f3d5]"}`
                 }
-                to={appPaths.analytics}
+                // to={appPaths.analytics}
+                to={"/"}
               >
                 <span>
                   <Box size="24" className="mr-3" />
@@ -73,9 +74,10 @@ function RestaurantSuperAdminLayout() {
 
               <NavLink
                 className={({ isActive }) =>
-                  `p-2 rounded flex items-center ${isActive ? "bg-green-100 font-bold" : ""}`
+                  `p-2 rounded flex items-center ${isActive ? "bg-green-100 font-bold" : "bg-[#f3f3f3d5]"}`
                 }
-                to={appPaths.settings}
+                // to={appPaths.settings}
+                to={"/"}
               >
                 <span>
                   <Setting size="24" className="mr-3" />

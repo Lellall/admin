@@ -21,6 +21,9 @@ const endpointsRequiringToken = [
   "inventory",
   "/shops",
   "/markets",
+  "/roles",
+  "/privileges",
+  "/order-statistic",
   "^/restaurants/[a-fA-F0-9-]+$/",
   /^\/products\/[a-fA-F0-9-]+$/,
 ]
