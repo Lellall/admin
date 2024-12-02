@@ -4,12 +4,15 @@ import { useEffect } from "react"
 import { useForm } from "react-hook-form"
 import styled from "styled-components"
 import * as yup from "yup"
+import Select from "react-select"
+import { useRolesQuery } from "@/redux/roles-privileges/roles-privileges.api"
 
 const schema = yup.object().shape({
   email: yup.string().email().required("Email is required"),
   password: yup.string().required("Password is required").min(6).max(12),
   firstName: yup.string().required("First Name is required"),
   lastName: yup.string().required("Last Name is required"),
+  roleId: yup.string().required("Role is required"),
 })
 
 interface UserData {
@@ -17,12 +20,14 @@ interface UserData {
   password: string
   firstName: string
   lastName: string
+  roleId: string
 }
 const defaultValues = {
   email: "",
   firstName: "",
   lastName: "",
   password: "",
+  roleId: "",
 }
 
 interface ModalProps {
@@ -30,19 +35,36 @@ interface ModalProps {
   shopId: string
 }
 
+const customStyles = {
+  container: (provided: any) => ({
+    ...provided,
+    width: "300px",
+    minWidth: "250px",
+    marginBottom: "15px",
+  }),
+  control: (provided: any) => ({
+    ...provided,
+    width: "100%",
+  }),
+}
+
 function CreateUser({ shopId, toggleModal }: ModalProps) {
   const [createUser, { isLoading, isSuccess, data }] = useCreateShopUserMutation()
+  const { data: roles, isLoading: isLoadingRoles } = useRolesQuery({ shopId: shopId }, { skip: !shopId })
 
   const {
     register,
     handleSubmit,
     watch,
     // control,
-
+    setValue,
     formState: { errors },
   } = useForm<UserData>({ defaultValues, resolver: yupResolver(schema) })
   const onSubmit = (data: UserData) => {
-    createUser({ data: data, shopId: shopId ?? "" })
+    createUser({
+      data: data,
+      shopId: shopId ?? "",
+    })
   }
 
   useEffect(() => {
@@ -70,6 +92,17 @@ function CreateUser({ shopId, toggleModal }: ModalProps) {
           <Input type="text" value={watch("password")} {...register("password")} placeholder="Password" />
           {errors && <span style={{ color: "red", fontSize: "12px" }}>{errors?.password?.message}</span>}
         </InputWrapper>
+        <Select
+          placeholder="Select roles"
+          onChange={(e) => {
+            setValue("roleId", e?.value ?? "")
+          }}
+          isLoading={isLoadingRoles}
+          styles={customStyles}
+          options={roles?.map((role) => {
+            return { label: role.name, value: role.id }
+          })}
+        />
         <Input
           className="col-span-2 bg-[#125F3A] text-white"
           type="Submit"
@@ -102,11 +135,11 @@ const Input = styled.input`
   box-sizing: border-box;
 `
 
-export const Select = styled.select`
-  border: 1px solid #ccc;
-  /* margin-bottom: 20px; */
-  padding: 7px;
-  border-radius: 5px;
-  outline: none;
-  color: #000;
-`
+// export const Select = styled.select`
+//   border: 1px solid #ccc;
+//   /* margin-bottom: 20px; */
+//   padding: 7px;
+//   border-radius: 5px;
+//   outline: none;
+//   color: #000;
+// `
