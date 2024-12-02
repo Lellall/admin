@@ -50,16 +50,29 @@ function ShopForm({ mode, close, restaurantId }: ShopFormProps) {
     if (mode === "update" && shopData) {
       reset({ paystackAccountId: shopData?.subAccountId, ...shopData })
     }
+  }, [mode, shopData, reset])
 
+  useEffect(() => {
     if (isSuccess || isUpdatingSuccess) {
       if (close) {
         close()
       }
     }
-  }, [mode, shopData, reset, isSuccess, isUpdatingSuccess, close])
+  }, [isSuccess, isUpdatingSuccess, close])
+
+  useEffect(() => {
+    if (location) {
+      geocodeByAddress(location.label)
+        .then((results) => getLatLng(results[0]))
+        .then(({ lat, lng }) => {
+          setValue("coordinate.latitude", lat)
+          setValue("coordinate.longitude", lng)
+        })
+    }
+  }, [location])
 
   const handleFormSubmit: SubmitHandler<Shop> = (data) => {
-    const { market, address, category, timeZone, vatCharge, metadata, paystackAccountId, ...restData } = data
+    const { market, category, timeZone, vatCharge, metadata, paystackAccountId, ...restData } = data
 
     if (mode === "update") {
       const dataToSubmit = {
@@ -76,7 +89,6 @@ function ShopForm({ mode, close, restaurantId }: ShopFormProps) {
         categoryId: category?.id,
         vatCharge: "7.5",
         timeZone: "GMT+1",
-        address,
       }
       createShop(createShopData)
     }
@@ -97,17 +109,6 @@ function ShopForm({ mode, close, restaurantId }: ShopFormProps) {
       value: item.id,
     }
   })
-
-  useEffect(() => {
-    if (location) {
-      geocodeByAddress(location.label)
-        .then((results) => getLatLng(results[0]))
-        .then(({ lat, lng }) => {
-          setValue("coordinate.latitude", lat)
-          setValue("coordinate.longitude", lng)
-        })
-    }
-  }, [location])
 
   return (
     <form className="w-[90%] m-auto " onSubmit={handleSubmit(handleFormSubmit)}>

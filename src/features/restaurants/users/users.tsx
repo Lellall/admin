@@ -10,11 +10,10 @@ import Select from "react-select"
 import { capitalizeFirstLetterOFEachWord } from "@/utils/helpers"
 import Skeleton from "react-loading-skeleton"
 import { usePrivileges } from "@/components/privileges"
-// import { useDebounce } from "react-use"
+import { useRolesQuery } from "@/redux/roles-privileges/roles-privileges.api"
+import Button from "@/components/button/button"
 
 function Users() {
-  // const [name, setName] = useState("")
-  // const [searchName, setSearchName] = useState("")
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [shopId, setShop] = useState("")
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
@@ -25,17 +24,11 @@ function Users() {
     filter: "",
   })
   const { hasAllPrivileges } = usePrivileges()
-  const { data, isLoading } = useGetShopUsersQuery({ shopId: shopId ?? "" })
+  const { data: roles } = useRolesQuery({ shopId: shopId }, { skip: !shopId })
+  console.log("roles", roles)
+  const { data, isLoading } = useGetShopUsersQuery({ shopId: shopId ?? "" }, { skip: !shopId })
 
-  // useDebounce(
-  //   () => {
-  //     setSearchName(name)
-  //   },
-  //   2000,
-  //   [name]
-  // )
-
-  const toggled = () => {
+  const toggledPrivilegesModal = () => {
     setIsModalOpen(!isModalOpen)
   }
   const toggledCreateModal = () => {
@@ -55,12 +48,6 @@ function Users() {
     }),
   }
 
-  // useEffect(() => {
-  //   if (shopId) {
-  //     refetch()
-  //   }
-  // }, [shopId, refetch])
-
   return (
     <div>
       <div className="flex justify-between my-5">
@@ -75,8 +62,6 @@ function Users() {
           rounded-md 
           ${shopId ? "text-[#fff]" : "text-[#000]"} 
           ${shopId ? "border" : ""} 
-
-       
           border-[#125F3A]`}
           >
             <Add />
@@ -99,13 +84,7 @@ function Users() {
             })}
           />
         </>
-        {/* <input
-          type="search"
-          className="my-3 p-3  w-[100%] md:w-[50%] outline-none  bg-[#34A8530F]"
-          placeholder="Search user"
-          // value={name}
-          // onChange={(e) => setName(e.target.value)}
-        /> */}
+        <Button children={"Add Roles"} onClick={toggledPrivilegesModal} className={"p-1"} loading={false} />
       </div>
 
       <>
@@ -121,7 +100,7 @@ function Users() {
                 <th>Name</th>
                 <th>Email</th>
                 <th>Phone Number</th>
-                <th>Role</th>
+                {/* <th>Role</th> */}
               </tr>
             </thead>
             <tbody>
@@ -131,7 +110,7 @@ function Users() {
                   <td>{capitalizeFirstLetterOFEachWord(`${user.firstName} ${user.lastName}`)}</td>
                   <td>{user.email}</td>
                   <td>{user.phoneNumber}</td>
-                  <td></td>
+                  {/* <td></td> */}
                 </tr>
               ))}
             </tbody>
@@ -149,7 +128,7 @@ function Users() {
         )}
       </>
 
-      <PrivilegesModal onclose={toggled} show={isModalOpen} />
+      <PrivilegesModal shopId={shopId} onclose={toggledPrivilegesModal} show={isModalOpen} />
       <Modal
         style={{ maxWidth: "600px", paddingBottom: "3rem" }}
         onClose={toggledCreateModal}
