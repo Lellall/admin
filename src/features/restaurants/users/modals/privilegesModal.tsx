@@ -40,7 +40,13 @@ function PrivilegesModal({ onclose, show, shopId }: ModalProps) {
   }, [isAdded])
 
   return (
-    <Modal onClose={onclose} show={show} title="Manage Privileges" width="80%">
+    <Modal
+      onClose={onclose}
+      show={show}
+      style={{ maxWidth: "600px", paddingTop: "1rem" }}
+      title="Manage Privileges"
+      width="80%"
+    >
       <div className="w-[100%] m-auto">
         <input
           onChange={(e) => setRoleName(e.target.value)}
@@ -73,7 +79,7 @@ function PrivilegesModal({ onclose, show, shopId }: ModalProps) {
         </div>
 
         <Button className={"w-[100%] my-6"} loading={isAdding} onClick={handleAddPrivileges}>
-          Update
+          Create
         </Button>
       </div>
     </Modal>

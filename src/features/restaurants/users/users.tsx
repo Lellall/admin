@@ -84,7 +84,22 @@ function Users() {
             })}
           />
         </>
-        <Button children={"Add Roles"} onClick={toggledPrivilegesModal} className={"p-1"} loading={false} />
+
+        {hasAllPrivileges(["c:user"]) && (
+          <button
+            disabled={!shopId}
+            onClick={toggledPrivilegesModal}
+            className={`flex items-center 
+            ${shopId ? "bg-[#125F3A]" : "bg-[#0E5D3726]"} 
+            p-[.5em] 
+            rounded-md 
+            ${shopId ? "text-[#fff]" : "text-[#000]"} 
+            ${shopId ? "border" : ""} 
+            border-[#125F3A]`}
+          >
+            Add Roles
+          </button>
+        )}
       </div>
 
       <>

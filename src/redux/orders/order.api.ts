@@ -55,7 +55,7 @@ const orders = baseApi.injectEndpoints({
     }),
     getInvoices: builder.query<InvoicesResponse, InvoiceRequest>({
       query: (params) => ({
-        url: `/orders/${params.restaurantId}/invoices`,
+        url: `invoices/shop-orders/${params.restaurantId}`,
         params,
         method: "GET",
       }),

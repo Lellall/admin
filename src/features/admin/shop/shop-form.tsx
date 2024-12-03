@@ -89,6 +89,7 @@ function ShopForm({ mode, close, restaurantId }: ShopFormProps) {
         categoryId: category?.id,
         vatCharge: "7.5",
         timeZone: "GMT+1",
+        active: true,
       }
       createShop(createShopData)
     }

@@ -80,4 +80,12 @@ const ModalContent = styled.div<ModalContentProps>`
     /* background: red; */
     width: 89%;
   }
+
+  @media screen and (max-width: 760px) {
+    padding: 15px 10px;
+
+    .modal_body {
+      width: 95%;
+    }
+  }
 `

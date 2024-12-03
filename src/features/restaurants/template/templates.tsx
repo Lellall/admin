@@ -113,17 +113,17 @@ function Templates() {
                 </button> */}
                 <div className="mt-5 mb-5 border rounded">
                   <TabContainer>
-                    {hasAllPrivileges(["c:order", "r:order", "d:order"]) && (
+                    {hasAllPrivileges(["r:order", "c:order", "d:order", "u:order"]) && (
                       <TabButton onClick={() => handleTabSwitch("template")} active={activeTab === "template"}>
                         ORDERS
                       </TabButton>
                     )}
-                    {hasPrivilege("c:inventory") && (
+                    {hasAllPrivileges(["c:inventory", "d:inventory", "r:inventory", "u:inventory"]) && (
                       <TabButton onClick={() => handleTabSwitch("inventory")} active={activeTab === "inventory"}>
                         INVENTORY
                       </TabButton>
                     )}
-                    {hasAllPrivileges(["r:order"]) && (
+                    {hasAllPrivileges(["r:order", "c:order", "d:order", "u:order"]) && (
                       <TabButton onClick={() => handleTabSwitch("invoice")} active={activeTab === "invoice"}>
                         INVOICES
                       </TabButton>
