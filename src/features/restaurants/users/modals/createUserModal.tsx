@@ -38,8 +38,7 @@ interface ModalProps {
 const customStyles = {
   container: (provided: any) => ({
     ...provided,
-    width: "300px",
-    minWidth: "250px",
+    width: "200px",
     marginBottom: "15px",
   }),
   control: (provided: any) => ({
@@ -92,17 +91,19 @@ function CreateUser({ shopId, toggleModal }: ModalProps) {
           <Input type="text" value={watch("password")} {...register("password")} placeholder="Password" />
           {errors && <span style={{ color: "red", fontSize: "12px" }}>{errors?.password?.message}</span>}
         </InputWrapper>
-        <Select
-          placeholder="Select roles"
-          onChange={(e) => {
-            setValue("roleId", e?.value ?? "")
-          }}
-          isLoading={isLoadingRoles}
-          styles={customStyles}
-          options={roles?.map((role) => {
-            return { label: role.name, value: role.id }
-          })}
-        />
+        <InputWrapper>
+          <Select
+            placeholder="Select roles"
+            onChange={(e) => {
+              setValue("roleId", e?.value ?? "")
+            }}
+            isLoading={isLoadingRoles}
+            styles={customStyles}
+            options={roles?.map((role) => {
+              return { label: role.name, value: role.id }
+            })}
+          />
+        </InputWrapper>
         <Input
           className="col-span-2 bg-[#125F3A] text-white"
           type="Submit"
