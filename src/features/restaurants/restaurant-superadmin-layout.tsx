@@ -46,7 +46,7 @@ function RestaurantSuperAdminLayout() {
                 Restaurant
               </NavLink>
 
-              {hasAllPrivileges(["c:user"]) && (
+              {hasAllPrivileges(["c:user", "r:user", "u:user"]) && (
                 <NavLink
                   className={({ isActive }) =>
                     `p-2 rounded flex items-center ${isActive ? "bg-green-100 font-bold" : ""}`
@@ -110,19 +110,24 @@ function RestaurantSuperAdminLayout() {
             </span>
             Shops
           </NavLink>
+          {hasAllPrivileges(["c:user", "r:user", "u:user"]) && (
+            <NavLink
+              className={({ isActive }) => `p-2 rounded flex items-center ${isActive ? "bg-green-100 font-bold" : ""}`}
+              to={appPaths.users}
+              onClick={toggleMobileMenu}
+            >
+              <span>
+                <UserSquare size="24" className="mr-3" />
+              </span>
+              Users
+            </NavLink>
+          )}
           <NavLink
-            className={({ isActive }) => `p-2 rounded flex items-center ${isActive ? "bg-green-100 font-bold" : ""}`}
-            to={appPaths.users}
-            onClick={toggleMobileMenu}
-          >
-            <span>
-              <UserSquare size="24" className="mr-3" />
-            </span>
-            Users
-          </NavLink>
-          <NavLink
-            className={({ isActive }) => `p-2 rounded flex items-center ${isActive ? "bg-green-100 font-bold" : ""}`}
-            to={appPaths.analytics}
+            className={({ isActive }) =>
+              `p-2 rounded flex items-center ${isActive ? "bg-green-100 font-bold" : "bg-[#f3f3f3d5]"}`
+            }
+            // to={appPaths.analytics}
+            to={"/"}
             onClick={toggleMobileMenu}
           >
             <span>
@@ -132,8 +137,11 @@ function RestaurantSuperAdminLayout() {
           </NavLink>
 
           <NavLink
-            className={({ isActive }) => `p-2 rounded flex items-center ${isActive ? "bg-green-100 font-bold" : ""}`}
-            to={appPaths.settings}
+            className={({ isActive }) =>
+              `p-2 rounded flex items-center ${isActive ? "bg-green-100 font-bold" : "bg-[#f3f3f3d5]"}`
+            }
+            // to={appPaths.settings}
+            to={"/"}
             onClick={toggleMobileMenu}
           >
             <span>

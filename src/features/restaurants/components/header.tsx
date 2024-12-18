@@ -115,7 +115,7 @@ const HeaderProfile = ({ openShopModal, showOther, url }: any) => {
                     className="bg-white shadow-lg py-2 px-3 md:px-4 text-xs rounded-lg hover:bg-green-100 flex items-center justify-center space-x-2 font-light tracking-wider leading-tight"
                   >
                     <Add size="15" color="#092d2b" />
-                    <span>CREATE SHOP</span>
+                    <span>CREATE RESTAURANT</span>
                   </button>
                 </>
               )}

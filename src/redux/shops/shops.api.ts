@@ -83,7 +83,7 @@ const shops = baseApi.injectEndpoints({
       invalidatesTags: ["SHOPS"],
       onQueryStarted(_args, { queryFulfilled: qf }) {
         qf.then(() => {
-          toast.success(`Vendor Updated Successfully `, {
+          toast.success(` Updated Successfully `, {
             position: "top-right",
           })
         }).catch((err) => {
@@ -102,7 +102,7 @@ const shops = baseApi.injectEndpoints({
       invalidatesTags: ["SHOPS"],
       onQueryStarted(_args, { queryFulfilled: qf }) {
         qf.then(() => {
-          toast.success(`Shop Created Successfully `, {
+          toast.success(`Created Successfully `, {
             position: "top-right",
           })
         }).catch((err) => {

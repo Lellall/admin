@@ -95,7 +95,7 @@ const ViewButton = styled.button`
 const ShopList = ({ shops }: any) => {
   const [isShopModalOpen, setIsShopModalOpen] = useState<boolean>(false)
   const [editShopModalOpen, setEditShopModalOpen] = useState<boolean>(false)
-const {hasAnyPrivilege} = usePrivileges()
+  const { hasAnyPrivilege } = usePrivileges()
   const navigate = useNavigate()
   const { id } = useShopSlice()
   const toggleModalShop = () => {
@@ -174,7 +174,7 @@ const {hasAnyPrivilege} = usePrivileges()
         <>
           <Modal
             width="100%"
-            title="Create Shop"
+            title="Create Restaurant"
             style={{
               maxWidth: "700px",
               width: "90%",
